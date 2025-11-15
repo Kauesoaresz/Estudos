@@ -1,0 +1,86 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Histórico de simulados</h2>
+  <p class="kst-section-subtitle">
+    Veja seus simulados, acertos por área e o total.
+  </p>
+
+  <form method="GET" action="/simulados" class="kst-filter-bar" style="margin-bottom: 1rem;">
+    <div class="kst-filter-group">
+      <label for="de">De:</label>
+      <input type="date" id="de" name="de" value="<%= de || '' %>">
+    </div>
+    <div class="kst-filter-group">
+      <label for="ate">Até:</label>
+      <input type="date" id="ate" name="ate" value="<%= ate || '' %>">
+    </div>
+    <button type="submit" class="kst-btn kst-btn-primary">Filtrar</button>
+    <a href="/simulados" class="kst-btn">Limpar</a>
+  </form>
+
+  <% if (!simulados || simulados.length === 0) { %>
+    <p>Nenhum simulado encontrado com esse filtro.</p>
+    <p>
+      <a href="/simulados/novo" class="kst-btn kst-btn-primary">Registrar simulado</a>
+    </p>
+  <% } else { %>
+    <div class="kst-card">
+      <table class="kst-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tempo (min)</th>
+            <th>Linguagens</th>
+            <th>Humanas</th>
+            <th>Naturezas</th>
+            <th>Matemática</th>
+            <th>Total</th>
+            <th>Infos</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% simulados.forEach(function(s) { %>
+            <tr>
+              <td><%= s.dataFormatada %></td>
+              <td>
+                <% if (s.tempo_total_minutos != null) { %>
+                  <%= s.tempo_total_minutos %>
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td><%= s.acertos_linguagens != null ? s.acertos_linguagens : '—' %></td>
+              <td><%= s.acertos_humanas != null ? s.acertos_humanas : '—' %></td>
+              <td><%= s.acertos_naturezas != null ? s.acertos_naturezas : '—' %></td>
+              <td><%= s.acertos_matematica != null ? s.acertos_matematica : '—' %></td>
+              <td><strong><%= s.totalAcertos %></strong></td>
+              <td>
+                <% if (s.area_que_mais_errou || s.principal_dificuldade) { %>
+                  <% if (s.area_que_mais_errou) { %>
+                    Área que mais errou: <%= s.area_que_mais_errou %><br />
+                  <% } %>
+                  <% if (s.principal_dificuldade) { %>
+                    Dificuldade: <%= s.principal_dificuldade %>
+                  <% } %>
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td>
+                <a href="/simulados/<%= s.id %>" class="kst-link-inline">Ver</a> |
+                <a href="/simulados/<%= s.id %>/editar" class="kst-link-inline">Editar</a> |
+                <form action="/simulados/<%= s.id %>/excluir" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este simulado?');">
+                  <button type="submit" class="kst-link-inline kst-link-danger">Excluir</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include("partials/footer") %>

@@ -1,0 +1,202 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Registrar simulado</h2>
+  <p class="kst-section-subtitle">
+    Registre um simulado estilo ENEM com acertos por área e dificuldades.
+  </p>
+
+  <% if (sucesso) { %>
+    <div class="kst-alert kst-alert-success">
+      Simulado registrado com sucesso!
+    </div>
+  <% } %>
+
+  <% if (erro) { %>
+    <div class="kst-alert kst-alert-error">
+      Verifique os campos obrigatórios e os valores informados.
+    </div>
+  <% } %>
+
+  <div id="erro-simulado" class="kst-alert kst-alert-error" style="display:none;"></div>
+
+  <form action="/simulados" method="POST" class="kst-form" onsubmit="return validarSimulado(event)">
+
+    <div class="kst-form-row">
+      <div class="kst-form-group">
+        <label class="kst-label" for="data">Data do simulado *</label>
+        <input
+          type="date"
+          id="data"
+          name="data"
+          class="kst-input"
+          required
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label class="kst-label" for="tempo_total_minutos">Tempo total (minutos)</label>
+        <input
+          type="number"
+          min="0"
+          id="tempo_total_minutos"
+          name="tempo_total_minutos"
+          class="kst-input"
+          placeholder="Ex: 300"
+        />
+      </div>
+    </div>
+
+    <fieldset class="kst-fieldset">
+      <legend>Acertos por área (0 a 45)</legend>
+
+      <div class="kst-form-row">
+        <div class="kst-form-group">
+          <label class="kst-label" for="acertos_linguagens">Linguagens (0–45)</label>
+          <input
+            type="number"
+            min="0"
+            max="45"
+            id="acertos_linguagens"
+            name="acertos_linguagens"
+            class="kst-input"
+          />
+        </div>
+
+        <div class="kst-form-group">
+          <label class="kst-label" for="acertos_humanas">Humanas (0–45)</label>
+          <input
+            type="number"
+            min="0"
+            max="45"
+            id="acertos_humanas"
+            name="acertos_humanas"
+            class="kst-input"
+          />
+        </div>
+      </div>
+
+      <div class="kst-form-row">
+        <div class="kst-form-group">
+          <label class="kst-label" for="acertos_naturezas">Naturezas (0–45)</label>
+          <input
+            type="number"
+            min="0"
+            max="45"
+            id="acertos_naturezas"
+            name="acertos_naturezas"
+            class="kst-input"
+          />
+        </div>
+
+        <div class="kst-form-group">
+          <label class="kst-label" for="acertos_matematica">Matemática (0–45)</label>
+          <input
+            type="number"
+            min="0"
+            max="45"
+            id="acertos_matematica"
+            name="acertos_matematica"
+            class="kst-input"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="kst-fieldset">
+      <legend>Dificuldades e resumo</legend>
+
+      <div class="kst-form-group">
+        <label class="kst-label" for="area_que_mais_errou">Área que mais errou</label>
+        <input
+          type="text"
+          id="area_que_mais_errou"
+          name="area_que_mais_errou"
+          class="kst-input"
+          placeholder="Ex: Matemática, Naturezas..."
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label class="kst-label" for="principal_dificuldade">Principal dificuldade</label>
+        <input
+          type="text"
+          id="principal_dificuldade"
+          name="principal_dificuldade"
+          class="kst-input"
+          placeholder="Ex: tempo, cansaço, falta de conteúdo..."
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label class="kst-label" for="resultado_resumo">Resumo do resultado</label>
+        <textarea
+          id="resultado_resumo"
+          name="resultado_resumo"
+          class="kst-textarea"
+          rows="3"
+          placeholder="Ex: Fui bem em linguagens, errei muito em Matemática nas questões de função..."
+        ></textarea>
+      </div>
+    </fieldset>
+
+    <div class="kst-form-actions">
+      <button type="submit" class="kst-btn kst-btn-primary">
+        Salvar simulado
+      </button>
+    </div>
+  </form>
+</section>
+
+<%- include("partials/footer") %>
+
+<script>
+  function validarSimulado(event) {
+    const erros = [];
+
+    const data = document.getElementById("data").value;
+    const tempo = document.getElementById("tempo_total_minutos").value;
+
+    const L = document.getElementById("acertos_linguagens").value;
+    const H = document.getElementById("acertos_humanas").value;
+    const N = document.getElementById("acertos_naturezas").value;
+    const M = document.getElementById("acertos_matematica").value;
+
+    if (!data) {
+      erros.push("A data do simulado é obrigatória.");
+    }
+
+    if (tempo) {
+      const t = Number(tempo);
+      if (isNaN(t) || t < 0) {
+        erros.push("Tempo total não pode ser negativo.");
+      }
+    }
+
+    function validaArea(valor, nomeArea) {
+      if (valor === "" || valor === null) return;
+      const v = Number(valor);
+      if (isNaN(v) || v < 0 || v > 45) {
+        erros.push(`Acertos em ${nomeArea} deve ser entre 0 e 45.`);
+      }
+    }
+
+    validaArea(L, "Linguagens");
+    validaArea(H, "Humanas");
+    validaArea(N, "Naturezas");
+    validaArea(M, "Matemática");
+
+    const boxErro = document.getElementById("erro-simulado");
+
+    if (erros.length > 0) {
+      event.preventDefault();
+      boxErro.style.display = "block";
+      boxErro.innerHTML = erros.join("<br>");
+      return false;
+    } else {
+      boxErro.style.display = "none";
+      boxErro.innerHTML = "";
+      return true;
+    }
+  }
+</script>

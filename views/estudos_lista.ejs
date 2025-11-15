@@ -1,0 +1,115 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Histórico de estudos por matéria</h2>
+  <p class="kst-section-subtitle">
+    Todos os blocos de estudo registrados, com filtro por período e matéria.
+  </p>
+
+  <form method="GET" action="/estudos" class="kst-filter-bar" style="margin-bottom: 1rem;">
+    <div class="kst-filter-group">
+      <label for="de">De:</label>
+      <input type="date" id="de" name="de" value="<%= de || '' %>">
+    </div>
+    <div class="kst-filter-group">
+      <label for="ate">Até:</label>
+      <input type="date" id="ate" name="ate" value="<%= ate || '' %>">
+    </div>
+    <div class="kst-filter-group">
+      <label for="materia_id">Matéria:</label>
+      <select id="materia_id" name="materia_id">
+        <option value="">Todas</option>
+        <% if (materias && materias.length) { %>
+          <% materias.forEach(function(m) { %>
+            <option value="<%= m.id %>" <%= String(m.id) === String(materia_id || '') ? 'selected' : '' %>>
+              <%= m.nome %>
+            </option>
+          <% }) %>
+        <% } %>
+      </select>
+    </div>
+    <button type="submit" class="kst-btn kst-btn-primary">Filtrar</button>
+    <a href="/estudos" class="kst-btn">Limpar</a>
+  </form>
+
+  <% if (!estudos || estudos.length === 0) { %>
+    <p>Nenhum estudo encontrado com esse filtro.</p>
+    <p>
+      <a href="/estudos/novo" class="kst-btn kst-btn-primary">Registrar estudo</a>
+    </p>
+  <% } else { %>
+    <div class="kst-card">
+      <table class="kst-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Matéria</th>
+            <th>Minutos</th>
+            <th>Tipo</th>
+            <th>Questões (certas / total)</th>
+            <th>Marcadas p/ revisão</th>
+            <th>Taxa de acerto</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% estudos.forEach(function(e) { %>
+            <tr>
+              <td><%= e.dataFormatada %></td>
+              <td><%= e.materiaNome %></td>
+              <td>
+                <% if (e.minutos_estudados != null) { %>
+                  <%= e.minutos_estudados %> min
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td>
+                <% if (e.tipo_estudo === 'CONTEUDO_NOVO') { %>
+                  Conteúdo novo
+                <% } else if (e.tipo_estudo === 'REVISAO') { %>
+                  Revisão
+                <% } else if (e.tipo_estudo === 'REVISAO_ERRO') { %>
+                  Revisão de erro
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td>
+                <% if (e.questoes_feitas != null || e.questoes_certas != null) { %>
+                  <%= e.questoes_certas != null ? e.questoes_certas : '—' %> /
+                  <%= e.questoes_feitas != null ? e.questoes_feitas : '—' %>
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td>
+                <% if (e.questoes_marcadas_revisao != null) { %>
+                  <%= e.questoes_marcadas_revisao %>
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td>
+                <% if (e.taxaAcerto != null) { %>
+                  <%= e.taxaAcerto %>%
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td>
+                <a href="/estudos/<%= e.id %>" class="kst-link-inline">Ver</a> |
+                <a href="/estudos/<%= e.id %>/editar" class="kst-link-inline">Editar</a> |
+                <form action="/estudos/<%= e.id %>/excluir" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este estudo?');">
+                  <button type="submit" class="kst-link-inline kst-link-danger">Excluir</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include("partials/footer") %>

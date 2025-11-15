@@ -1,0 +1,121 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Editar simulado</h2>
+
+  <form action="/simulados/<%= simulado.id %>/atualizar" method="post" class="kst-form">
+    <div class="kst-form-grid">
+      <div class="kst-form-group">
+        <label>Data do simulado *</label>
+        <input
+          type="date"
+          name="data"
+          class="kst-input"
+          required
+          value="<%= simulado.dia ? simulado.dia.data : '' %>"
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label>Tempo total (minutos)</label>
+        <input
+          type="number"
+          name="tempo_total_minutos"
+          class="kst-input"
+          value="<%= simulado.tempo_total_minutos || '' %>"
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label>Área que mais errou</label>
+        <input
+          type="text"
+          name="area_que_mais_errou"
+          class="kst-input"
+          value="<%= simulado.area_que_mais_errou || '' %>"
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label>Principal dificuldade</label>
+        <select name="principal_dificuldade" class="kst-input">
+          <option value="" <%= !simulado.principal_dificuldade ? "selected" : "" %> >Não informar</option>
+          <option value="Tempo" <%= simulado.principal_dificuldade === "Tempo" ? "selected" : "" %> >Tempo</option>
+          <option value="Cansaço" <%= simulado.principal_dificuldade === "Cansaço" ? "selected" : "" %> >Cansaço</option>
+          <option value="Ansiedade" <%= simulado.principal_dificuldade === "Ansiedade" ? "selected" : "" %> >Ansiedade</option>
+          <option value="Falta de conteúdo" <%= simulado.principal_dificuldade === "Falta de conteúdo" ? "selected" : "" %> >Falta de conteúdo</option>
+          <option value="Prova muito difícil" <%= simulado.principal_dificuldade === "Prova muito difícil" ? "selected" : "" %> >Prova muito difícil</option>
+          <option value="Outro" <%= simulado.principal_dificuldade === "Outro" ? "selected" : "" %> >Outro</option>
+        </select>
+      </div>
+    </div>
+
+    <h3 class="kst-form-section-title">Acertos por área (ENEM)</h3>
+
+    <div class="kst-form-grid">
+      <div class="kst-form-group">
+        <label>Linguagens (0–45)</label>
+        <input
+          type="number"
+          name="acertos_linguagens"
+          class="kst-input"
+          min="0"
+          max="45"
+          value="<%= simulado.acertos_linguagens != null ? simulado.acertos_linguagens : '' %>"
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label>Humanas (0–45)</label>
+        <input
+          type="number"
+          name="acertos_humanas"
+          class="kst-input"
+          min="0"
+          max="45"
+          value="<%= simulado.acertos_humanas != null ? simulado.acertos_humanas : '' %>"
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label>Naturezas (0–45)</label>
+        <input
+          type="number"
+          name="acertos_naturezas"
+          class="kst-input"
+          min="0"
+          max="45"
+          value="<%= simulado.acertos_naturezas != null ? simulado.acertos_naturezas : '' %>"
+        />
+      </div>
+
+      <div class="kst-form-group">
+        <label>Matemática (0–45)</label>
+        <input
+          type="number"
+          name="acertos_matematica"
+          class="kst-input"
+          min="0"
+          max="45"
+          value="<%= simulado.acertos_matematica != null ? simulado.acertos_matematica : '' %>"
+        />
+      </div>
+    </div>
+
+    <div class="kst-form-group">
+      <label>Resultado / resumo do simulado</label>
+      <textarea
+        name="resultado_resumo"
+        class="kst-input"
+        rows="3"
+      ><%= simulado.resultado_resumo || '' %></textarea>
+    </div>
+
+    <div style="margin-top:1rem;">
+      <button type="submit" class="kst-btn kst-btn-primary">Salvar alterações</button>
+      <a href="/simulados" class="kst-btn kst-btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</section>
+
+<%- include("partials/footer") %>

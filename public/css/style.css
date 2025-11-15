@@ -1,0 +1,393 @@
+/* Reset bem básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #0f172a; /* azul bem escuro, clima de madrugada estudando */
+  color: #e5e7eb; /* cinza clarinho */
+}
+
+/* Container padrão */
+.kst-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Header */
+.kst-header {
+  background: #020617;
+  border-bottom: 1px solid #1f2937;
+}
+
+.kst-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.kst-logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #f97316; /* laranja pra dar destaque */
+}
+
+.kst-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.kst-nav-link {
+  text-decoration: none;
+  font-size: 0.95rem;
+  color: #9ca3af;
+}
+
+.kst-nav-link:hover {
+  color: #f97316;
+}
+
+/* Main */
+.kst-main {
+  min-height: calc(100vh - 120px);
+}
+
+/* Hero */
+.kst-hero {
+  margin-top: 2rem;
+}
+
+.kst-hero h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.kst-hero p {
+  max-width: 600px;
+  color: #d1d5db;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+/* Botões */
+.kst-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.kst-btn {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.kst-btn-primary {
+  background: #f97316;
+  color: #111827;
+  font-weight: 600;
+}
+
+.kst-btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.kst-btn-secondary {
+  background: transparent;
+  color: #e5e7eb;
+  border-color: #4b5563;
+}
+
+.kst-btn-secondary:hover {
+  background: #111827;
+}
+
+/* Cards da home */
+.kst-info-grid {
+  margin-top: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.kst-card {
+  background: #020617;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid #1f2937;
+}
+
+.kst-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.kst-card p {
+  font-size: 0.9rem;
+  color: #d1d5db;
+  line-height: 1.4;
+}
+
+/* Seções genéricas */
+.kst-section {
+  margin-top: 2rem;
+}
+
+.kst-section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.kst-section-subtitle {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Alerts */
+.kst-alert {
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.kst-alert-success {
+  background: #022c22;
+  border: 1px solid #16a34a;
+  color: #bbf7d0;
+}
+
+/* Formulário */
+.kst-form {
+  background: #020617;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #1f2937;
+  margin-top: 0.5rem;
+}
+
+.kst-form-section-title {
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #f97316;
+}
+
+.kst-form-group {
+  margin-bottom: 1rem;
+}
+
+.kst-form-group label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  color: #e5e7eb;
+}
+
+.kst-form-group input,
+.kst-form-group select,
+.kst-form-group textarea {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid #374151;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.kst-form-group input:focus,
+.kst-form-group select:focus,
+.kst-form-group textarea:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.5);
+}
+
+.kst-form-group textarea {
+  resize: vertical;
+}
+
+/* Grids do formulário */
+.kst-form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.kst-form-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.kst-form-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Radios */
+.kst-radio-group {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.kst-radio-group input {
+  width: auto;
+  margin-right: 0.25rem;
+}
+
+/* Range */
+.kst-range-value {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* Ações do formulário */
+.kst-form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Footer */
+.kst-footer {
+  border-top: 1px solid #1f2937;
+  background: #020617;
+}
+
+.kst-footer p {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+  .kst-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Tabelas */
+.kst-table-wrapper {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.kst-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.kst-table thead {
+  background: #020617;
+}
+
+.kst-table th,
+.kst-table td {
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid #1f2937;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.kst-table th {
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.kst-table tbody tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.kst-table tbody tr:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+/* Alerts de erro */
+.kst-alert-error {
+  background: #450a0a;
+  border: 1px solid #f97373;
+  color: #fecaca;
+}
+
+/* Lista de matérias */
+.kst-materia-lista {
+  list-style: none;
+  margin-top: 0.75rem;
+  padding-left: 0;
+}
+
+.kst-materia-item {
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.kst-materia-nome {
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+/* Grid do dashboard da home */
+.kst-dashboard-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.kst-card-metric {
+  text-align: left;
+}
+
+.kst-metric-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.kst-metric-sub {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+/* Grid dos gráficos */
+.kst-charts-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.kst-chart-card canvas {
+  width: 100%;
+  max-height: 260px;
+}
+
+/* Lista da home */
+.kst-home-list {
+  margin-top: 0.75rem;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
+
+.kst-home-list li {
+  margin-bottom: 0.25rem;
+}

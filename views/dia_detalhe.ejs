@@ -1,0 +1,100 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Detalhes do dia</h2>
+
+  <div class="kst-card">
+    <p><strong>Data:</strong> <%= dia.data %></p>
+
+    <h3 class="kst-form-section-title">Sono e rotina</h3>
+    <p><strong>Hora que acordou:</strong> <%= dia.hora_acordou || "-" %></p>
+    <p><strong>Hora que dormiu:</strong> <%= dia.hora_dormiu || "-" %></p>
+    <p><strong>Horas totais de sono:</strong> <%= dia.horas_sono_total || "-" %></p>
+    <p><strong>Qualidade do sono (0–10):</strong> <%= dia.qualidade_sono_nota != null ? dia.qualidade_sono_nota : "-" %></p>
+    <p><strong>Tirou soneca?</strong> <%= dia.tirou_soneca == null ? "-" : (dia.tirou_soneca ? "Sim" : "Não") %></p>
+    <p><strong>Minutos de soneca:</strong> <%= dia.minutos_soneca != null ? dia.minutos_soneca : "-" %></p>
+
+    <h3 class="kst-form-section-title">Estudos (resumo do dia)</h3>
+    <p><strong>Horas líquidas de estudo:</strong> <%= dia.horas_estudo_liquidas || "-" %></p>
+    <p><strong>Questões feitas (total):</strong> <%= dia.questoes_feitas_total != null ? dia.questoes_feitas_total : "-" %></p>
+    <p><strong>Questões certas (total):</strong> <%= dia.questoes_acertos_total != null ? dia.questoes_acertos_total : "-" %></p>
+
+    <h3 class="kst-form-section-title">Reflexão</h3>
+    <p><strong>Erros que cometi no dia:</strong> <%= dia.erros_do_dia || "-" %></p>
+    <p><strong>O que melhorar para o dia seguinte:</strong> <%= dia.melhorar_amanha || "-" %></p>
+    <p><strong>Ponto alto do dia:</strong> <%= dia.ponto_alto_dia || "-" %></p>
+    <p><strong>Maior vacilo do dia:</strong> <%= dia.maior_vacilo_dia || "-" %></p>
+
+    <h3 class="kst-form-section-title">Meta do dia</h3>
+    <p><strong>Meta principal:</strong> <%= dia.meta_principal_dia || "-" %></p>
+    <p><strong>Status da meta:</strong>
+      <% if (dia.status_meta === "SIM") { %>
+        Cumprida
+      <% } else if (dia.status_meta === "PARCIAL") { %>
+        Parcial
+      <% } else if (dia.status_meta === "NAO") { %>
+        Não cumprida
+      <% } else { %>
+        -
+      <% } %>
+    </p>
+
+    <h3 class="kst-form-section-title">Estado mental</h3>
+    <p><strong>Nível de foco (0–10):</strong> <%= dia.nivel_foco != null ? dia.nivel_foco : "-" %></p>
+    <p><strong>Nível de energia (0–10):</strong> <%= dia.nivel_energia != null ? dia.nivel_energia : "-" %></p>
+    <p><strong>Humor:</strong>
+      <% if (dia.humor === "BOM") { %>
+        😄 Bom
+      <% } else if (dia.humor === "OK") { %>
+        😐 Ok
+      <% } else if (dia.humor === "RUIM") { %>
+        😞 Ruim
+      <% } else { %>
+        -
+      <% } %>
+    </p>
+
+    <% if (dia.estudos_materias && dia.estudos_materias.length) { %>
+      <h3 class="kst-form-section-title">Estudos por matéria nesse dia</h3>
+      <ul class="kst-home-list">
+        <% dia.estudos_materias.forEach(function(e) { %>
+          <li>
+            <strong><%= e.materia ? e.materia.nome : "Matéria" %>:</strong>
+            <%= e.minutos_estudados || 0 %> min,
+            questões <%= e.questoes_certas || 0 %>/<%= e.questoes_feitas || 0 %>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <% if (dia.simulados && dia.simulados.length) { %>
+      <h3 class="kst-form-section-title">Simulados nesse dia</h3>
+      <ul class="kst-home-list">
+        <% dia.simulados.forEach(function(s) { %>
+          <li>
+            <strong>Simulado:</strong>
+            <% if (s.tempo_total_minutos != null) { %>
+              <%= s.tempo_total_minutos %> min
+            <% } else { %>
+              tempo não informado
+            <% } %>
+            <% if (s.resultado_resumo) { %>
+              — <%= s.resultado_resumo %>
+            <% } %>
+            <% if (s.area_que_mais_errou) { %>
+              (mais errou: <%= s.area_que_mais_errou %>)
+            <% } %>
+            [<a href="/simulados/<%= s.id %>">ver detalhes</a>]
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <div style="margin-top:1rem;">
+    <a href="/dias" class="kst-btn kst-btn-secondary">Voltar ao histórico</a>
+    <a href="/dias/<%= dia.id %>/editar" class="kst-btn kst-btn-primary">Editar dia</a>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

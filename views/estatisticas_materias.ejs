@@ -1,0 +1,190 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Estatísticas por matéria</h2>
+  <p class="kst-section-subtitle">
+    Veja em quais matérias você está investindo mais tempo e fazendo mais questões.
+  </p>
+
+  <div class="kst-filter-bar" style="margin-bottom: 1rem;">
+    <span style="margin-right: 0.5rem;">Período:</span>
+    <a href="/estatisticas/materias?periodo=7d"
+       class="kst-btn <%= periodo === '7d' ? 'kst-btn-primary' : '' %>">
+      Últimos 7 dias
+    </a>
+    <a href="/estatisticas/materias?periodo=30d"
+       class="kst-btn <%= periodo === '30d' ? 'kst-btn-primary' : '' %>">
+      Últimos 30 dias
+    </a>
+    <a href="/estatisticas/materias?periodo=todos"
+       class="kst-btn <%= periodo === 'todos' ? 'kst-btn-primary' : '' %>">
+      Todos os estudos
+    </a>
+  </div>
+
+  <% if (!materiasStats || materiasStats.length === 0) { %>
+    <p>Nenhum estudo encontrado neste período.</p>
+    <p>
+      <a href="/estudos/novo" class="kst-btn kst-btn-primary">Registrar estudo por matéria</a>
+    </p>
+  <% } else { %>
+    <div class="kst-dashboard-grid">
+      <div class="kst-card kst-card-kpi">
+        <h3>Matérias com estudo</h3>
+        <p class="kst-kpi-number"><%= materiasStats.length %></p>
+        <p class="kst-kpi-text">
+          Total de estudos: 
+          <strong>
+            <%= materiasStats.reduce((acc, m) => acc + m.estudosCount, 0) %>
+          </strong>
+        </p>
+      </div>
+
+      <div class="kst-card kst-card-kpi">
+        <h3>Matéria mais estudada (horas)</h3>
+        <% const topHoras = materiasStats[0]; %>
+        <p class="kst-kpi-text">
+          <strong><%= topHoras.materiaNome %></strong><br />
+          <%= topHoras.horasTotais.toFixed(2) %> h, 
+          <%= topHoras.totalQuestoes %> questões.
+        </p>
+      </div>
+
+      <div class="kst-card kst-card-kpi">
+        <h3>Questões (total)</h3>
+        <p class="kst-kpi-text">
+          Total de questões:
+          <strong>
+            <%= materiasStats.reduce((acc, m) => acc + m.totalQuestoes, 0) %>
+          </strong><br />
+          Total de acertos:
+          <strong>
+            <%= materiasStats.reduce((acc, m) => acc + m.totalCertas, 0) %>
+          </strong>
+        </p>
+      </div>
+
+      <div class="kst-card kst-card-kpi">
+        <h3>Taxa de acerto média</h3>
+        <% 
+          const somaTaxa = materiasStats.reduce((acc, m) => {
+            return acc + (m.taxaAcerto != null ? m.taxaAcerto : 0);
+          }, 0);
+          const qtdComTaxa = materiasStats.filter(m => m.taxaAcerto != null).length;
+          const mediaTaxa = qtdComTaxa ? (somaTaxa / qtdComTaxa) : 0;
+        %>
+        <p class="kst-kpi-text">
+          Taxa média: <strong><%= mediaTaxa.toFixed(1) %>%</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="kst-charts-grid">
+      <div class="kst-card">
+        <h3>Horas estudadas por matéria</h3>
+        <p class="kst-chart-subtitle">Total de horas dedicadas em cada matéria.</p>
+        <canvas id="chartHorasMaterias"></canvas>
+      </div>
+
+      <div class="kst-card">
+        <h3>Questões por matéria</h3>
+        <p class="kst-chart-subtitle">Total de questões resolvidas em cada matéria.</p>
+        <canvas id="chartQuestoesMaterias"></canvas>
+      </div>
+    </div>
+
+    <div class="kst-card" style="margin-top: 1.5rem;">
+      <h3>Resumo detalhado</h3>
+      <table class="kst-table">
+        <thead>
+          <tr>
+            <th>Matéria</th>
+            <th>Horas</th>
+            <th>Minutos</th>
+            <th>Dias estudados</th>
+            <th>Questões</th>
+            <th>Acertos</th>
+            <th>Taxa de acerto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% materiasStats.forEach(function(m) { %>
+            <tr>
+              <td><%= m.materiaNome %></td>
+              <td><%= m.horasTotais.toFixed(2) %> h</td>
+              <td><%= m.totalMinutos %> min</td>
+              <td><%= m.totalDias %></td>
+              <td><%= m.totalQuestoes %></td>
+              <td><%= m.totalCertas %></td>
+              <td>
+                <% if (m.taxaAcerto != null) { %>
+                  <%= m.taxaAcerto %>%
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include("partials/footer") %>
+
+<% if (materiasStats && materiasStats.length > 0) { %>
+<script>
+  (function () {
+    const labels = <%- JSON.stringify(labels) %>;
+    const horasDataset = <%- JSON.stringify(horasDataset) %>;
+    const questoesDataset = <%- JSON.stringify(questoesDataset) %>;
+
+    const ctxHoras = document.getElementById("chartHorasMaterias");
+    if (ctxHoras) {
+      new Chart(ctxHoras, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Horas estudadas",
+            data: horasDataset
+          }]
+        },
+        options: {
+          responsive: true,
+          indexAxis: "y",
+          scales: {
+            x: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    const ctxQuestoes = document.getElementById("chartQuestoesMaterias");
+    if (ctxQuestoes) {
+      new Chart(ctxQuestoes, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Questões resolvidas",
+            data: questoesDataset
+          }]
+        },
+        options: {
+          responsive: true,
+          indexAxis: "y",
+          scales: {
+            x: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  })();
+</script>
+<% } %>

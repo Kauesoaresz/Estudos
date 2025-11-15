@@ -1,0 +1,34 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Detalhes do estudo</h2>
+
+  <div class="kst-card">
+    <p><strong>Data:</strong> <%= estudo.dia ? estudo.dia.data : "-" %></p>
+    <p><strong>Matéria:</strong> <%= estudo.materia ? estudo.materia.nome : "-" %></p>
+    <p><strong>Tempo de estudo:</strong> <%= estudo.minutos_estudados != null ? estudo.minutos_estudados + " min" : "-" %></p>
+    <p><strong>Tipo de estudo:</strong>
+      <% if (estudo.tipo_estudo === "CONTEUDO_NOVO") { %>
+        Conteúdo novo
+      <% } else if (estudo.tipo_estudo === "REVISAO") { %>
+        Revisão
+      <% } else if (estudo.tipo_estudo === "REVISAO_ERRO") { %>
+        Revisão de erro
+      <% } else { %>
+        -
+      <% } %>
+    </p>
+    <p><strong>Questões feitas:</strong> <%= estudo.questoes_feitas != null ? estudo.questoes_feitas : "-" %></p>
+    <p><strong>Questões certas:</strong> <%= estudo.questoes_certas != null ? estudo.questoes_certas : "-" %></p>
+    <p><strong>Questões marcadas para revisão:</strong> <%= estudo.questoes_marcadas_revisao != null ? estudo.questoes_marcadas_revisao : "-" %></p>
+
+    <p><strong>Tópicos estudados:</strong> <%= estudo.topicos_estudados || "-" %></p>
+  </div>
+
+  <div style="margin-top:1rem;">
+    <a href="/estudos" class="kst-btn kst-btn-secondary">Voltar ao histórico</a>
+    <a href="/estudos/<%= estudo.id %>/editar" class="kst-btn kst-btn-primary">Editar estudo</a>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

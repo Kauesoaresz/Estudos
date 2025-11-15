@@ -1,0 +1,201 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Painel geral</h2>
+  <p class="kst-section-subtitle">
+    Visão rápida do que você está fazendo hoje, na semana e no mês.
+  </p>
+
+  <div class="kst-dashboard-grid">
+    <!-- HOJE -->
+    <div class="kst-card kst-card-kpi">
+      <h3>
+        Hoje
+        <% if (resumoHoje.existe && resumoHoje.dataLabel) { %>
+          (<%= resumoHoje.dataLabel %>)
+        <% } %>
+      </h3>
+
+      <% if (!resumoHoje.existe) { %>
+        <p class="kst-kpi-text">Nenhum dia registrado hoje ainda.</p>
+        <p>
+          <a href="/dia/novo" class="kst-btn kst-btn-primary">
+            Registrar dia de hoje
+          </a>
+        </p>
+      <% } else { %>
+        <p class="kst-kpi-number">
+          <%= resumoHoje.horasEstudo.toFixed(2) %> h
+        </p>
+        <p class="kst-kpi-text">
+          <strong><%= resumoHoje.questoes %></strong> questões resolvidas.
+        </p>
+        <p class="kst-kpi-text">
+          Sono:
+          <% if (resumoHoje.horasSono != null) { %>
+            <%= resumoHoje.horasSono.toFixed(1) %> h
+          <% } else { %>
+            —
+          <% } %>
+          <br />
+          Foco: <%= resumoHoje.foco != null ? resumoHoje.foco : "—" %> |
+          Energia: <%= resumoHoje.energia != null ? resumoHoje.energia : "—" %><br />
+          Humor:
+          <%= resumoHoje.humor ? resumoHoje.humor.toLowerCase() : "—" %>
+        </p>
+        <p>
+          <a href="/dias" class="kst-link-inline">Ver histórico de dias</a>
+        </p>
+      <% } %>
+    </div>
+
+    <!-- ÚLTIMOS 7 DIAS -->
+    <div class="kst-card kst-card-kpi">
+      <h3>Últimos 7 dias</h3>
+
+      <% if (!resumo7 || resumo7.totalDias === 0) { %>
+        <p class="kst-kpi-text">Nenhum registro nos últimos 7 dias.</p>
+      <% } else { %>
+        <p class="kst-kpi-text">
+          Dias registrados:
+          <strong><%= resumo7.totalDias %></strong><br />
+          Dias com estudo:
+          <strong><%= resumo7.diasComEstudo %></strong>
+        </p>
+        <p class="kst-kpi-text">
+          Horas totais:
+          <strong><%= resumo7.somaHoras.toFixed(2) %> h</strong><br />
+          Média (só dias com estudo):
+          <strong><%= resumo7.mediaHoras.toFixed(2) %> h/dia</strong>
+        </p>
+        <p class="kst-kpi-text">
+          Questões totais:
+          <strong><%= resumo7.somaQuestoes %></strong><br />
+          Média (só dias com estudo):
+          <strong><%= resumo7.mediaQuestoes.toFixed(1) %></strong>
+        </p>
+      <% } %>
+    </div>
+
+    <!-- ÚLTIMOS 30 DIAS -->
+    <div class="kst-card kst-card-kpi">
+      <h3>Últimos 30 dias</h3>
+
+      <% if (!resumo30 || resumo30.totalDias === 0) { %>
+        <p class="kst-kpi-text">Nenhum registro nos últimos 30 dias.</p>
+      <% } else { %>
+        <p class="kst-kpi-text">
+          Dias registrados:
+          <strong><%= resumo30.totalDias %></strong><br />
+          Dias com estudo:
+          <strong><%= resumo30.diasComEstudo %></strong>
+        </p>
+        <p class="kst-kpi-text">
+          Horas totais:
+          <strong><%= resumo30.somaHoras.toFixed(2) %> h</strong><br />
+          Média (só dias com estudo):
+          <strong><%= resumo30.mediaHoras.toFixed(2) %> h/dia</strong>
+        </p>
+        <p class="kst-kpi-text">
+          Questões totais:
+          <strong><%= resumo30.somaQuestoes %></strong><br />
+          Média (só dias com estudo):
+          <strong><%= resumo30.mediaQuestoes.toFixed(1) %></strong>
+        </p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Gráficos últimos 30 dias -->
+  <div class="kst-section" style="margin-top: 2rem;">
+    <h2>Evolução diária (últimos 30 dias)</h2>
+
+    <% if (!labels30 || labels30.length === 0) { %>
+      <p>Você ainda não tem dados suficientes. Comece registrando seus dias de estudo.</p>
+      <p>
+        <a href="/dia/novo" class="kst-btn kst-btn-primary">Registrar dia</a>
+        <a href="/estudos/novo" class="kst-btn">Registrar estudo por matéria</a>
+      </p>
+    <% } else { %>
+      <div class="kst-charts-grid">
+        <div class="kst-card">
+          <h3>Horas estudadas</h3>
+          <canvas id="chartHorasHome"></canvas>
+        </div>
+        <div class="kst-card">
+          <h3>Questões resolvidas</h3>
+          <canvas id="chartQuestoesHome"></canvas>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Ações rápidas -->
+  <div class="kst-section" style="margin-top: 2rem;">
+    <h2>Ações rápidas</h2>
+    <div class="kst-quick-actions">
+      <a href="/dia/novo" class="kst-btn kst-btn-primary">Registrar dia</a>
+      <a href="/estudos/novo" class="kst-btn">Registrar estudo por matéria</a>
+      <a href="/simulados/novo" class="kst-btn">Registrar simulado</a>
+      <a href="/estatisticas/dias" class="kst-btn">Ver estatísticas gerais</a>
+    </div>
+  </div>
+</section>
+
+<%- include("partials/footer") %>
+
+<% if (labels30 && labels30.length > 0) { %>
+<script>
+  (function () {
+    const labels = <%- JSON.stringify(labels30) %>;
+    const horas = <%- JSON.stringify(horas30) %>;
+    const questoes = <%- JSON.stringify(questoes30) %>;
+
+    const ctxHoras = document.getElementById("chartHorasHome");
+    if (ctxHoras) {
+      new Chart(ctxHoras, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Horas de estudo",
+            data: horas,
+            fill: false,
+            tension: 0.2
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    const ctxQuestoes = document.getElementById("chartQuestoesHome");
+    if (ctxQuestoes) {
+      new Chart(ctxQuestoes, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Questões resolvidas",
+            data: questoes
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  })();
+</script>
+<% } %>

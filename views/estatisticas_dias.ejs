@@ -1,0 +1,210 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Estatísticas dos dias</h2>
+  <p class="kst-section-subtitle">
+    Visão geral da sua rotina: sono, estudo, foco, energia e humor ao longo do tempo.
+  </p>
+
+  <div class="kst-filter-bar" style="margin-bottom: 1rem;">
+    <span style="margin-right: 0.5rem;">Período:</span>
+    <a href="/estatisticas/dias?periodo=7d"
+       class="kst-btn <%= periodo === '7d' ? 'kst-btn-primary' : '' %>">
+      Últimos 7 dias
+    </a>
+    <a href="/estatisticas/dias?periodo=30d"
+       class="kst-btn <%= periodo === '30d' ? 'kst-btn-primary' : '' %>">
+      Últimos 30 dias
+    </a>
+    <a href="/estatisticas/dias?periodo=todos"
+       class="kst-btn <%= periodo === 'todos' ? 'kst-btn-primary' : '' %>">
+      Todos os dias
+    </a>
+  </div>
+
+  <% if (totalDias === 0) { %>
+    <p>Nenhum dia registrado neste período.</p>
+    <p>
+      <a href="/dia/novo" class="kst-btn kst-btn-primary">Registrar dia</a>
+    </p>
+  <% } else { %>
+    <div class="kst-dashboard-grid">
+      <div class="kst-card kst-card-kpi">
+        <h3>Total de dias considerados</h3>
+        <p class="kst-kpi-number"><%= totalDias %></p>
+        <p class="kst-kpi-text"><%= diasComEstudo %> dia(s) com estudo registrado.</p>
+      </div>
+
+      <div class="kst-card kst-card-kpi">
+        <h3>Estudos (média)</h3>
+        <p class="kst-kpi-text">
+          Horas de estudo/dia com estudo: <strong><%= mediaHorasEstudo.toFixed(2) %> h</strong><br />
+          Questões/dia com estudo: <strong><%= mediaQuestoesPorDia.toFixed(1) %></strong><br />
+          Total de questões: <strong><%= somaQuestoes %></strong>
+        </p>
+      </div>
+
+      <div class="kst-card kst-card-kpi">
+        <h3>Sono</h3>
+        <p class="kst-kpi-text">
+          Média de sono: <strong><%= mediaHorasSono.toFixed(2) %> h/noite</strong><br />
+          Qualidade média: <strong><%= mediaQualidadeSono.toFixed(1) %>/10</strong><br />
+          Dias com soneca: <strong><%= diasComSoneca %></strong>
+        </p>
+      </div>
+
+      <div class="kst-card kst-card-kpi">
+        <h3>Foco, energia e humor</h3>
+        <p class="kst-kpi-text">
+          Foco médio: <strong><%= mediaFoco.toFixed(1) %>/10</strong><br />
+          Energia média: <strong><%= mediaEnergia.toFixed(1) %>/10</strong><br />
+          Humor: 
+          <strong><%= countHumorBom %></strong> bom, 
+          <strong><%= countHumorOk %></strong> ok, 
+          <strong><%= countHumorRuim %></strong> ruim.
+        </p>
+      </div>
+    </div>
+
+    <div class="kst-charts-grid">
+      <div class="kst-card">
+        <h3>Horas de estudo por dia</h3>
+        <p class="kst-chart-subtitle">Horas líquidas de estudo registradas em cada dia.</p>
+        <canvas id="chartHorasEstudo"></canvas>
+      </div>
+
+      <div class="kst-card">
+        <h3>Questões por dia</h3>
+        <p class="kst-chart-subtitle">Quantidade total de questões por dia.</p>
+        <canvas id="chartQuestoesDia"></canvas>
+      </div>
+
+      <div class="kst-card">
+        <h3>Foco e energia</h3>
+        <p class="kst-chart-subtitle">Nível de foco e energia ao longo dos dias.</p>
+        <canvas id="chartFocoEnergia"></canvas>
+      </div>
+
+      <div class="kst-card">
+        <h3>Distribuição de humor</h3>
+        <p class="kst-chart-subtitle">Quantos dias você marcou como bom, ok ou ruim.</p>
+        <canvas id="chartHumor"></canvas>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<%- include("partials/footer") %>
+
+<% if (totalDias > 0) { %>
+<script>
+  (function() {
+    const labels = <%- labelsJSON %>;
+    const horasEstudo = <%- horasEstudoDatasetJSON %>;
+    const questoes = <%- questoesDatasetJSON %>;
+    const foco = <%- focoDatasetJSON %>;
+    const energia = <%- energiaDatasetJSON %>;
+    const humorLabels = <%- humorLabelsJSON %>;
+    const humorValores = <%- humorValoresJSON %>;
+
+    // Horas de estudo
+    const ctxHoras = document.getElementById("chartHorasEstudo");
+    if (ctxHoras) {
+      new Chart(ctxHoras, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Horas de estudo",
+            data: horasEstudo,
+            fill: false,
+            tension: 0.2
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Questões por dia
+    const ctxQuestoes = document.getElementById("chartQuestoesDia");
+    if (ctxQuestoes) {
+      new Chart(ctxQuestoes, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Questões por dia",
+            data: questoes
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Foco e energia
+    const ctxFocoEnergia = document.getElementById("chartFocoEnergia");
+    if (ctxFocoEnergia) {
+      new Chart(ctxFocoEnergia, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Foco",
+              data: foco,
+              fill: false,
+              tension: 0.2
+            },
+            {
+              label: "Energia",
+              data: energia,
+              fill: false,
+              tension: 0.2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              suggestedMax: 10
+            }
+          }
+        }
+      });
+    }
+
+    // Humor (pizza)
+    const ctxHumor = document.getElementById("chartHumor");
+    if (ctxHumor) {
+      new Chart(ctxHumor, {
+        type: "pie",
+        data: {
+          labels: humorLabels,
+          datasets: [{
+            data: humorValores
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+    }
+  })();
+</script>
+<% } %>

@@ -1,0 +1,69 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Matérias</h2>
+  <p class="kst-section-subtitle">
+    Cadastre aqui as matérias que você estuda (Matemática, Física, Redação, etc.).
+  </p>
+
+  <% if (erroExcluir) { %>
+    <p style="color:#f97373; margin-bottom: 1rem;">
+      Não é possível excluir uma matéria que já possui estudos registrados.
+    </p>
+  <% } %>
+
+  <div class="kst-card" style="margin-bottom: 1.5rem;">
+    <h3>Adicionar nova matéria</h3>
+
+    <% if (erro) { %>
+      <p style="color:#f97373;">Informe um nome válido.</p>
+    <% } %>
+    <% if (sucesso) { %>
+      <p style="color:#4ade80;">Matéria cadastrada com sucesso!</p>
+    <% } %>
+
+    <form action="/materias" method="post" class="kst-form-inline">
+      <input
+        type="text"
+        name="nome"
+        placeholder="Ex.: Matemática"
+        class="kst-input"
+        required
+      />
+      <button type="submit" class="kst-btn kst-btn-primary">Adicionar</button>
+    </form>
+  </div>
+
+  <% if (!materias || materias.length === 0) { %>
+    <p>Nenhuma matéria cadastrada ainda.</p>
+  <% } else { %>
+    <div class="kst-table-wrapper">
+      <table class="kst-table">
+        <thead>
+          <tr>
+            <th>Matéria</th>
+            <th style="width: 220px;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% materias.forEach(function(m) { %>
+            <tr>
+              <td><%= m.nome %></td>
+              <td>
+                <div class="kst-table-actions">
+                  <a href="/materias/<%= m.id %>" class="kst-btn kst-btn-xs">Ver</a>
+                  <a href="/materias/<%= m.id %>/editar" class="kst-btn kst-btn-xs kst-btn-secondary">Editar</a>
+                  <form action="/materias/<%= m.id %>/excluir" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta matéria?');" style="display:inline;">
+                    <button type="submit" class="kst-btn kst-btn-xs kst-btn-danger">Excluir</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include("partials/footer") %>

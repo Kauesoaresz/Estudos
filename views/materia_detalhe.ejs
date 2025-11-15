@@ -1,0 +1,35 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Detalhes da matéria</h2>
+
+  <div class="kst-card">
+    <p><strong>Nome:</strong> <%= materia.nome %></p>
+
+    <h3 class="kst-form-section-title">Resumo de estudos</h3>
+    <p><strong>Horas totais:</strong> <%= resumo.horasTotais.toFixed(2) %> h</p>
+    <p><strong>Minutos totais:</strong> <%= resumo.totalMinutos %> min</p>
+    <p><strong>Dias estudados:</strong> <%= resumo.diasEstudados %></p>
+    <p><strong>Questões (certas/total):</strong>
+      <% if (resumo.totalQuestoes > 0) { %>
+        <%= resumo.totalCertas %>/<%= resumo.totalQuestoes %>
+      <% } else { %>
+        -
+      <% } %>
+    </p>
+    <p><strong>% de acerto:</strong>
+      <% if (resumo.taxaAcerto != null) { %>
+        <%= resumo.taxaAcerto %>%
+      <% } else { %>
+        -
+      <% } %>
+    </p>
+  </div>
+
+  <div style="margin-top:1rem;">
+    <a href="/materias" class="kst-btn kst-btn-secondary">Voltar</a>
+    <a href="/materias/<%= materia.id %>/editar" class="kst-btn kst-btn-primary">Editar nome</a>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

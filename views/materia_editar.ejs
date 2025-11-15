@@ -1,0 +1,21 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-section">
+  <h2>Editar matéria</h2>
+
+  <div class="kst-card">
+    <form action="/materias/<%= materia.id %>/atualizar" method="post" class="kst-form-inline">
+      <input
+        type="text"
+        name="nome"
+        class="kst-input"
+        value="<%= materia.nome %>"
+        required
+      />
+      <button type="submit" class="kst-btn kst-btn-primary">Salvar</button>
+      <a href="/materias" class="kst-btn kst-btn-secondary">Cancelar</a>
+    </form>
+  </div>
+</section>
+
+<%- include("partials/footer") %>
