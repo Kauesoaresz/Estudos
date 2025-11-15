@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
+
 <body>
   <header class="kst-header">
     <div class="kst-container kst-header-inner">
 
-      <!-- ESQUERDA: "logo" + nome -->
+      <!-- ESQUERDA: Avatar + Nome -->
       <div class="kst-header-left">
         <a href="/" class="kst-logo-link">
           <div class="kst-logo-circle">
-            <!-- coloca uma foto em /public/img/perfil.jpg -->
             <img src="/img/perfil.jpg" alt="Kauê" class="kst-logo-avatar">
           </div>
         </a>
@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <!-- CENTRO: abas -->
+      <!-- CENTRO: Navegação -->
       <nav class="kst-header-nav">
         <div class="kst-nav-group-top">
 
@@ -73,15 +73,27 @@
               <a href="/estatisticas/simulados" class="kst-nav-dropdown-link">Estatísticas de simulados</a>
             </div>
           </div>
+
+          <!-- Revisão (NOVO) -->
+          <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+            <button type="button" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Revisão</span>
+              <span class="kst-nav-top-underline"></span>
+            </button>
+
+            <div class="kst-nav-dropdown">
+              <a href="/revisao" class="kst-nav-dropdown-link">Painel de revisão</a>
+              <a href="/estatisticas/materias" class="kst-nav-dropdown-link">Ver estatísticas</a>
+              <a href="/estudos" class="kst-nav-dropdown-link">Histórico de estudos</a>
+            </div>
+          </div>
+
         </div>
       </nav>
 
-      <!-- DIREITA: switch tema + menu mobile -->
+      <!-- DIREITA: Tema + Menu Mobile -->
       <div class="kst-header-right">
-        <button
-          class="kst-theme-switch"
-          type="button"
-          aria-label="Alternar tema claro/escuro">
+        <button class="kst-theme-switch" type="button" aria-label="Alternar tema claro/escuro">
           <span class="kst-theme-switch-knob"></span>
         </button>
 
@@ -92,6 +104,7 @@
     </div>
   </header>
 
+  <!-- SCRIPT HEADER -->
   <script>
     (function () {
       const body = document.body;
@@ -101,21 +114,17 @@
       function setTheme(theme) {
         body.classList.remove("theme-dark", "theme-light");
         body.classList.add(theme);
-        try {
-          localStorage.setItem(THEME_KEY, theme);
-        } catch (e) {}
+        try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
         if (themeSwitch) {
           themeSwitch.classList.toggle("is-light", theme === "theme-light");
         }
       }
 
-      const saved = (function () {
-        try {
-          return localStorage.getItem(THEME_KEY);
-        } catch (e) {
-          return null;
-        }
+      const saved = (() => {
+        try { return localStorage.getItem(THEME_KEY); }
+        catch (e) { return null; }
       })();
+
       const prefersDark = window.matchMedia &&
         window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -140,12 +149,13 @@
         });
       }
 
-      // Dropdown no mobile: abre/fecha no clique
+      // Dropdown no mobile: clique
       document.querySelectorAll(".kst-nav-top-item--has-dropdown").forEach(item => {
         const trigger = item.querySelector(".kst-nav-top-trigger");
         if (!trigger) return;
+
         trigger.addEventListener("click", (ev) => {
-          if (window.innerWidth > 900) return; // desktop: hover
+          if (window.innerWidth > 900) return; // desktop → hover
           ev.preventDefault();
           item.classList.toggle("is-open");
         });

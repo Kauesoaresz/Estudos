@@ -1,0 +1,126 @@
+<%- include("partials/header", { tituloPagina }) %>
+
+<div class="container">
+  <h1 class="titulo-pagina">Revisão – <%= materia.nome %></h1>
+
+  <% if (sucesso) { %>
+    <div class="alert alert-sucesso">
+      Revisão registrada com sucesso!
+    </div>
+  <% } %>
+
+  <!-- Resumo da matéria -->
+  <section class="secao">
+    <h2>Resumo da matéria</h2>
+    <ul class="lista-resumo">
+      <li>Horas totais de estudo: <strong><%= (resumo.horasTotais || 0).toFixed(2) %> h</strong></li>
+      <li>Total de minutos: <strong><%= resumo.totalMinutos || 0 %></strong></li>
+      <li>Questões feitas: <strong><%= resumo.totalQuestoes || 0 %></strong></li>
+      <li>Questões certas: <strong><%= resumo.totalCertas || 0 %></strong></li>
+      <li>Questões marcadas p/ revisão: <strong><%= resumo.totalMarcadas || 0 %></strong></li>
+      <li>Taxa de acerto geral:
+        <% if (resumo.taxaAcertoGeral != null) { %>
+          <strong><%= resumo.taxaAcertoGeral %>%</strong>
+        <% } else { %>
+          <span>sem dados</span>
+        <% } %>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Registrar nova revisão -->
+  <section class="secao">
+    <h2>Registrar revisão desta matéria</h2>
+
+    <form method="POST" action="/revisao/registrar" class="formulario">
+      <input type="hidden" name="materia_id" value="<%= materia.id %>">
+
+      <div class="grupo-campo">
+        <label for="data">Data da revisão</label>
+        <input type="date" id="data" name="data" required value="<%= new Date().toISOString().slice(0,10) %>">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="tipo_revisao">Tipo de revisão</label>
+        <select id="tipo_revisao" name="tipo_revisao">
+          <option value="">Selecione...</option>
+          <option value="QUESTÕES">Questões</option>
+          <option value="RESUMO">Resumo / Teoria</option>
+          <option value="FLASHCARDS">Flashcards</option>
+          <option value="RELEITURA">Releitura de anotações</option>
+        </select>
+      </div>
+
+      <div class="grupo-campo">
+        <label for="minutos_estudados">Minutos de revisão</label>
+        <input type="number" id="minutos_estudados" name="minutos_estudados" min="0" step="5">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="topicos_revisados">Tópicos revisados</label>
+        <textarea id="topicos_revisados" name="topicos_revisados" rows="3" placeholder="Ex: Função afim – gráficos; PA; regra de três..."></textarea>
+      </div>
+
+      <div class="grupo-campo">
+        <label for="questoes_feitas">Questões feitas na revisão</label>
+        <input type="number" id="questoes_feitas" name="questoes_feitas" min="0">
+      </div>
+
+      <div class="grupo-campo">
+        <label for="questoes_certas">Questões certas na revisão</label>
+        <input type="number" id="questoes_certas" name="questoes_certas" min="0">
+      </div>
+
+      <button type="submit" class="btn">Salvar revisão</button>
+    </form>
+  </section>
+
+  <!-- Histórico de estudos e revisões dessa matéria -->
+  <section class="secao">
+    <h2>Histórico de estudos e revisões</h2>
+
+    <% if (estudosDetalhados && estudosDetalhados.length) { %>
+      <div class="tabela-wrapper">
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Tipo</th>
+              <th>Min</th>
+              <th>Questões (C/T)</th>
+              <th>Taxa acerto</th>
+              <th>Tópicos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% estudosDetalhados.forEach(function(e) { %>
+              <tr>
+                <td><%= e.dataLabel %></td>
+                <td><%= e.tipo %></td>
+                <td><%= e.minutos_estudados || 0 %></td>
+                <td>
+                  <%= e.questoes_certas != null ? e.questoes_certas : 0 %> /
+                  <%= e.questoes_feitas != null ? e.questoes_feitas : 0 %>
+                </td>
+                <td>
+                  <% if (e.taxaAcerto != null) { %>
+                    <%= e.taxaAcerto %>%
+                  <% } else { %>
+                    —
+                  <% } %>
+                </td>
+                <td class="texto-menor">
+                  <%= e.topicos_estudados || "-" %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p>Ainda não há estudos/revisões registrados para esta matéria.</p>
+    <% } %>
+  </section>
+</div>
+
+<%- include("partials/footer") %>

@@ -1,0 +1,105 @@
+<%- include("partials/header", { tituloPagina }) %>
+
+<div class="container">
+  <h1 class="titulo-pagina">Painel de Revisão</h1>
+
+  <!-- Sugestões de revisão para hoje -->
+  <section class="secao">
+    <h2>Sugestões de revisão para hoje</h2>
+
+    <% if (sugestoesHoje && sugestoesHoje.length) { %>
+      <div class="cards-grid">
+        <% sugestoesHoje.forEach(function(m) { %>
+          <div class="card card-revisao">
+            <h3><a href="/revisao/materia/<%= m.materiaId %>"><%= m.materiaNome %></a></h3>
+
+            <p>
+              Último estudo:
+              <strong><%= m.ultimoEstudoLabel %></strong>
+              <% if (m.diasSemVer != null) { %>
+                (<%= m.diasSemVer %> dia(s) sem ver)
+              <% } %>
+            </p>
+
+            <p>
+              Taxa de acerto:
+              <% if (m.taxaAcerto != null) { %>
+                <strong><%= m.taxaAcerto %>%</strong>
+              <% } else { %>
+                <span>sem dados ainda</span>
+              <% } %>
+            </p>
+
+            <p>
+              Questões marcadas para revisão:
+              <strong><%= m.totalMarcadasRevisao || 0 %></strong>
+            </p>
+
+            <p class="prioridade">
+              Prioridade:
+              <span class="badge">
+                <%= m.prioridadeScore %> pts
+              </span>
+            </p>
+
+            <a class="btn" href="/revisao/materia/<%= m.materiaId %>">
+              Ver detalhes e revisar
+            </a>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>Você ainda não tem estudos suficientes para montar sugestões de revisão.</p>
+    <% } %>
+  </section>
+
+  <!-- Lista completa de matérias com prioridade -->
+  <section class="secao">
+    <h2>Todas as matérias – prioridades de revisão</h2>
+
+    <% if (materiasRevisao && materiasRevisao.length) { %>
+      <div class="tabela-wrapper">
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th>Matéria</th>
+              <th>Último estudo</th>
+              <th>Dias sem ver</th>
+              <th>Taxa de acerto</th>
+              <th>Questões marcadas</th>
+              <th>Prioridade</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% materiasRevisao.forEach(function(m) { %>
+              <tr>
+                <td><a href="/revisao/materia/<%= m.materiaId %>"><%= m.materiaNome %></a></td>
+                <td><%= m.ultimoEstudoLabel %></td>
+                <td><%= m.diasSemVer != null ? m.diasSemVer : "—" %></td>
+                <td>
+                  <% if (m.taxaAcerto != null) { %>
+                    <%= m.taxaAcerto %>%
+                  <% } else { %>
+                    —
+                  <% } %>
+                </td>
+                <td><%= m.totalMarcadasRevisao || 0 %></td>
+                <td><strong><%= m.prioridadeScore %></strong></td>
+                <td>
+                  <a class="btn btn-sm" href="/revisao/materia/<%= m.materiaId %>">
+                    Revisar
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p>Nenhuma matéria encontrada com estudos registrados.</p>
+    <% } %>
+  </section>
+</div>
+
+<%- include("partials/footer") %>

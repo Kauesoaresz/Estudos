@@ -1,0 +1,59 @@
+/* ============================
+   BOTÕES / LINKS
+============================ */
+
+.kst-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--kst-border-soft);
+  background: var(--kst-bg-elevated-soft);
+  color: var(--kst-text-main);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.18s ease-out;
+}
+
+.kst-btn:hover {
+  border-color: var(--kst-accent);
+  background: var(--kst-bg-elevated);
+}
+
+.kst-btn:active {
+  transform: scale(0.97);
+}
+
+.kst-btn-primary {
+  background: linear-gradient(135deg, var(--kst-text-main), var(--kst-accent-strong));
+  border-color: transparent;
+  color: #111827;
+  font-weight: 600;
+}
+
+.kst-btn-primary:hover {
+  filter: brightness(1.02);
+}
+
+.kst-link-inline {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--kst-accent-strong);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease-out;
+}
+
+.kst-link-inline:hover {
+  text-decoration: underline;
+}
+
+.kst-link-danger {
+  color: var(--kst-danger);
+}

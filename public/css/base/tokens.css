@@ -1,0 +1,62 @@
+:root {
+  --kst-bg-body: #050506;
+  --kst-bg-header: #060608;
+  --kst-bg-elevated: #0b0c10;
+  --kst-bg-elevated-soft: #111217;
+
+  --kst-border-soft: rgba(148, 163, 184, 0.28);
+  --kst-border-strong: rgba(148, 163, 184, 0.5);
+
+  --kst-shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.65);
+
+  --kst-text-main: #f9fafb;
+  --kst-text-soft: #d1d5db;
+  --kst-text-muted: #9ca3af;
+
+  --kst-accent: #f5f5f5;
+  --kst-accent-soft: rgba(249, 250, 251, 0.16);
+  --kst-accent-strong: #ffffff;
+
+  --kst-danger: #fca5a5;
+  --kst-success: #bbf7d0;
+
+  --kst-radius-sm: 6px;
+  --kst-radius-md: 12px;
+  --kst-radius-lg: 18px;
+}
+
+/* ESCURO */
+body.theme-dark {
+  --kst-bg-body: #050506;
+  --kst-bg-header: #060608;
+  --kst-bg-elevated: #0b0c10;
+  --kst-bg-elevated-soft: #111217;
+
+  --kst-text-main: #f9fafb;
+  --kst-text-soft: #d1d5db;
+  --kst-text-muted: #9ca3af;
+
+  --kst-accent: #f5f5f5;
+  --kst-accent-soft: rgba(249, 250, 251, 0.16);
+  --kst-accent-strong: #ffffff;
+}
+
+/* CLARO */
+body.theme-light {
+  --kst-bg-body: #f3f4f6;
+  --kst-bg-header: #ffffff;
+  --kst-bg-elevated: #ffffff;
+  --kst-bg-elevated-soft: #f9fafb;
+
+  --kst-text-main: #111827;
+  --kst-text-soft: #4b5563;
+  --kst-text-muted: #6b7280;
+
+  --kst-border-soft: rgba(148, 163, 184, 0.35);
+  --kst-border-strong: rgba(148, 163, 184, 0.7);
+  --kst-shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.12);
+
+  --kst-accent: #111827;
+  --kst-accent-soft: rgba(17, 24, 39, 0.08);
+  --kst-accent-strong: #000000;
+}

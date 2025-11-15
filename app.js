@@ -2,20 +2,18 @@
 //
 // Versão limpa e organizada do Kauê Study Tracker
 // com arquitetura MVC: controllers + routes + utils
-//
-// Ele substitui totalmente o app.js gigante original.
-//
 
 const express = require("express");
 const path = require("path");
 const db = require("./models"); // sequelize + models
 
-// Importa as rotas
+// Rotas
 const diaRoutes = require("./routes/diaRoutes");
 const materiaRoutes = require("./routes/materiaRoutes");
 const estudoRoutes = require("./routes/estudoRoutes");
 const simuladoRoutes = require("./routes/simuladoRoutes");
 const estatisticasRoutes = require("./routes/estatisticasRoutes");
+const revisaoRoutes = require("./routes/revisaoRoutes"); // 👈 NOVO
 
 const app = express();
 
@@ -63,6 +61,9 @@ app.use("/simulados", simuladoRoutes);
 
 // ESTATÍSTICAS
 app.use("/estatisticas", estatisticasRoutes);
+
+// REVISÃO (NOVO MÓDULO)
+app.use("/revisao", revisaoRoutes);
 
 // ---------------------
 // SUBIR SERVIDOR

@@ -1,0 +1,309 @@
+/* ============================
+   HEADER
+============================ */
+
+.kst-header {
+  background: var(--kst-bg-header);
+  border-bottom: 1px solid var(--kst-border-soft);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(16px);
+}
+
+.kst-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.4rem 0.5rem;
+}
+
+/* ESQUERDA */
+
+.kst-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.kst-logo-link {
+  text-decoration: none;
+}
+
+.kst-logo-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: var(--kst-bg-elevated-soft);
+  border: 1px solid var(--kst-border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.kst-logo-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.kst-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.kst-app-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.kst-app-subtitle {
+  font-size: 0.75rem;
+  color: var(--kst-text-muted);
+}
+
+/* NAV CENTRAL */
+
+.kst-header-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.kst-nav-group-top {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* todos os itens usam a mesma base */
+
+.kst-nav-top-item,
+.kst-nav-top-trigger {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.4rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.kst-nav-top-item {
+  text-decoration: none;
+}
+
+.kst-nav-top-label {
+  font-size: 0.85rem;
+  color: var(--kst-text-soft);
+  white-space: nowrap;
+}
+
+.kst-nav-top-underline {
+  margin-top: 0.22rem;
+  width: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--kst-accent-strong);
+  transition: width 0.16s ease-out;
+}
+
+/* hover / ativo */
+
+.kst-nav-top-item:hover .kst-nav-top-label,
+.kst-nav-top-item.is-active .kst-nav-top-label,
+.kst-nav-top-trigger:hover .kst-nav-top-label,
+.kst-nav-top-item--has-dropdown.is-open .kst-nav-top-label {
+  color: var(--kst-accent-strong);
+}
+
+.kst-nav-top-item:hover .kst-nav-top-underline,
+.kst-nav-top-item.is-active .kst-nav-top-underline,
+.kst-nav-top-trigger:hover .kst-nav-top-underline,
+.kst-nav-top-item--has-dropdown.is-open .kst-nav-top-underline {
+  width: 16px;
+}
+
+/* DROPDOWN – CENTRALIZADO E GRUDADO */
+
+.kst-nav-top-item--has-dropdown {
+  position: relative;
+}
+
+.kst-nav-dropdown {
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 2px);         /* encosta no item */
+  transform: translateX(-50%);   /* só centraliza */
+  min-width: 200px;
+  background: var(--kst-bg-elevated);
+  border-radius: 12px;
+  border: 1px solid var(--kst-border-soft);
+  padding: 0.45rem 0;
+  box-shadow: var(--kst-shadow-soft);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease-out;
+  z-index: 50;
+}
+
+.kst-nav-dropdown-link {
+  display: block;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--kst-text-soft);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.kst-nav-dropdown-link:hover {
+  background: var(--kst-bg-elevated-soft);
+  color: var(--kst-accent-strong);
+}
+
+/* Desktop: hover/focus (sem sumir quando desce o mouse) */
+
+@media (min-width: 901px) {
+  .kst-nav-top-item--has-dropdown:hover .kst-nav-dropdown,
+  .kst-nav-top-item--has-dropdown:focus-within .kst-nav-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* DIREITA: switch de tema + hamburguer */
+
+.kst-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* switch tema */
+
+.kst-theme-switch {
+  width: 42px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid var(--kst-border-soft);
+  background: var(--kst-bg-elevated-soft);
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+body.theme-light .kst-theme-switch {
+  background: #e5e7eb;
+}
+
+.kst-theme-switch-knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--kst-text-main);
+  transform: translateX(0);
+  transition: transform 0.18s ease-out, background 0.18s ease-out;
+}
+
+.kst-theme-switch.is-light .kst-theme-switch-knob {
+  transform: translateX(18px);
+}
+
+/* hamburguer (mobile) */
+
+.kst-nav-toggle {
+  display: none;
+  width: 34px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--kst-border-soft);
+  background: var(--kst-bg-elevated-soft);
+  padding: 0 5px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.kst-nav-toggle span {
+  width: 100%;
+  height: 2px;
+  background: var(--kst-text-main);
+  border-radius: 999px;
+  transition: transform 0.18s ease-out, opacity 0.18s ease-out;
+}
+
+.kst-nav-toggle.is-open span:nth-child(1) {
+  transform: translateY(4px) rotate(45deg);
+}
+
+.kst-nav-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.kst-nav-toggle.is-open span:nth-child(3) {
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+/* MENU MOBILE */
+
+@media (max-width: 900px) {
+  .kst-header-inner {
+    align-items: center;
+  }
+
+  .kst-header-nav {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    background: var(--kst-bg-header);
+    border-top: 1px solid var(--kst-border-soft);
+    display: none;
+    justify-content: center;
+    padding: 0.5rem 0 0.8rem;
+  }
+
+  .kst-header-nav.is-open {
+    display: flex;
+  }
+
+  .kst-nav-group-top {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .kst-nav-top-item,
+  .kst-nav-top-trigger {
+    align-items: flex-start;
+  }
+
+  .kst-nav-dropdown {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    box-shadow: none;
+    border: none;
+    padding-top: 0.2rem;
+    padding-bottom: 0.4rem;
+    background: transparent;
+    min-width: 0;
+  }
+
+  .kst-nav-dropdown-link {
+    padding-left: 0;
+  }
+
+  .kst-nav-toggle {
+    display: inline-flex;
+  }
+}

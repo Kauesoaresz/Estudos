@@ -1,0 +1,55 @@
+/* ============================
+   CARDS / GRID
+============================ */
+
+.kst-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.kst-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.kst-card {
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--kst-border-soft);
+  box-shadow: var(--kst-shadow-soft);
+}
+
+.kst-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+}
+
+.kst-card-kpi {
+  position: relative;
+  overflow: hidden;
+}
+
+.kst-card-kpi::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, var(--kst-accent-soft), transparent 70%);
+  pointer-events: none;
+}
+
+.kst-kpi-number {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+  color: var(--kst-accent-strong);
+}
+
+.kst-kpi-text {
+  font-size: 0.9rem;
+  color: var(--kst-text-soft);
+  margin: 0.15rem 0;
+}
