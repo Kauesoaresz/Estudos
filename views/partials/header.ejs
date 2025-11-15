@@ -11,30 +11,29 @@
   <header class="kst-header">
     <div class="kst-container kst-header-inner">
 
-      <!-- ESQUERDA: Avatar + Nome -->
+      <!-- ESQUERDA -->
       <div class="kst-header-left">
         <a href="/" class="kst-logo-link">
           <div class="kst-logo-circle">
             <img src="/img/perfil.jpg" alt="Kauê" class="kst-logo-avatar">
           </div>
         </a>
+
         <div class="kst-brand">
           <div class="kst-app-name">KAUÊ · ESTUDOS</div>
           <div class="kst-app-subtitle">Painel de estudos para Medicina</div>
         </div>
       </div>
 
-      <!-- CENTRO: Navegação -->
+      <!-- CENTRO -->
       <nav class="kst-header-nav">
         <div class="kst-nav-group-top">
 
-          <!-- Início -->
           <a href="/" class="kst-nav-top-item">
             <span class="kst-nav-top-label">Início</span>
             <span class="kst-nav-top-underline"></span>
           </a>
 
-          <!-- Dias -->
           <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
             <button type="button" class="kst-nav-top-trigger">
               <span class="kst-nav-top-label">Dias</span>
@@ -47,7 +46,6 @@
             </div>
           </div>
 
-          <!-- Estudos -->
           <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
             <button type="button" class="kst-nav-top-trigger">
               <span class="kst-nav-top-label">Estudos</span>
@@ -61,7 +59,6 @@
             </div>
           </div>
 
-          <!-- Simulados -->
           <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
             <button type="button" class="kst-nav-top-trigger">
               <span class="kst-nav-top-label">Simulados</span>
@@ -74,13 +71,11 @@
             </div>
           </div>
 
-          <!-- Revisão (NOVO) -->
           <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
             <button type="button" class="kst-nav-top-trigger">
               <span class="kst-nav-top-label">Revisão</span>
               <span class="kst-nav-top-underline"></span>
             </button>
-
             <div class="kst-nav-dropdown">
               <a href="/revisao" class="kst-nav-dropdown-link">Painel de revisão</a>
               <a href="/estatisticas/materias" class="kst-nav-dropdown-link">Ver estatísticas</a>
@@ -91,75 +86,63 @@
         </div>
       </nav>
 
-      <!-- DIREITA: Tema + Menu Mobile -->
+      <!-- DIREITA -->
       <div class="kst-header-right">
+
+        <!-- SWITCH DE TEMA -->
         <button class="kst-theme-switch" type="button" aria-label="Alternar tema claro/escuro">
           <span class="kst-theme-switch-knob"></span>
         </button>
 
+        <!-- MOBILE MENU -->
         <button class="kst-nav-toggle" type="button" aria-label="Abrir menu">
           <span></span><span></span><span></span>
         </button>
       </div>
+
     </div>
   </header>
 
-  <!-- SCRIPT HEADER -->
+  <!-- SCRIPT -->
   <script>
     (function () {
       const body = document.body;
-      const THEME_KEY = "kst-theme";
       const themeSwitch = document.querySelector(".kst-theme-switch");
 
-      function setTheme(theme) {
+      const KEY = "kst-theme";
+      const saved = localStorage.getItem(KEY);
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      const initial = saved || (prefersDark ? "theme-dark" : "theme-light");
+      body.classList.add(initial);
+
+      themeSwitch.addEventListener("click", () => {
+        const isLight = body.classList.contains("theme-light");
+        const newTheme = isLight ? "theme-dark" : "theme-light";
+
         body.classList.remove("theme-dark", "theme-light");
-        body.classList.add(theme);
-        try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
-        if (themeSwitch) {
-          themeSwitch.classList.toggle("is-light", theme === "theme-light");
-        }
-      }
+        body.classList.add(newTheme);
+        localStorage.setItem(KEY, newTheme);
+      });
 
-      const saved = (() => {
-        try { return localStorage.getItem(THEME_KEY); }
-        catch (e) { return null; }
-      })();
-
-      const prefersDark = window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-      const initialTheme = saved || (prefersDark ? "theme-dark" : "theme-light");
-      setTheme(initialTheme);
-
-      if (themeSwitch) {
-        themeSwitch.addEventListener("click", () => {
-          const isLight = body.classList.contains("theme-light");
-          setTheme(isLight ? "theme-dark" : "theme-light");
-        });
-      }
-
-      // MENU MOBILE
       const navToggle = document.querySelector(".kst-nav-toggle");
-      const headerNav = document.querySelector(".kst-header-nav");
+      const nav = document.querySelector(".kst-header-nav");
 
-      if (navToggle && headerNav) {
-        navToggle.addEventListener("click", () => {
-          navToggle.classList.toggle("is-open");
-          headerNav.classList.toggle("is-open");
-        });
-      }
+      navToggle.addEventListener("click", () => {
+        navToggle.classList.toggle("is-open");
+        nav.classList.toggle("is-open");
+      });
 
-      // Dropdown no mobile: clique
       document.querySelectorAll(".kst-nav-top-item--has-dropdown").forEach(item => {
         const trigger = item.querySelector(".kst-nav-top-trigger");
-        if (!trigger) return;
 
         trigger.addEventListener("click", (ev) => {
-          if (window.innerWidth > 900) return; // desktop → hover
+          if (window.innerWidth > 900) return;
           ev.preventDefault();
           item.classList.toggle("is-open");
         });
       });
+
     })();
   </script>
 

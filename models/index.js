@@ -1,17 +1,24 @@
+// models/index.js
+"use strict";
+
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
+// IMPORT MODELS
 const DiaModel = require("./Dia");
 const MateriaModel = require("./Materia");
 const EstudoMateriaDiaModel = require("./EstudoMateriaDia");
 const SimuladoModel = require("./Simulado");
 
+// INIT MODELS
 const Dia = DiaModel(sequelize, DataTypes);
 const Materia = MateriaModel(sequelize, DataTypes);
 const EstudoMateriaDia = EstudoMateriaDiaModel(sequelize, DataTypes);
 const Simulado = SimuladoModel(sequelize, DataTypes);
 
-// Associações
+// ===============================
+// ASSOCIAÇÕES
+// ===============================
 
 // Dia 1:N EstudoMateriaDia
 Dia.hasMany(EstudoMateriaDia, {
@@ -43,6 +50,7 @@ Simulado.belongsTo(Dia, {
   as: "dia"
 });
 
+// EXPORT FINAL
 const db = {
   sequelize,
   Dia,
