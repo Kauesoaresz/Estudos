@@ -27,12 +27,39 @@
   transform: scale(0.97);
 }
 
+/* BOTÃO - Revisar agora */
 .kst-btn-primary {
-  background: linear-gradient(135deg, var(--kst-text-main), var(--kst-accent-strong));
-  border-color: transparent;
-  color: #111827;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.9rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
+
+/* ESCURO: botão claro */
+body.theme-dark .kst-btn-primary {
+  background: #ffffff;
+  color: #111;
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.12);
+}
+
+body.theme-dark .kst-btn-primary:hover {
+  background: #f3f3f3;
+}
+
+/* CLARO: botão escuro */
+body.theme-light .kst-btn-primary {
+  background: #151515;
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+
+body.theme-light .kst-btn-primary:hover {
+  background: #000;
+}
+
 
 .kst-btn-primary:hover {
   filter: brightness(1.02);

@@ -1,22 +1,43 @@
-// routes/revisaoRoutes.js
-//
-// Rotas do módulo de REVISÃO
-
 const express = require("express");
 const router = express.Router();
 
-const revisaoController = require("../controllers/revisaoController");
+const {
+  dashboardRevisao,
+  detalheMateriaRevisao,
+  registrarRevisao,
+  carregarRevisaoParaEdicao,
+  atualizarRevisao,
+  excluirRevisao,
+  getRevisaoAPI
+} = require("../controllers/revisaoController");
 
-// Dashboard geral de revisão
-// GET /revisao
-router.get("/", revisaoController.dashboardRevisao);
+// ==============================
+// ROTAS FIXAS PRIMEIRO
+// ==============================
 
-// Tela detalhada de revisão por matéria
-// GET /revisao/materia/:id
-router.get("/materia/:id", revisaoController.detalheMateriaRevisao);
+// Dashboard
+router.get("/", dashboardRevisao);
 
-// Registrar uma sessão de revisão
-// POST /revisao/registrar
-router.post("/registrar", revisaoController.registrarRevisao);
+// Página da matéria
+router.get("/materia/:id", detalheMateriaRevisao);
+
+// API para popup de edição
+router.get("/api/revisao/:id", getRevisaoAPI);
+
+// Registrar nova revisão
+router.post("/registrar", registrarRevisao);
+
+// ==============================
+// ROTAS DINÂMICAS DEPOIS
+// ==============================
+
+// Editar revisão
+router.get("/:id/editar", carregarRevisaoParaEdicao);
+
+// Atualizar revisão
+router.post("/:id/atualizar", atualizarRevisao);
+
+// Excluir revisão
+router.post("/:id/excluir", excluirRevisao);
 
 module.exports = router;

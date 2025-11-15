@@ -14,5 +14,10 @@
 @import url("./components/forms.css");
 @import url("./components/tables.css");
 
+/* PAGES */
+
+@import url("./pages/revisao.css");
+
+
 /* UTILS */
 @import url("./utils/responsive.css");

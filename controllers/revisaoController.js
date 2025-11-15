@@ -1,9 +1,4 @@
 // controllers/revisaoController.js
-//
-// Módulo de REVISÃO do Kauê Study Tracker
-// - Dashboard de revisão por matéria
-// - Tela detalhada da matéria para revisão
-// - Registro de sessões de revisão (reutilizando EstudoMateriaDia)
 
 const { Materia, EstudoMateriaDia, Dia } = require("../models");
 const {
@@ -12,12 +7,12 @@ const {
   formatarDDMMYYYY
 } = require("../utils/datas");
 
-// -----------------------------
-// DASHBOARD DE REVISÃO GERAL
-// -----------------------------
+
+// =====================================================================
+// DASHBOARD DE REVISÃO
+// =====================================================================
 async function dashboardRevisao(req, res) {
   try {
-    // Busca TODOS os estudos, com matéria + dia
     const estudosBrutos = await EstudoMateriaDia.findAll({
       include: [
         { model: Materia, as: "materia", attributes: ["id", "nome"] },
@@ -25,74 +20,92 @@ async function dashboardRevisao(req, res) {
       ]
     });
 
-    const estudos = estudosBrutos.map((e) => e.get({ plain: true }));
-
-    // Mapa por matéria
+    const estudos = estudosBrutos.map(e => e.get({ plain: true }));
     const mapa = new Map();
 
-    estudos.forEach((est) => {
+    // ==============================
+    // AGRUPAMENTO POR MATÉRIA
+    // ==============================
+    estudos.forEach(est => {
       const mat = est.materia;
       if (!mat) return;
 
-      const matId = mat.id;
-
-      if (!mapa.has(matId)) {
-        mapa.set(matId, {
-          materiaId: matId,
+      if (!mapa.has(mat.id)) {
+        mapa.set(mat.id, {
+          materiaId: mat.id,
           materiaNome: mat.nome,
           ultimoEstudoISO: null,
           totalQuestoes: 0,
           totalCertas: 0,
-          totalMarcadasRevisao: 0,
-          totalEstudos: 0
+          totalMarcadasRevisao: 0
         });
       }
 
-      const item = mapa.get(matId);
-      item.totalEstudos++;
+      const item = mapa.get(mat.id);
 
-      // Data
-      if (est.dia && est.dia.data) {
+      if (est.dia?.data) {
         const iso = toISODate(est.dia.data);
-        if (iso) {
-          if (!item.ultimoEstudoISO || iso > item.ultimoEstudoISO) {
-            item.ultimoEstudoISO = iso;
-          }
+        if (!item.ultimoEstudoISO || iso > item.ultimoEstudoISO) {
+          item.ultimoEstudoISO = iso;
         }
       }
 
-      // Questões
-      if (est.questoes_feitas != null) {
+      if (est.questoes_feitas != null)
         item.totalQuestoes += Number(est.questoes_feitas);
-      }
-      if (est.questoes_certas != null) {
+
+      if (est.questoes_certas != null)
         item.totalCertas += Number(est.questoes_certas);
-      }
-      if (est.questoes_marcadas_revisao != null) {
+
+      if (est.questoes_marcadas_revisao != null)
         item.totalMarcadasRevisao += Number(est.questoes_marcadas_revisao);
-      }
     });
 
-    // Constrói array final
-    const materiasRevisao = Array.from(mapa.values()).map((m) => {
-      let diasSemVer = null;
-      if (m.ultimoEstudoISO) {
-        diasSemVer = diffDiasFromHoje(m.ultimoEstudoISO);
-        if (diasSemVer < 0) diasSemVer = 0;
-      }
+    // ==============================
+    // CÁLCULO FINAL
+    // ==============================
+    const materiasRevisao = Array.from(mapa.values()).map(m => {
+      const diasSemVer = m.ultimoEstudoISO
+        ? Math.max(diffDiasFromHoje(m.ultimoEstudoISO), 0)
+        : 0;
 
       const taxaAcerto =
         m.totalQuestoes > 0
           ? Math.round((m.totalCertas / m.totalQuestoes) * 100)
           : null;
 
-      const dificuldade = taxaAcerto != null ? 100 - taxaAcerto : 50;
-      const diasPeso = Math.min(diasSemVer ?? 0, 60);
-      const marcadasPeso = Math.min(m.totalMarcadasRevisao || 0, 50);
+      let prioridadeScore = 0;
+      let prioridadeClass = "baixa";
+      let prioridadeLabel = "Prioridade baixa";
 
-      // Combinação dos critérios (III)
-      const prioridadeScore =
-        diasPeso * 0.5 + dificuldade * 0.3 + marcadasPeso * 0.2;
+      // CASO ESPECIAL: redação ou matérias sem questões
+      if (taxaAcerto === null) {
+        if (diasSemVer >= 7) {
+          prioridadeClass = "alta";
+          prioridadeLabel = "Prioridade alta";
+        } else if (diasSemVer >= 3) {
+          prioridadeClass = "media";
+          prioridadeLabel = "Prioridade média";
+        }
+      } else {
+        const dificuldade = 100 - taxaAcerto;  
+        const diasPeso = Math.min(diasSemVer, 60);
+        const marcadasPeso = Math.min(m.totalMarcadasRevisao, 50);
+
+        prioridadeScore =
+          diasPeso * 0.5 +
+          dificuldade * 0.3 +
+          marcadasPeso * 0.2;
+
+        prioridadeScore = Number(prioridadeScore.toFixed(1));
+
+        if (prioridadeScore >= 40) {
+          prioridadeClass = "alta";
+          prioridadeLabel = "Prioridade alta";
+        } else if (prioridadeScore >= 20) {
+          prioridadeClass = "media";
+          prioridadeLabel = "Prioridade média";
+        }
+      }
 
       return {
         materiaId: m.materiaId,
@@ -106,40 +119,42 @@ async function dashboardRevisao(req, res) {
         totalQuestoes: m.totalQuestoes,
         totalCertas: m.totalCertas,
         totalMarcadasRevisao: m.totalMarcadasRevisao,
-        prioridadeScore: Number(prioridadeScore.toFixed(1)),
-        dificuldade
+        prioridadeScore,
+        prioridadeClass,
+        prioridadeLabel
       };
-    });
+    });  // ← ESTA CHAVE FALTAVA NO SEU CÓDIGO
 
-    // Ordena por prioridade desc
+
+    // ORDENAÇÃO
     materiasRevisao.sort((a, b) => b.prioridadeScore - a.prioridadeScore);
 
-    const sugestoesHoje = materiasRevisao.slice(0, 5); // top 5
+    const sugestoesHoje = materiasRevisao.slice(0, 5);
 
     res.render("revisao_dashboard", {
       tituloPagina: "Revisão – Kauê Study Tracker",
       materiasRevisao,
       sugestoesHoje
     });
+
   } catch (error) {
-    console.error("❌ Erro ao carregar dashboard de revisão:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar painel de revisão. Veja o console.");
+    console.error("❌ Erro no dashboard:", error);
+    return res.status(500).send("Erro ao carregar painel de revisão.");
   }
 }
 
-// -----------------------------
-// TELA DETALHADA DE UMA MATÉRIA PARA REVISÃO
-// -----------------------------
-async function detalheMateriaRevisao(req, res) {
-  const id = req.params.id;
 
+
+// =====================================================================
+// DETALHE DA MATÉRIA
+// =====================================================================
+async function detalheMateriaRevisao(req, res) {
   try {
+    const id = req.params.id;
+
     const materia = await Materia.findByPk(id, { raw: true });
-    if (!materia) {
+    if (!materia)
       return res.status(404).send("Matéria não encontrada.");
-    }
 
     const estudosBrutos = await EstudoMateriaDia.findAll({
       where: { materia_id: id },
@@ -147,32 +162,20 @@ async function detalheMateriaRevisao(req, res) {
       order: [["id", "DESC"]]
     });
 
-    const estudosDetalhados = estudosBrutos.map((e) => {
+    const estudosDetalhados = estudosBrutos.map(e => {
       const est = e.get({ plain: true });
-
       const iso = est.dia?.data ? toISODate(est.dia.data) : null;
-      const dataLabel = iso ? formatarDDMMYYYY(iso) : "—";
 
       let taxaAcerto = null;
-      if (
-        est.questoes_feitas &&
-        est.questoes_certas != null &&
-        est.questoes_feitas > 0
-      ) {
+      if (est.questoes_feitas > 0)
         taxaAcerto = Math.round(
           (est.questoes_certas / est.questoes_feitas) * 100
         );
-      }
-
-      const tipo =
-        est.tipo_estudo && est.tipo_estudo.toUpperCase().includes("REVIS")
-          ? "REVISÃO"
-          : "ESTUDO";
 
       return {
         id: est.id,
-        dataLabel,
-        tipo,
+        dataLabel: iso ? formatarDDMMYYYY(iso) : "—",
+        tipo: est.tipo_estudo?.includes("REVIS") ? "REVISÃO" : "ESTUDO",
         minutos_estudados: est.minutos_estudados,
         topicos_estudados: est.topicos_estudados,
         questoes_feitas: est.questoes_feitas,
@@ -182,28 +185,18 @@ async function detalheMateriaRevisao(req, res) {
       };
     });
 
-    // Resumo rápido
     let totalMinutos = 0;
     let totalQuestoes = 0;
     let totalCertas = 0;
     let totalMarcadas = 0;
 
-    estudosDetalhados.forEach((e) => {
-      if (e.minutos_estudados != null) {
-        totalMinutos += Number(e.minutos_estudados);
-      }
-      if (e.questoes_feitas != null) {
-        totalQuestoes += Number(e.questoes_feitas);
-      }
-      if (e.questoes_certas != null) {
-        totalCertas += Number(e.questoes_certas);
-      }
-      if (e.questoes_marcadas_revisao != null) {
-        totalMarcadas += Number(e.questoes_marcadas_revisao);
-      }
+    estudosDetalhados.forEach(e => {
+      totalMinutos += Number(e.minutos_estudados || 0);
+      totalQuestoes += Number(e.questoes_feitas || 0);
+      totalCertas += Number(e.questoes_certas || 0);
+      totalMarcadas += Number(e.questoes_marcadas_revisao || 0);
     });
 
-    const horasTotais = totalMinutos / 60;
     const taxaAcertoGeral =
       totalQuestoes > 0
         ? Math.round((totalCertas / totalQuestoes) * 100)
@@ -216,27 +209,27 @@ async function detalheMateriaRevisao(req, res) {
       materia,
       estudosDetalhados,
       resumo: {
-        horasTotais,
         totalMinutos,
         totalQuestoes,
         totalCertas,
         totalMarcadas,
+        horasTotais: totalMinutos / 60,
         taxaAcertoGeral
       },
       sucesso
     });
+
   } catch (error) {
-    console.error("❌ Erro ao carregar tela de revisão da matéria:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar revisão da matéria. Veja o console.");
+    console.error("❌ Erro detalhe revisão:", error);
+    return res.status(500).send("Erro ao carregar revisão da matéria.");
   }
 }
 
-// -----------------------------
-// REGISTRAR UMA SESSÃO DE REVISÃO
-// (reutiliza EstudoMateriaDia com tipo_estudo = "REVISÃO")
-// -----------------------------
+
+
+// =====================================================================
+// REGISTRAR REVISÃO
+// =====================================================================
 async function registrarRevisao(req, res) {
   try {
     const {
@@ -249,25 +242,22 @@ async function registrarRevisao(req, res) {
       questoes_certas
     } = req.body;
 
-    if (!data || !materia_id) {
+    if (!materia_id || !data)
       return res.redirect(`/revisao/materia/${materia_id}?erro=1`);
-    }
 
-    // Garante que existe um Dia com essa data
     let dia = await Dia.findOne({ where: { data } });
-    if (!dia) {
-      dia = await Dia.create({ data });
-    }
+    if (!dia) dia = await Dia.create({ data });
+
+    // ACEITA CHECKBOX MÚLTIPLO
+    let tipoFinal = "REVISÃO";
+    if (Array.isArray(tipo_revisao))
+      tipoFinal = "REVISÃO - " + tipo_revisao.join(", ");
 
     await EstudoMateriaDia.create({
       dia_id: dia.id,
       materia_id: Number(materia_id),
-      minutos_estudados: minutos_estudados
-        ? Number(minutos_estudados)
-        : null,
-      tipo_estudo: tipo_revisao
-        ? `REVISÃO - ${tipo_revisao}`
-        : "REVISÃO",
+      minutos_estudados: minutos_estudados ? Number(minutos_estudados) : null,
+      tipo_estudo: tipoFinal,
       topicos_estudados: topicos_revisados || null,
       questoes_feitas: questoes_feitas ? Number(questoes_feitas) : null,
       questoes_certas: questoes_certas ? Number(questoes_certas) : null,
@@ -275,16 +265,150 @@ async function registrarRevisao(req, res) {
     });
 
     return res.redirect(`/revisao/materia/${materia_id}?sucesso=1`);
+
   } catch (error) {
     console.error("❌ Erro ao registrar revisão:", error);
-    return res
-      .status(500)
-      .send("Erro ao registrar revisão. Veja o console.");
+    return res.status(500).send("Erro ao registrar revisão.");
   }
 }
+
+// =====================================================================
+// CARREGAR A REVISÃO PARA EDIÇÃO
+// =====================================================================
+async function carregarRevisaoParaEdicao(req, res) {
+  try {
+    const id = req.params.id;
+
+    const revisao = await EstudoMateriaDia.findByPk(id, {
+      include: [{ model: Dia, as: "dia", attributes: ["data"] }]
+    });
+
+    if (!revisao) return res.status(404).send("Revisão não encontrada.");
+
+    const materia = await Materia.findByPk(revisao.materia_id, { raw: true });
+
+    res.render("revisao_editar", {
+      tituloPagina: "Editar revisão",
+      revisao: revisao.get({ plain: true }),
+      materia
+    });
+
+  } catch (error) {
+    console.error("❌ Erro ao carregar edição:", error);
+    res.status(500).send("Erro ao carregar revisão para edição.");
+  }
+}
+
+
+
+// =====================================================================
+// ATUALIZAR REVISÃO
+// =====================================================================
+async function atualizarRevisao(req, res) {
+  try {
+    const id = req.params.id;
+
+    const {
+      data,
+      minutos_estudados,
+      topicos_revisados,
+      questoes_feitas,
+      questoes_certas,
+      tipo_revisao
+    } = req.body;
+
+    const revisao = await EstudoMateriaDia.findByPk(id);
+    if (!revisao) return res.status(404).send("Revisão não encontrada.");
+
+    let tipoFinal = revisao.tipo_estudo;
+
+    if (Array.isArray(tipo_revisao) && tipo_revisao.length > 0) {
+      tipoFinal = "REVISÃO - " + tipo_revisao.join(", ");
+    }
+
+    // Atualiza dia
+    let dia = await Dia.findOne({ where: { data } });
+    if (!dia) dia = await Dia.create({ data });
+
+    await revisao.update({
+      dia_id: dia.id,
+      minutos_estudados: minutos_estudados ? Number(minutos_estudados) : 0,
+      topicos_estudados: topicos_revisados || null,
+      questoes_feitas: questoes_feitas ? Number(questoes_feitas) : 0,
+      questoes_certas: questoes_certas ? Number(questoes_certas) : 0,
+      tipo_estudo: tipoFinal
+    });
+
+    return res.redirect(`/revisao/materia/${revisao.materia_id}?sucesso=1`);
+
+  } catch (error) {
+    console.error("❌ Erro ao atualizar revisão:", error);
+    res.status(500).send("Erro ao atualizar revisão.");
+  }
+}
+
+
+
+// =====================================================================
+// EXCLUIR REVISÃO
+// =====================================================================
+async function excluirRevisao(req, res) {
+  try {
+    const id = req.params.id;
+
+    const revisao = await EstudoMateriaDia.findByPk(id);
+    if (!revisao) return res.status(404).send("Revisão não encontrada.");
+
+    const materiaId = revisao.materia_id;
+
+    await revisao.destroy();
+
+    return res.redirect(`/revisao/materia/${materiaId}?apagado=1`);
+
+  } catch (error) {
+    console.error("❌ Erro ao excluir revisão:", error);
+    res.status(500).send("Erro ao excluir revisão.");
+  }
+}
+
+// =====================================================
+// API para buscar uma revisão específica (para o popup)
+// =====================================================
+async function getRevisaoAPI(req, res) {
+  try {
+    const id = req.params.id;
+
+    const r = await EstudoMateriaDia.findByPk(id, {
+      include: [{ model: Dia, as: "dia" }]
+    });
+
+    if (!r) return res.status(404).json({ erro: "Revisão não encontrada." });
+
+    res.json({
+      data: r.dia.data,
+      minutos: r.minutos_estudados,
+      topicos: r.topicos_estudados,
+      feitas: r.questoes_feitas,
+      certas: r.questoes_certas
+    });
+
+  } catch (err) {
+    console.error("Erro ao buscar revisão API:", err);
+    return res.status(500).json({ erro: "Erro no servidor." });
+  }
+}
+
+
+
 
 module.exports = {
   dashboardRevisao,
   detalheMateriaRevisao,
-  registrarRevisao
+  registrarRevisao,
+  carregarRevisaoParaEdicao,
+  atualizarRevisao,
+  excluirRevisao,
+  getRevisaoAPI
 };
+
+

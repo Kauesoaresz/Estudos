@@ -1,126 +1,252 @@
-<%- include("partials/header", { tituloPagina }) %>
+<%- include('partials/header', { tituloPagina }) %>
 
-<div class="container">
-  <h1 class="titulo-pagina">Revisão – <%= materia.nome %></h1>
+<link rel="stylesheet" href="/css/pages/revisao_materia.css">
 
-  <% if (sucesso) { %>
-    <div class="alert alert-sucesso">
-      Revisão registrada com sucesso!
-    </div>
-  <% } %>
+<div class="kst-rev-mat-page kst-container">
 
-  <!-- Resumo da matéria -->
-  <section class="secao">
-    <h2>Resumo da matéria</h2>
-    <ul class="lista-resumo">
-      <li>Horas totais de estudo: <strong><%= (resumo.horasTotais || 0).toFixed(2) %> h</strong></li>
-      <li>Total de minutos: <strong><%= resumo.totalMinutos || 0 %></strong></li>
-      <li>Questões feitas: <strong><%= resumo.totalQuestoes || 0 %></strong></li>
-      <li>Questões certas: <strong><%= resumo.totalCertas || 0 %></strong></li>
-      <li>Questões marcadas p/ revisão: <strong><%= resumo.totalMarcadas || 0 %></strong></li>
-      <li>Taxa de acerto geral:
-        <% if (resumo.taxaAcertoGeral != null) { %>
-          <strong><%= resumo.taxaAcertoGeral %>%</strong>
+  <!-- TÍTULO -->
+  <h1 class="kst-rev-mat-title">Revisão – <%= materia.nome %></h1>
+  <p class="kst-rev-mat-subtitle">Veja seu desempenho, registre revisões e acompanhe sua evolução.</p>
+
+  <!-- ============================
+       CARD RESUMO
+  ============================= -->
+  <div class="kst-rev-mat-card">
+    <h3>Resumo da matéria</h3>
+
+    <ul class="kst-rev-mat-list">
+      <li><strong>Horas totais:</strong> <%= resumo.horasTotais.toFixed(2) %> h</li>
+      <li><strong>Minutos:</strong> <%= resumo.totalMinutos %></li>
+      <li><strong>Questões feitas:</strong> <%= resumo.totalQuestoes %></li>
+      <li><strong>Questões certas:</strong> <%= resumo.totalCertas %></li>
+      <li><strong>Questões marcadas p/ revisão:</strong> <%= resumo.totalMarcadas %></li>
+      <li>
+        <strong>Taxa de acerto geral:</strong>
+        <% if (resumo.taxaAcertoGeral === null) { %>
+          —
         <% } else { %>
-          <span>sem dados</span>
+          <%= resumo.taxaAcertoGeral %>%
         <% } %>
       </li>
     </ul>
-  </section>
+  </div>
 
-  <!-- Registrar nova revisão -->
-  <section class="secao">
-    <h2>Registrar revisão desta matéria</h2>
+  <!-- ============================
+       FORM PARA REGISTRAR NOVA REVISÃO
+  ============================= -->
+  <div class="kst-rev-mat-form">
+    <h3>Registrar revisão desta matéria</h3>
 
-    <form method="POST" action="/revisao/registrar" class="formulario">
+    <form action="/revisao/registrar" method="POST">
       <input type="hidden" name="materia_id" value="<%= materia.id %>">
 
-      <div class="grupo-campo">
-        <label for="data">Data da revisão</label>
-        <input type="date" id="data" name="data" required value="<%= new Date().toISOString().slice(0,10) %>">
+      <div class="kst-form-group">
+        <label>Data</label>
+        <input type="date" name="data" required>
       </div>
 
-      <div class="grupo-campo">
-        <label for="tipo_revisao">Tipo de revisão</label>
-        <select id="tipo_revisao" name="tipo_revisao">
-          <option value="">Selecione...</option>
-          <option value="QUESTÕES">Questões</option>
-          <option value="RESUMO">Resumo / Teoria</option>
-          <option value="FLASHCARDS">Flashcards</option>
-          <option value="RELEITURA">Releitura de anotações</option>
-        </select>
+      <div class="kst-form-group">
+        <label>Tipo(s) de revisão</label>
+
+        <div class="kst-checkbox-group">
+          <label class="kst-checkbox">
+            <input type="checkbox" name="tipo_revisao" value="Resumo">
+            <span>Resumo</span>
+          </label>
+
+          <label class="kst-checkbox">
+            <input type="checkbox" name="tipo_revisao" value="Questões">
+            <span>Questões</span>
+          </label>
+
+          <label class="kst-checkbox">
+            <input type="checkbox" name="tipo_revisao" value="Flashcards">
+            <span>Flashcards</span>
+          </label>
+
+          <label class="kst-checkbox">
+            <input type="checkbox" name="tipo_revisao" value="Releitura">
+            <span>Releitura</span>
+          </label>
+        </div>
       </div>
 
-      <div class="grupo-campo">
-        <label for="minutos_estudados">Minutos de revisão</label>
-        <input type="number" id="minutos_estudados" name="minutos_estudados" min="0" step="5">
+      <div class="kst-form-group">
+        <label>Minutos revisados</label>
+        <input type="number" name="minutos_estudados" min="1">
       </div>
 
-      <div class="grupo-campo">
-        <label for="topicos_revisados">Tópicos revisados</label>
-        <textarea id="topicos_revisados" name="topicos_revisados" rows="3" placeholder="Ex: Função afim – gráficos; PA; regra de três..."></textarea>
+      <div class="kst-form-group">
+        <label>Tópicos revisados</label>
+        <textarea name="topicos_revisados"></textarea>
       </div>
 
-      <div class="grupo-campo">
-        <label for="questoes_feitas">Questões feitas na revisão</label>
-        <input type="number" id="questoes_feitas" name="questoes_feitas" min="0">
+      <div class="kst-form-group">
+        <label>Questões feitas</label>
+        <input type="number" name="questoes_feitas" min="0">
       </div>
 
-      <div class="grupo-campo">
-        <label for="questoes_certas">Questões certas na revisão</label>
-        <input type="number" id="questoes_certas" name="questoes_certas" min="0">
+      <div class="kst-form-group">
+        <label>Questões certas</label>
+        <input type="number" name="questoes_certas" min="0">
       </div>
 
-      <button type="submit" class="btn">Salvar revisão</button>
+      <button type="submit" class="kst-btn kst-btn-primary">
+        Salvar revisão
+      </button>
     </form>
-  </section>
+  </div>
 
-  <!-- Histórico de estudos e revisões dessa matéria -->
-  <section class="secao">
-    <h2>Histórico de estudos e revisões</h2>
+  <!-- ============================
+       HISTÓRICO
+  ============================= -->
+  <h3 class="kst-hist-title">Histórico de estudos e revisões</h3>
 
-    <% if (estudosDetalhados && estudosDetalhados.length) { %>
-      <div class="tabela-wrapper">
-        <table class="tabela">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Tipo</th>
-              <th>Min</th>
-              <th>Questões (C/T)</th>
-              <th>Taxa acerto</th>
-              <th>Tópicos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% estudosDetalhados.forEach(function(e) { %>
-              <tr>
-                <td><%= e.dataLabel %></td>
-                <td><%= e.tipo %></td>
-                <td><%= e.minutos_estudados || 0 %></td>
-                <td>
-                  <%= e.questoes_certas != null ? e.questoes_certas : 0 %> /
-                  <%= e.questoes_feitas != null ? e.questoes_feitas : 0 %>
-                </td>
-                <td>
-                  <% if (e.taxaAcerto != null) { %>
-                    <%= e.taxaAcerto %>%
-                  <% } else { %>
-                    —
-                  <% } %>
-                </td>
-                <td class="texto-menor">
-                  <%= e.topicos_estudados || "-" %>
-                </td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    <% } else { %>
-      <p>Ainda não há estudos/revisões registrados para esta matéria.</p>
-    <% } %>
-  </section>
+  <div class="kst-rev-mat-table-wrapper">
+    <table class="kst-rev-mat-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Tipo</th>
+          <th>Min</th>
+          <th>Questões (C/T)</th>
+          <th>Taxa</th>
+          <th>Tópicos</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% estudosDetalhados.forEach(e => { %>
+          <tr>
+            <td><%= e.dataLabel %></td>
+
+            <td>
+              <% if (e.tipo === "REVISÃO") { %>
+                <span class="kst-rev-badge-tipo kst-rev-badge-tipo--rev">Revisão</span>
+              <% } else { %>
+                <span class="kst-rev-badge-tipo kst-rev-badge-tipo--est">Estudo</span>
+              <% } %>
+            </td>
+
+            <td><%= e.minutos_estudados || 0 %></td>
+
+            <td>
+              <% if (e.questoes_feitas > 0) { %>
+                <%= e.questoes_certas %> / <%= e.questoes_feitas %>
+              <% } else { %>
+                —
+              <% } %>
+            </td>
+
+            <td>
+              <% if (e.taxaAcerto === null) { %>
+                —
+              <% } else { %>
+                <%= e.taxaAcerto %>%
+              <% } %>
+            </td>
+
+            <td><%= e.topicos_estudados || "—" %></td>
+
+            <td>
+              <button
+                type="button"
+                class="kst-link-inline"
+                onclick="abrirPopupEditar(<%= e.id %>)">
+                Editar
+              </button>
+
+              <form action="/revisao/<%= e.id %>/excluir" method="POST" style="display:inline;">
+                <button
+                  class="kst-link-inline"
+                  onclick="return confirm('Excluir revisão?');">
+                  Excluir
+                </button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<%- include("partials/footer") %>
+<!-- =====================================================
+     POPUP DE EDIÇÃO
+===================================================== -->
+<div id="popupEditar" class="kst-popup-overlay">
+  <div class="kst-popup">
+    <h2>Editar revisão</h2>
+
+    <form id="formEditar" method="POST">
+      <div class="kst-form-group">
+        <label>Data</label>
+        <input type="date" id="edit_data" name="data" required>
+      </div>
+
+      <div class="kst-form-group">
+        <label>Minutos</label>
+        <input type="number" id="edit_min" name="minutos_estudados" min="1">
+      </div>
+
+      <div class="kst-form-group">
+        <label>Tópicos revisados</label>
+        <textarea id="edit_topicos" name="topicos_revisados"></textarea>
+      </div>
+
+      <div class="kst-form-group">
+        <label>Questões feitas</label>
+        <input type="number" id="edit_feitas" name="questoes_feitas" min="0">
+      </div>
+
+      <div class="kst-form-group">
+        <label>Questões certas</label>
+        <input type="number" id="edit_certas" name="questoes_certas" min="0">
+      </div>
+
+      <div class="kst-popup-buttons">
+        <button type="button" onclick="fecharPopup()" class="kst-btn">
+          Cancelar
+        </button>
+        <button type="submit" class="kst-btn kst-btn-primary">
+          Salvar alterações
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function abrirPopupEditar(id) {
+    // IMPORTANTE: rota correta com prefixo /revisao
+    fetch(`/revisao/api/revisao/${id}`)
+      .then(res => res.json())
+      .then(dados => {
+        // garante formato YYYY-MM-DD
+        const dataFormatada = dados.data ? String(dados.data).slice(0, 10) : "";
+
+        document.getElementById("edit_data").value    = dataFormatada;
+        document.getElementById("edit_min").value     = dados.minutos ?? "";
+        document.getElementById("edit_topicos").value = dados.topicos ?? "";
+        document.getElementById("edit_feitas").value  = dados.feitas ?? "";
+        document.getElementById("edit_certas").value  = dados.certas ?? "";
+
+        // define action do form para a rota de atualização
+        document.getElementById("formEditar").action = `/revisao/${id}/atualizar`;
+
+        // abre popup
+        document.getElementById("popupEditar").style.display = "flex";
+      })
+      .catch(err => {
+        console.error("Erro ao carregar revisão para edição:", err);
+        alert("Não foi possível carregar os dados da revisão.");
+      });
+  }
+
+  function fecharPopup() {
+    document.getElementById("popupEditar").style.display = "none";
+  }
+</script>
+
+<%- include('partials/footer') %>

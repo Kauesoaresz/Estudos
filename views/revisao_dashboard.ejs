@@ -1,105 +1,234 @@
-<%- include("partials/header", { tituloPagina }) %>
+<%- include('partials/header', { tituloPagina: 'Revisão' }) %>
 
-<div class="container">
-  <h1 class="titulo-pagina">Painel de Revisão</h1>
+<link rel="stylesheet" href="/css/pages/revisao.css">
 
-  <!-- Sugestões de revisão para hoje -->
-  <section class="secao">
-    <h2>Sugestões de revisão para hoje</h2>
+<div class="kst-rev-page">
 
-    <% if (sugestoesHoje && sugestoesHoje.length) { %>
-      <div class="cards-grid">
-        <% sugestoesHoje.forEach(function(m) { %>
-          <div class="card card-revisao">
-            <h3><a href="/revisao/materia/<%= m.materiaId %>"><%= m.materiaNome %></a></h3>
+  <!-- ============================================================
+       CABEÇALHO
+  ============================================================ -->
+  <div class="kst-rev-header">
+    <h1 class="kst-rev-title">Painel de Revisão</h1>
+    <p class="kst-rev-subtitle">
+      Sugestões de revisão calculadas com base em prioridade, tempo sem revisar e erros.
+    </p>
+  </div>
 
-            <p>
+
+  <!-- ============================================================
+       1) SUGESTÕES PARA HOJE (CARDS)
+  ============================================================ -->
+  <section class="kst-rev-section">
+    <div class="kst-rev-section-head">
+      <h2 class="kst-rev-section-title">Sugestões para hoje</h2>
+      <p class="kst-rev-section-caption">
+        <%= sugestoesHoje.length %> matéria(s) com maior prioridade de revisão agora.
+      </p>
+    </div>
+
+    <div class="kst-rev-grid">
+
+      <% if (sugestoesHoje.length === 0) { %>
+        <p class="kst-rev-empty">Nenhuma matéria com alta prioridade de revisão agora.</p>
+      <% } %>
+
+      <% sugestoesHoje.forEach((m, idx) => { %>
+        <%
+          // PRIORIDADE POR POSIÇÃO NO RANKING:
+          // 0 e 1 -> alta, 2 e 3 -> média, resto -> baixa
+          let prioridadeClass = "baixa";
+          let prioridadeLabel = "Prioridade baixa";
+
+          if (idx === 0 || idx === 1) {
+            prioridadeClass = "alta";
+            prioridadeLabel = "Prioridade alta";
+          } else if (idx === 2 || idx === 3) {
+            prioridadeClass = "media";
+            prioridadeLabel = "Prioridade média";
+          }
+
+          // Barra de prioridade: normaliza para 0–100
+          const perc = Math.max(
+            10,
+            Math.min(100, Math.round((m.prioridadeScore / 70) * 100))
+          );
+
+          const temTaxa = m.taxaAcerto != null;
+          const temMarcadas = (m.totalMarcadasRevisao || 0) > 0;
+        %>
+
+        <div class="kst-rev-card kst-rev-card--<%= prioridadeClass %>">
+
+          <!-- Título + prioridade -->
+          <div class="kst-rev-card-top">
+            <span class="kst-rev-pill kst-rev-pill--<%= prioridadeClass %>">
+              <%= prioridadeLabel %>
+            </span>
+
+            <h3 class="kst-rev-card-title">
+              <a href="/revisao/materia/<%= m.materiaId %>"><%= m.materiaNome %></a>
+            </h3>
+
+            <p class="kst-rev-meta">
               Último estudo:
               <strong><%= m.ultimoEstudoLabel %></strong>
-              <% if (m.diasSemVer != null) { %>
-                (<%= m.diasSemVer %> dia(s) sem ver)
-              <% } %>
+              —
+              <%= m.diasSemVer != null ? m.diasSemVer + ' dia(s) sem revisar' : 'sem histórico' %>
             </p>
+          </div>
 
-            <p>
-              Taxa de acerto:
-              <% if (m.taxaAcerto != null) { %>
-                <strong><%= m.taxaAcerto %>%</strong>
-              <% } else { %>
-                <span>sem dados ainda</span>
-              <% } %>
+          <!-- Estatísticas / Questões -->
+          <% if (!temTaxa && !temMarcadas) { %>
+            <!-- Ex: Redação sem questões ainda -->
+            <p class="kst-rev-stat-muted kst-rev-empty">
+              Sem dados de questões ainda.
             </p>
+          <% } else { %>
+            <dl class="kst-rev-stats">
+              <div class="kst-rev-stat">
+                <dt>Taxa de acerto</dt>
+                <dd>
+                  <% if (m.taxaAcerto == null) { %>
+                    <span class="kst-rev-stat-muted">—</span>
+                  <% } else { %>
+                    <span class="kst-rev-stat-value"><%= m.taxaAcerto %>%</span>
+                  <% } %>
+                </dd>
+              </div>
 
-            <p>
-              Questões marcadas para revisão:
-              <strong><%= m.totalMarcadasRevisao || 0 %></strong>
-            </p>
+              <div class="kst-rev-stat">
+                <dt>Questões marcadas</dt>
+                <dd>
+                  <span class="kst-rev-stat-value"><%= m.totalMarcadasRevisao %></span>
+                </dd>
+              </div>
+            </dl>
+          <% } %>
 
-            <p class="prioridade">
-              Prioridade:
-              <span class="badge">
+          <!-- Barra de prioridade -->
+          <div class="kst-rev-priority">
+            <div class="kst-rev-priority-line">
+              <div class="kst-rev-priority-bar">
+                <div
+                  class="kst-rev-priority-bar-fill"
+                  style="width: <%= perc %>%;"
+                ></div>
+              </div>
+              <span class="kst-rev-priority-score">
                 <%= m.prioridadeScore %> pts
               </span>
-            </p>
-
-            <a class="btn" href="/revisao/materia/<%= m.materiaId %>">
-              Ver detalhes e revisar
-            </a>
+            </div>
           </div>
-        <% }) %>
-      </div>
-    <% } else { %>
-      <p>Você ainda não tem estudos suficientes para montar sugestões de revisão.</p>
-    <% } %>
+
+          <!-- Botão CTA -->
+          <a
+            href="/revisao/materia/<%= m.materiaId %>"
+            class="kst-btn kst-btn-primary kst-rev-card-cta"
+          >
+            Revisar agora
+          </a>
+
+        </div>
+      <% }) %>
+
+    </div>
   </section>
 
-  <!-- Lista completa de matérias com prioridade -->
-  <section class="secao">
-    <h2>Todas as matérias – prioridades de revisão</h2>
 
-    <% if (materiasRevisao && materiasRevisao.length) { %>
-      <div class="tabela-wrapper">
-        <table class="tabela">
-          <thead>
+
+  <!-- ============================================================
+       2) TABELA – TODAS AS MATÉRIAS
+  ============================================================ -->
+  <section class="kst-rev-section kst-rev-section--table">
+    <div class="kst-rev-section-head">
+      <h2 class="kst-rev-section-title">Todas as matérias — prioridades de revisão</h2>
+      <p class="kst-rev-section-caption">
+        Lista completa ordenada da maior para a menor prioridade.
+      </p>
+    </div>
+
+    <div class="revisao-table-wrapper">
+      <table class="revisao-table">
+        <thead>
+          <tr>
+            <th>Matéria</th>
+            <th>Último estudo</th>
+            <th>Dias sem ver</th>
+            <th>Taxa de acerto</th>
+            <th>Questões marcadas</th>
+            <th>Prioridade</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% 
+            // pegar score máximo pra usar como referência visual
+            const maxScore = materiasRevisao.length
+              ? materiasRevisao[0].prioridadeScore
+              : 0;
+          %>
+
+          <% materiasRevisao.forEach(m => { %>
             <tr>
-              <th>Matéria</th>
-              <th>Último estudo</th>
-              <th>Dias sem ver</th>
-              <th>Taxa de acerto</th>
-              <th>Questões marcadas</th>
-              <th>Prioridade</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% materiasRevisao.forEach(function(m) { %>
-              <tr>
-                <td><a href="/revisao/materia/<%= m.materiaId %>"><%= m.materiaNome %></a></td>
-                <td><%= m.ultimoEstudoLabel %></td>
-                <td><%= m.diasSemVer != null ? m.diasSemVer : "—" %></td>
-                <td>
-                  <% if (m.taxaAcerto != null) { %>
+              <!-- Matéria -->
+              <td>
+                <a href="/revisao/materia/<%= m.materiaId %>" class="kst-link-inline">
+                  <%= m.materiaNome %>
+                </a>
+              </td>
+
+              <!-- Último estudo -->
+              <td><%= m.ultimoEstudoLabel %></td>
+
+              <!-- Dias sem ver (badge) -->
+              <td>
+                <%
+                  let nivelDia = "baixo";
+                  if (m.diasSemVer >= 15) nivelDia = "alto";
+                  else if (m.diasSemVer >= 5) nivelDia = "medio";
+                %>
+                <span class="badge badge-dia" data-level="<%= nivelDia %>">
+                  <%= m.diasSemVer != null ? m.diasSemVer + ' dia(s)' : '—' %>
+                </span>
+              </td>
+
+              <!-- Taxa de acerto (badge) -->
+              <td>
+                <% if (m.taxaAcerto == null) { %>
+                  —
+                <% } else { %>
+                  <%
+                    let qual = "bom";
+                    if (m.taxaAcerto < 50) qual = "ruim";
+                    else if (m.taxaAcerto < 80) qual = "medio";
+                  %>
+                  <span class="badge badge-acerto" data-qual="<%= qual %>">
                     <%= m.taxaAcerto %>%
-                  <% } else { %>
-                    —
-                  <% } %>
-                </td>
-                <td><%= m.totalMarcadasRevisao || 0 %></td>
-                <td><strong><%= m.prioridadeScore %></strong></td>
-                <td>
-                  <a class="btn btn-sm" href="/revisao/materia/<%= m.materiaId %>">
-                    Revisar
-                  </a>
-                </td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    <% } else { %>
-      <p>Nenhuma matéria encontrada com estudos registrados.</p>
-    <% } %>
+                  </span>
+                <% } %>
+              </td>
+
+              <!-- Questões marcadas -->
+              <td><%= m.totalMarcadasRevisao %></td>
+
+              <!-- Prioridade numérica (podia virar badge depois) -->
+              <td><strong><%= m.prioridadeScore %></strong></td>
+
+              <!-- Botão Revisar -->
+              <td>
+                <a href="/revisao/materia/<%= m.materiaId %>" class="revisao-mini-btn">
+                  Revisar
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
   </section>
+
 </div>
 
-<%- include("partials/footer") %>
+<%- include('partials/footer') %>
