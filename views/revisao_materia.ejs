@@ -8,6 +8,7 @@
   <h1 class="kst-rev-mat-title">Revisão – <%= materia.nome %></h1>
   <p class="kst-rev-mat-subtitle">Veja seu desempenho, registre revisões e acompanhe sua evolução.</p>
 
+
   <!-- ============================
        CARD RESUMO
   ============================= -->
@@ -20,8 +21,7 @@
       <li><strong>Questões feitas:</strong> <%= resumo.totalQuestoes %></li>
       <li><strong>Questões certas:</strong> <%= resumo.totalCertas %></li>
       <li><strong>Questões marcadas p/ revisão:</strong> <%= resumo.totalMarcadas %></li>
-      <li>
-        <strong>Taxa de acerto geral:</strong>
+      <li><strong>Taxa de acerto geral:</strong>
         <% if (resumo.taxaAcertoGeral === null) { %>
           —
         <% } else { %>
@@ -31,6 +31,8 @@
     </ul>
   </div>
 
+
+
   <!-- ============================
        FORM PARA REGISTRAR NOVA REVISÃO
   ============================= -->
@@ -38,6 +40,7 @@
     <h3>Registrar revisão desta matéria</h3>
 
     <form action="/revisao/registrar" method="POST">
+
       <input type="hidden" name="materia_id" value="<%= materia.id %>">
 
       <div class="kst-form-group">
@@ -49,6 +52,7 @@
         <label>Tipo(s) de revisão</label>
 
         <div class="kst-checkbox-group">
+
           <label class="kst-checkbox">
             <input type="checkbox" name="tipo_revisao" value="Resumo">
             <span>Resumo</span>
@@ -68,6 +72,7 @@
             <input type="checkbox" name="tipo_revisao" value="Releitura">
             <span>Releitura</span>
           </label>
+
         </div>
       </div>
 
@@ -94,13 +99,42 @@
       <button type="submit" class="kst-btn kst-btn-primary">
         Salvar revisão
       </button>
+
     </form>
   </div>
 
+
+
   <!-- ============================
-       HISTÓRICO
+       HISTÓRICO + FILTRO
   ============================= -->
-  <h3 class="kst-hist-title">Histórico de estudos e revisões</h3>
+  <div class="kst-hist-header-row">
+    <h3 class="kst-hist-title">Histórico de estudos e revisões</h3>
+
+    <!-- FILTROS -->
+    <div class="kst-hist-filtros">
+      <button
+        type="button"
+        class="kst-filtro-btn kst-filtro-btn--ativo"
+        data-filter-hist="todos">
+        Todos
+      </button>
+
+      <button
+        type="button"
+        class="kst-filtro-btn"
+        data-filter-hist="rev">
+        Só revisões
+      </button>
+
+      <button
+        type="button"
+        class="kst-filtro-btn"
+        data-filter-hist="est">
+        Só estudos
+      </button>
+    </div>
+  </div>
 
   <div class="kst-rev-mat-table-wrapper">
     <table class="kst-rev-mat-table">
@@ -118,68 +152,68 @@
 
       <tbody>
         <% estudosDetalhados.forEach(e => { %>
-          <tr>
-            <td><%= e.dataLabel %></td>
+        <tr data-tipo="<%= e.tipo === 'REVISÃO' ? 'rev' : 'est' %>">
+          <td><%= e.dataLabel %></td>
 
-            <td>
-              <% if (e.tipo === "REVISÃO") { %>
-                <span class="kst-rev-badge-tipo kst-rev-badge-tipo--rev">Revisão</span>
-              <% } else { %>
-                <span class="kst-rev-badge-tipo kst-rev-badge-tipo--est">Estudo</span>
-              <% } %>
-            </td>
+          <td>
+            <% if (e.tipo === "REVISÃO") { %>
+              <span class="kst-rev-badge-tipo kst-rev-badge-tipo--rev">Revisão</span>
+            <% } else { %>
+              <span class="kst-rev-badge-tipo kst-rev-badge-tipo--est">Estudo</span>
+            <% } %>
+          </td>
 
-            <td><%= e.minutos_estudados || 0 %></td>
+          <td><%= e.minutos_estudados || 0 %></td>
 
-            <td>
-              <% if (e.questoes_feitas > 0) { %>
-                <%= e.questoes_certas %> / <%= e.questoes_feitas %>
-              <% } else { %>
-                —
-              <% } %>
-            </td>
+          <td>
+            <% if (e.questoes_feitas > 0) { %>
+              <%= e.questoes_certas %> / <%= e.questoes_feitas %>
+            <% } else { %>
+              —
+            <% } %>
+          </td>
 
-            <td>
-              <% if (e.taxaAcerto === null) { %>
-                —
-              <% } else { %>
-                <%= e.taxaAcerto %>%
-              <% } %>
-            </td>
+          <td>
+            <% if (e.taxaAcerto === null) { %>
+              —
+            <% } else { %>
+              <%= e.taxaAcerto %>%
+            <% } %>
+          </td>
 
-            <td><%= e.topicos_estudados || "—" %></td>
+          <td><%= e.topicos_estudados || "—" %></td>
 
-            <td>
-              <button
-                type="button"
-                class="kst-link-inline"
-                onclick="abrirPopupEditar(<%= e.id %>)">
-                Editar
+          <td>
+            <button class="kst-link-inline" onclick="abrirPopupEditar(<%= e.id %>)">
+              Editar
+            </button>
+
+            <form action="/revisao/<%= e.id %>/excluir" method="POST" style="display:inline;">
+              <button class="kst-link-inline" onclick="return confirm('Excluir revisão?');">
+                Excluir
               </button>
-
-              <form action="/revisao/<%= e.id %>/excluir" method="POST" style="display:inline;">
-                <button
-                  class="kst-link-inline"
-                  onclick="return confirm('Excluir revisão?');">
-                  Excluir
-                </button>
-              </form>
-            </td>
-          </tr>
+            </form>
+          </td>
+        </tr>
         <% }) %>
       </tbody>
+
     </table>
   </div>
 </div>
 
+
+
 <!-- =====================================================
-     POPUP DE EDIÇÃO
+          POPUP DE EDIÇÃO
 ===================================================== -->
 <div id="popupEditar" class="kst-popup-overlay">
   <div class="kst-popup">
+
     <h2>Editar revisão</h2>
 
     <form id="formEditar" method="POST">
+
       <div class="kst-form-group">
         <label>Data</label>
         <input type="date" id="edit_data" name="data" required>
@@ -206,41 +240,60 @@
       </div>
 
       <div class="kst-popup-buttons">
-        <button type="button" onclick="fecharPopup()" class="kst-btn">
-          Cancelar
-        </button>
-        <button type="submit" class="kst-btn kst-btn-primary">
-          Salvar alterações
-        </button>
+        <button type="button" onclick="fecharPopup()" class="kst-btn">Cancelar</button>
+        <button type="submit" class="kst-btn kst-btn-primary">Salvar alterações</button>
       </div>
+
     </form>
+
   </div>
 </div>
 
+
+
 <script>
+  // --------- FILTRO HISTÓRICO (front-end) ----------
+  (function () {
+    const botoes = document.querySelectorAll(".kst-filtro-btn");
+    const linhas = document.querySelectorAll(".kst-rev-mat-table tbody tr");
+
+    botoes.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const filtro = btn.getAttribute("data-filter-hist"); // 'todos', 'rev', 'est'
+
+        // marca botão ativo
+        botoes.forEach(b => b.classList.remove("kst-filtro-btn--ativo"));
+        btn.classList.add("kst-filtro-btn--ativo");
+
+        // mostra/esconde linhas
+        linhas.forEach(tr => {
+          const tipo = tr.getAttribute("data-tipo"); // 'rev' ou 'est'
+          if (filtro === "todos" || filtro === tipo) {
+            tr.style.display = "";
+          } else {
+            tr.style.display = "none";
+          }
+        });
+      });
+    });
+  })();
+
+
+  // --------- POPUP EDITAR ----------
   function abrirPopupEditar(id) {
-    // IMPORTANTE: rota correta com prefixo /revisao
-    fetch(`/revisao/api/revisao/${id}`)
+    fetch(`/api/revisao/${id}`)
       .then(res => res.json())
       .then(dados => {
-        // garante formato YYYY-MM-DD
-        const dataFormatada = dados.data ? String(dados.data).slice(0, 10) : "";
 
-        document.getElementById("edit_data").value    = dataFormatada;
-        document.getElementById("edit_min").value     = dados.minutos ?? "";
-        document.getElementById("edit_topicos").value = dados.topicos ?? "";
-        document.getElementById("edit_feitas").value  = dados.feitas ?? "";
-        document.getElementById("edit_certas").value  = dados.certas ?? "";
+        document.getElementById("edit_data").value = dados.data;
+        document.getElementById("edit_min").value = dados.minutos || "";
+        document.getElementById("edit_topicos").value = dados.topicos || "";
+        document.getElementById("edit_feitas").value = dados.feitas || "";
+        document.getElementById("edit_certas").value = dados.certas || "";
 
-        // define action do form para a rota de atualização
         document.getElementById("formEditar").action = `/revisao/${id}/atualizar`;
 
-        // abre popup
         document.getElementById("popupEditar").style.display = "flex";
-      })
-      .catch(err => {
-        console.error("Erro ao carregar revisão para edição:", err);
-        alert("Não foi possível carregar os dados da revisão.");
       });
   }
 

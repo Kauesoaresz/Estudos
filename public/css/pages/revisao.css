@@ -125,21 +125,18 @@
   border: 1px solid transparent;
 }
 
-/* ALTA */
 .kst-rev-pill--alta {
   background: rgba(255, 0, 0, 0.10);
   border-color: rgba(255, 60, 60, 0.6);
   color: #ff5f5f;
 }
 
-/* MÉDIA */
 .kst-rev-pill--media {
   background: rgba(255, 200, 10, 0.12);
   border-color: rgba(255, 205, 50, 0.6);
   color: #c28a00;
 }
 
-/* BAIXA */
 .kst-rev-pill--baixa {
   background: rgba(50, 125, 255, 0.12);
   border-color: rgba(80, 145, 255, 0.6);
@@ -150,7 +147,7 @@
    ESTATÍSTICAS DO CARD
 ============================ */
 
-.mst-rev-stats {
+.kst-rev-stats {
   position: relative;
   z-index: 1;
   margin: 0.7rem 0 0.6rem;
@@ -232,14 +229,24 @@ body.theme-light .kst-rev-priority-bar-fill {
 }
 
 /* ============================
-   ESTADO VAZIO
+   GRÁFICOS — NOVO!!!
 ============================ */
 
-.kst-rev-empty {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--kst-text-muted);
+.kst-chart-box {
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-soft);
+  border-radius: 18px;
+  padding: 1.2rem;
+  box-shadow: var(--kst-shadow-soft);
 }
+
+.kst-chart-title {
+  margin: 0 0 0.6rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
 
 /* ============================
    TABELA – CAIXA
@@ -277,11 +284,12 @@ body.theme-light .kst-rev-priority-bar-fill {
   color: var(--kst-text-soft);
 }
 
-/* zebra rows */
+/* zebra */
 .revisao-table tr:nth-child(odd) {
   background: rgba(148, 163, 184, 0.06);
 }
 
+/* light */
 body.theme-light .revisao-table tr:nth-child(odd) {
   background: rgba(0,0,0,0.03);
 }
@@ -296,7 +304,7 @@ body.theme-light .revisao-table tr:hover {
 }
 
 /* ============================
-   BADGES (dias / acurácia)
+   BADGES
 ============================ */
 
 .badge {
@@ -352,7 +360,6 @@ body.theme-light .revisao-table tr:hover {
   display: inline-block;
 }
 
-/* dark */
 body.theme-dark .revisao-mini-btn {
   background: #ffffff;
   color: #111;
@@ -363,7 +370,6 @@ body.theme-dark .revisao-mini-btn:hover {
   background: #e8e8e8;
 }
 
-/* light */
 body.theme-light .revisao-mini-btn {
   background: #111;
   color: #fff;
@@ -383,7 +389,7 @@ body.theme-light .revisao-mini-btn:hover {
     font-size: 1.45rem;
   }
 
-  .mst-rev-stats {
+  .kst-rev-stats {
     flex-direction: column;
   }
 }

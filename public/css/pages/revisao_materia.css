@@ -187,3 +187,32 @@
   gap: 12px;
   margin-top: 20px;
 }
+
+.kst-hist-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.kst-hist-filtros {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.kst-filtro-btn {
+  border-radius: 999px;
+  border: 1px solid #d0d4e4;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.8rem;
+  background: #f5f6fb;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kst-filtro-btn--ativo {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
+}
