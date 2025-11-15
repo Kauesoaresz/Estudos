@@ -2,33 +2,156 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title><%= tituloPagina %> | Rastreador de Estudos</title>
+  <title><%= tituloPagina %> | Kauê - Estudos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
   <header class="kst-header">
     <div class="kst-container kst-header-inner">
-      <h1 class="kst-logo">Kauê - Rastreador de Estudos</h1>
-      <nav class="kst-nav">
-        <a href="/" class="kst-nav-link">Início</a>
-        <a href="/dia/novo" class="kst-nav-link">Registrar dia</a>
-        <a href="/dias" class="kst-nav-link">Histórico de dias</a>
 
-        <a href="/materias" class="kst-nav-link">Matérias</a>
+      <!-- ESQUERDA: "logo" + nome -->
+      <div class="kst-header-left">
+        <a href="/" class="kst-logo-link">
+          <div class="kst-logo-circle">
+            <!-- coloca uma foto em /public/img/perfil.jpg -->
+            <img src="/img/perfil.jpg" alt="Kauê" class="kst-logo-avatar">
+          </div>
+        </a>
+        <div class="kst-brand">
+          <div class="kst-app-name">KAUÊ · ESTUDOS</div>
+          <div class="kst-app-subtitle">Painel de estudos para Medicina</div>
+        </div>
+      </div>
 
-        <a href="/estudos/novo" class="kst-nav-link">Estudo por matéria</a>
-        <a href="/estudos" class="kst-nav-link">Histórico de estudos</a>
+      <!-- CENTRO: abas -->
+      <nav class="kst-header-nav">
+        <div class="kst-nav-group-top">
 
-        <a href="/simulados/novo" class="kst-nav-link">Registrar simulado</a>
-        <a href="/simulados" class="kst-nav-link">Histórico de simulados</a>
+          <!-- Início -->
+          <a href="/" class="kst-nav-top-item">
+            <span class="kst-nav-top-label">Início</span>
+            <span class="kst-nav-top-underline"></span>
+          </a>
 
-        <a href="/estatisticas/materias" class="kst-nav-link">Estatísticas por matéria</a>
-        <a href="/estatisticas/simulados" class="kst-nav-link">Estatísticas de simulados</a>
-        <a href="/estatisticas/dias" class="kst-nav-link">Estatísticas dos dias</a>
+          <!-- Dias -->
+          <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+            <button type="button" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Dias</span>
+              <span class="kst-nav-top-underline"></span>
+            </button>
+            <div class="kst-nav-dropdown">
+              <a href="/dia/novo" class="kst-nav-dropdown-link">Registrar dia</a>
+              <a href="/dias" class="kst-nav-dropdown-link">Histórico de dias</a>
+              <a href="/estatisticas/dias" class="kst-nav-dropdown-link">Estatísticas dos dias</a>
+            </div>
+          </div>
+
+          <!-- Estudos -->
+          <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+            <button type="button" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Estudos</span>
+              <span class="kst-nav-top-underline"></span>
+            </button>
+            <div class="kst-nav-dropdown">
+              <a href="/estudos/novo" class="kst-nav-dropdown-link">Registrar estudo por matéria</a>
+              <a href="/estudos" class="kst-nav-dropdown-link">Histórico de estudos</a>
+              <a href="/materias" class="kst-nav-dropdown-link">Gerenciar matérias</a>
+              <a href="/estatisticas/materias" class="kst-nav-dropdown-link">Estatísticas por matéria</a>
+            </div>
+          </div>
+
+          <!-- Simulados -->
+          <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+            <button type="button" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Simulados</span>
+              <span class="kst-nav-top-underline"></span>
+            </button>
+            <div class="kst-nav-dropdown">
+              <a href="/simulados/novo" class="kst-nav-dropdown-link">Registrar simulado</a>
+              <a href="/simulados" class="kst-nav-dropdown-link">Histórico de simulados</a>
+              <a href="/estatisticas/simulados" class="kst-nav-dropdown-link">Estatísticas de simulados</a>
+            </div>
+          </div>
+        </div>
       </nav>
+
+      <!-- DIREITA: switch tema + menu mobile -->
+      <div class="kst-header-right">
+        <button
+          class="kst-theme-switch"
+          type="button"
+          aria-label="Alternar tema claro/escuro">
+          <span class="kst-theme-switch-knob"></span>
+        </button>
+
+        <button class="kst-nav-toggle" type="button" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
+
+  <script>
+    (function () {
+      const body = document.body;
+      const THEME_KEY = "kst-theme";
+      const themeSwitch = document.querySelector(".kst-theme-switch");
+
+      function setTheme(theme) {
+        body.classList.remove("theme-dark", "theme-light");
+        body.classList.add(theme);
+        try {
+          localStorage.setItem(THEME_KEY, theme);
+        } catch (e) {}
+        if (themeSwitch) {
+          themeSwitch.classList.toggle("is-light", theme === "theme-light");
+        }
+      }
+
+      const saved = (function () {
+        try {
+          return localStorage.getItem(THEME_KEY);
+        } catch (e) {
+          return null;
+        }
+      })();
+      const prefersDark = window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      const initialTheme = saved || (prefersDark ? "theme-dark" : "theme-light");
+      setTheme(initialTheme);
+
+      if (themeSwitch) {
+        themeSwitch.addEventListener("click", () => {
+          const isLight = body.classList.contains("theme-light");
+          setTheme(isLight ? "theme-dark" : "theme-light");
+        });
+      }
+
+      // MENU MOBILE
+      const navToggle = document.querySelector(".kst-nav-toggle");
+      const headerNav = document.querySelector(".kst-header-nav");
+
+      if (navToggle && headerNav) {
+        navToggle.addEventListener("click", () => {
+          navToggle.classList.toggle("is-open");
+          headerNav.classList.toggle("is-open");
+        });
+      }
+
+      // Dropdown no mobile: abre/fecha no clique
+      document.querySelectorAll(".kst-nav-top-item--has-dropdown").forEach(item => {
+        const trigger = item.querySelector(".kst-nav-top-trigger");
+        if (!trigger) return;
+        trigger.addEventListener("click", (ev) => {
+          if (window.innerWidth > 900) return; // desktop: hover
+          ev.preventDefault();
+          item.classList.toggle("is-open");
+        });
+      });
+    })();
+  </script>
 
   <main class="kst-main">
     <div class="kst-container">
