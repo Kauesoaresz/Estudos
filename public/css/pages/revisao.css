@@ -1,0 +1,395 @@
+/* ============================
+   REVISÃO – PAINEL PREMIUM
+============================ */
+
+.kst-rev-page {
+  padding-top: 0.75rem;
+  padding-bottom: 2.5rem;
+}
+
+.kst-rev-header {
+  margin-bottom: 1.5rem;
+}
+
+.kst-rev-title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin: 0 0 0.15rem;
+}
+
+.kst-rev-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--kst-text-muted);
+}
+
+/* ============================
+   SEÇÕES
+============================ */
+
+.kst-rev-section {
+  margin-top: 1.7rem;
+}
+
+.kst-rev-section-head {
+  margin-bottom: 0.75rem;
+}
+
+.kst-rev-section-title {
+  font-size: 1.2rem;
+  margin: 0 0 0.15rem;
+}
+
+.kst-rev-section-caption {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--kst-text-muted);
+}
+
+/* ============================
+   GRID DE CARDS
+============================ */
+
+.kst-rev-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.kst-rev-card {
+  position: relative;
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  padding: 1rem 1.1rem 0.9rem;
+  border: 1px solid var(--kst-border-soft);
+  box-shadow: var(--kst-shadow-soft);
+  overflow: hidden;
+}
+
+.kst-rev-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, var(--kst-accent-soft), transparent 70%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.kst-rev-card--alta {
+  border-color: rgba(248, 113, 113, 0.9);
+}
+
+.kst-rev-card--media {
+  border-color: rgba(250, 204, 21, 0.8);
+}
+
+.kst-rev-card--baixa {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.kst-rev-card-top {
+  position: relative;
+  z-index: 1;
+}
+
+.kst-rev-card-title {
+  margin: 0.25rem 0 0.3rem;
+  font-size: 1.05rem;
+}
+
+.kst-rev-card-title a {
+  color: var(--kst-text-main);
+  text-decoration: none;
+}
+
+.kst-rev-card-title a:hover {
+  text-decoration: underline;
+}
+
+.kst-rev-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--kst-text-soft);
+}
+
+/* ============================
+   PILLS DE PRIORIDADE
+============================ */
+
+.kst-rev-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid transparent;
+}
+
+.kst-rev-pill--alta {
+  background: rgba(255, 0, 0, 0.10);
+  border-color: rgba(255, 60, 60, 0.6);
+  color: #ff5f5f;
+}
+
+.kst-rev-pill--media {
+  background: rgba(255, 200, 10, 0.12);
+  border-color: rgba(255, 205, 50, 0.6);
+  color: #c28a00;
+}
+
+.kst-rev-pill--baixa {
+  background: rgba(50, 125, 255, 0.12);
+  border-color: rgba(80, 145, 255, 0.6);
+  color: #3f75e5;
+}
+
+/* ============================
+   ESTATÍSTICAS DO CARD
+============================ */
+
+.kst-rev-stats {
+  position: relative;
+  z-index: 1;
+  margin: 0.7rem 0 0.6rem;
+  display: flex;
+  gap: 1.2rem;
+}
+
+.kst-rev-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.kst-rev-stat dt {
+  font-size: 0.78rem;
+  color: var(--kst-text-muted);
+}
+
+.kst-rev-stat dd {
+  margin: 0;
+}
+
+.kst-rev-stat-value {
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+.kst-rev-stat-muted {
+  font-size: 0.88rem;
+  color: var(--kst-text-muted);
+}
+
+/* ============================
+   BARRA DE PRIORIDADE
+============================ */
+
+.kst-rev-priority {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.kst-rev-priority-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kst-rev-priority-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.22);
+  overflow: hidden;
+}
+
+body.theme-dark .kst-rev-priority-bar-fill {
+  background: linear-gradient(90deg, #ffa833, #ff4545);
+}
+
+body.theme-light .kst-rev-priority-bar-fill {
+  background: linear-gradient(90deg, #d97706, #dc2626);
+}
+
+.kst-rev-priority-score {
+  font-size: 0.82rem;
+  color: var(--kst-text-soft);
+}
+
+/* ============================
+   BOTÃO DO CARD
+============================ */
+
+.kst-rev-card-cta {
+  align-self: flex-start;
+}
+
+/* ============================
+   GRÁFICOS — NOVO!!!
+============================ */
+
+.kst-chart-box {
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-soft);
+  border-radius: 18px;
+  padding: 1.2rem;
+  box-shadow: var(--kst-shadow-soft);
+}
+
+.kst-chart-title {
+  margin: 0 0 0.6rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+
+/* ============================
+   TABELA – CAIXA
+============================ */
+
+.revisao-table-wrapper {
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-soft);
+  border-radius: 18px;
+  padding: 1.2rem;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.15);
+  margin-top: 1.2rem;
+}
+
+/* ============================
+   TABELA EM SI
+============================ */
+
+.revisao-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.revisao-table th,
+.revisao-table td {
+  padding: 0.75rem 0.8rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  white-space: nowrap;
+}
+
+.revisao-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--kst-text-soft);
+}
+
+/* zebra */
+.revisao-table tr:nth-child(odd) {
+  background: rgba(148, 163, 184, 0.06);
+}
+
+/* light */
+body.theme-light .revisao-table tr:nth-child(odd) {
+  background: rgba(0,0,0,0.03);
+}
+
+/* hover */
+.revisao-table tr:hover {
+  background: rgba(148, 163, 184, 0.18);
+}
+
+body.theme-light .revisao-table tr:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+/* ============================
+   BADGES
+============================ */
+
+.badge {
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-dia[data-level="alto"] {
+  background: #ef4444;
+  color: white;
+}
+
+.badge-dia[data-level="medio"] {
+  background: #f59e0b;
+  color: white;
+}
+
+.badge-dia[data-level="baixo"] {
+  background: #3b82f6;
+  color: white;
+}
+
+.badge-acerto[data-qual="ruim"] {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.badge-acerto[data-qual="medio"] {
+  background: rgba(252, 211, 77, 0.15);
+  color: #d97706;
+}
+
+.badge-acerto[data-qual="bom"] {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+/* ============================
+   BOTÃO MINI
+============================ */
+
+.revisao-mini-btn {
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+body.theme-dark .revisao-mini-btn {
+  background: #ffffff;
+  color: #111;
+  box-shadow: 0 2px 10px rgba(255,255,255,0.15);
+}
+
+body.theme-dark .revisao-mini-btn:hover {
+  background: #e8e8e8;
+}
+
+body.theme-light .revisao-mini-btn {
+  background: #111;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+
+body.theme-light .revisao-mini-btn:hover {
+  background: #000;
+}
+
+/* ============================
+   RESPONSIVO
+============================ */
+
+@media (max-width: 768px) {
+  .kst-rev-title {
+    font-size: 1.45rem;
+  }
+
+  .kst-rev-stats {
+    flex-direction: column;
+  }
+}

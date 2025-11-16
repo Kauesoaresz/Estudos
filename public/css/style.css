@@ -13,9 +13,7 @@
    01 — RESET & TOKENS DE TEMA
    ===================================================================== */
 
-/* ------------------------
-   RESET SIMPLES
-------------------------- */
+/* RESET SIMPLES */
 *,
 *::before,
 *::after {
@@ -32,10 +30,7 @@ body {
   min-height: 100vh;
 }
 
-/* ------------------------
-   TOKENS / THEME
-------------------------- */
-
+/* TOKENS / THEME */
 :root {
   --kst-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
@@ -117,15 +112,13 @@ body.theme-dark {
    02 — BASE GLOBAL & LAYOUT
    ===================================================================== */
 
-/* ------------------------
-   BASE GLOBAL
-------------------------- */
-
+/* BASE GLOBAL */
 body {
   font-family: var(--kst-font-sans);
-  background: radial-gradient(circle at top left, rgba(28, 154, 255, 0.1), transparent 55%),
-              radial-gradient(circle at bottom right, rgba(28, 154, 255, 0.08), transparent 55%),
-              var(--kst-bg-body);
+  background:
+    radial-gradient(circle at top left, rgba(28, 154, 255, 0.1), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(28, 154, 255, 0.08), transparent 55%),
+    var(--kst-bg-body);
   color: var(--kst-text-main);
   -webkit-font-smoothing: antialiased;
   display: flex;
@@ -167,10 +160,7 @@ a:hover {
   opacity: 0.85;
 }
 
-/* ------------------------
-   LAYOUT GERAL
-------------------------- */
-
+/* LAYOUT GERAL */
 .kst-header {
   position: sticky;
   top: 0;
@@ -230,10 +220,6 @@ body.theme-dark .kst-footer {
    03 — HEADER, NAV & TOPO  (VERSÃO PREMIUM)
    ===================================================================== */
 
-/* ------------------------
-   HEADER: BRAND + NAV
-------------------------- */
-
 .kst-header-left {
   display: flex;
   align-items: center;
@@ -251,13 +237,13 @@ body.theme-dark .kst-footer {
   width: 36px;
   height: 36px;
   border-radius: 999px;
-  border: 1.5px solid rgba(28,154,255,0.45);
+  border: 1.5px solid rgba(28, 154, 255, 0.45);
   padding: 1.5px;
-  background: radial-gradient(circle at top, rgba(28,154,255,0.20), transparent 60%);
+  background: radial-gradient(circle at top, rgba(28, 154, 255, 0.2), transparent 60%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
 }
 
 .kst-logo-avatar {
@@ -275,7 +261,7 @@ body.theme-dark .kst-footer {
 }
 
 .kst-app-name {
-  font-size: 0.80rem;
+  font-size: 0.8rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-weight: 700;
@@ -345,7 +331,7 @@ body.theme-dark .kst-footer {
   bottom: -0.28rem;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(90deg,#1C9AFF,#62c3ff);
+  background: linear-gradient(90deg, #1C9AFF, #62c3ff);
   transform: scaleX(0);
   transform-origin: center;
   transition: transform var(--kst-transition-med);
@@ -362,30 +348,22 @@ body.theme-dark .kst-footer {
   position: relative;
 }
 
-/* Drop DOWN BASE */
 .kst-nav-dropdown {
   position: absolute;
   top: calc(100% + 12px);
   left: 50%;
   transform: translateX(-50%);
-  
   min-width: 220px;
   background: var(--kst-bg-elevated);
   border-radius: 0.75rem;
   border: 1px solid var(--kst-border-subtle);
-
   padding: 0.45rem;
   box-shadow:
-    0 12px 28px rgba(0,0,0,0.09),
-    0 2px 8px rgba(0,0,0,0.04);
-
+    0 12px 28px rgba(0, 0, 0, 0.09),
+    0 2px 8px rgba(0, 0, 0, 0.04);
   display: none;
-
-  /* ESSENCIAL: SEM TRANSIÇÕES DE POSIÇÃO */
-  transition: opacity .12s ease-out;
+  transition: opacity 0.12s ease-out;
   opacity: 0;
-
-  /* evita sumir quando o mouse sai da label */
   pointer-events: none;
 }
 
@@ -396,7 +374,7 @@ body.theme-dark .kst-footer {
   pointer-events: auto;
 }
 
-/* Pequeno espaço acima para evitar "perder" o hover */
+/* Área “tapável” acima para não perder hover */
 .kst-nav-dropdown::before {
   content: "";
   position: absolute;
@@ -415,10 +393,9 @@ body.theme-dark .kst-footer {
   font-size: 0.84rem;
   border-radius: 0.55rem;
   color: var(--kst-text-muted);
-  transition: background .15s ease, color .15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-/* HOVER LINKS */
 .kst-nav-dropdown-link:hover {
   background: var(--kst-primary-soft);
   color: var(--kst-text-main);
@@ -449,8 +426,8 @@ body.theme-dark .kst-footer {
   width: 17px;
   height: 17px;
   border-radius: 999px;
-  background: linear-gradient(135deg,#f9fafb,#d1d5db);
-  box-shadow: 0 1px 3px rgba(15,23,42,0.3);
+  background: linear-gradient(135deg, #f9fafb, #d1d5db);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.3);
   transform: translateX(0);
   transition: transform var(--kst-transition-med);
 }
@@ -475,7 +452,7 @@ body.theme-dark .kst-theme-switch-knob {
   width: 100%;
   border-radius: 999px;
   background: var(--kst-text-main);
-  transition: transform .16s ease, opacity .16s ease;
+  transition: transform 0.16s ease, opacity 0.16s ease;
 }
 
 /* Mobile open state */
@@ -489,11 +466,8 @@ body.theme-dark .kst-theme-switch-knob {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-/* ------------------------
-   RESPONSIVIDADE HEADER
-------------------------- */
+/* Responsivo header */
 @media (max-width: 900px) {
-
   .kst-header-inner {
     padding: 0.45rem 1rem;
   }
@@ -505,12 +479,18 @@ body.theme-dark .kst-theme-switch-knob {
     background: var(--kst-bg-body);
     padding: 0.6rem 1.25rem 1.1rem;
     border-bottom: 1px solid var(--kst-border-subtle);
-    animation: menuSlide .20s ease-out;
+    animation: menuSlide 0.2s ease-out;
   }
 
   @keyframes menuSlide {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .kst-header-nav.is-open {
@@ -538,7 +518,6 @@ body.theme-dark .kst-theme-switch-knob {
     box-shadow: none;
   }
 
-  /* dropdown abre com clique */
   .kst-nav-top-item--has-dropdown .kst-nav-dropdown {
     display: none;
   }
@@ -555,14 +534,9 @@ body.theme-dark .kst-theme-switch-knob {
 }
 
 
-
 /* =====================================================================
    04 — SEÇÕES, GRID & ESTRUTURA
    ===================================================================== */
-
-/* ------------------------
-   SEÇÕES
-------------------------- */
 
 .kst-section {
   margin-bottom: 2.25rem;
@@ -580,10 +554,7 @@ body.theme-dark .kst-theme-switch-knob {
   color: var(--kst-text-muted);
 }
 
-/* ------------------------
-   GRID DASHBOARD / CHARTS
-------------------------- */
-
+/* GRID DASHBOARD / CHARTS */
 .kst-dashboard-grid,
 .kst-charts-grid {
   display: grid;
@@ -593,202 +564,59 @@ body.theme-dark .kst-theme-switch-knob {
 
 
 /* =====================================================================
-   05 — COMPONENTES (CARDS, BOTÕES, BADGES, ALERTAS)
+   05 — COMPONENTES GLOBAIS (CARDS, BOTÕES, BADGES, ALERTAS)
    ===================================================================== */
-/* ============================================================
-   DETALHES DO ESTUDO — ESTILO PREMIUM (IGUAL DETALHES DO DIA)
-   ============================================================ */
 
-.kst-study-details-wrapper {
-  max-width: 950px;
-  margin: 0 auto;
-  padding: 2rem 1.2rem 3rem;
-}
-
-.kst-study-header {
-  margin-bottom: 2rem;
-}
-
-.kst-study-title {
-  font-size: 1.9rem;
-  font-weight: 700;
-  color: var(--kst-text-main);
-  margin: 0;
-}
-
-.kst-study-subtitle {
-  margin: 0.25rem 0 1.8rem;
-  font-size: 0.95rem;
-  color: var(--kst-text-muted);
-}
-
-/* CARD GERAL */
-.kst-study-main-card {
+/* CARD base */
+.kst-card {
   background: var(--kst-bg-elevated);
-  border-radius: 16px;
-  padding: 2rem;
+  border-radius: var(--kst-radius-lg);
+  padding: 1.5rem;
+  border: 1px solid var(--kst-border-subtle);
   box-shadow: var(--kst-shadow-soft);
-  border: 1px solid var(--kst-border-subtle);
 }
 
-/* TÍTULOS DAS SEÇÕES */
-.kst-study-section-title {
-  margin-top: 1.8rem;
-  margin-bottom: 0.9rem;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--kst-text-main);
+/* KPI card */
+.kst-card-kpi {
+  padding: 1.6rem 1.5rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid rgba(148, 163, 184, 0.28);
 }
 
-/* LINHAS DE INFO */
-.kst-study-info p {
-  margin: 0.25rem 0;
-  font-size: 0.92rem;
-  color: var(--kst-text-main);
-}
-
-.kst-study-info strong {
-  font-weight: 600;
-}
-
-/* GRID DAS SEÇÕES DO CARD */
-.kst-study-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.2rem;
-}
-
-/* MINI-CARDS INTERNOS */
-.kst-study-mini-card {
-  background: var(--kst-bg-elevated-soft);
-  padding: 1.3rem 1.4rem;
-  border-radius: 14px;
-  border: 1px solid var(--kst-border-subtle);
-  box-shadow: var(--kst-shadow-subtle);
-}
-
-.kst-study-mini-card h4 {
-  margin: 0 0 0.9rem;
+.kst-card-kpi h3 {
+  margin: 0 0 0.6rem;
   font-size: 1rem;
   font-weight: 600;
   color: var(--kst-text-main);
 }
 
-.kst-study-mini-card p {
-  margin: 0.25rem 0;
-  font-size: 0.9rem;
-}
-
-/* BADGE DO TIPO DE ESTUDO */
-.kst-badge-tipo-estudo {
-  padding: 0.18rem 0.55rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  border-radius: 6px;
-  color: white;
-}
-
-.kst-badge--novo {
-  background: #3b82f6;
-}
-
-.kst-badge--revisao {
-  background: #22c55e;
-}
-
-.kst-badge--erro {
-  background: #eab308;
-}
-
-/* BADGE ACERTO */
-.kst-badge-acerto {
-  display: inline-block;
-  padding: 0.18rem 0.55rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: white;
-}
-
-.kst-acerto-alto {
-  background: #22c55e;
-}
-
-.kst-acerto-medio {
-  background: #f59e0b;
-}
-
-.kst-acerto-baixo {
-  background: #ef4444;
-}
-
-/* TÓPICOS ESTUDADOS */
-.kst-study-topicos {
-  background: var(--kst-bg-elevated-soft);
-  border: 1px solid var(--kst-border-subtle);
-  padding: 1.3rem 1.4rem;
-  border-radius: 14px;
-  box-shadow: var(--kst-shadow-subtle);
-  white-space: pre-wrap;
-  font-size: 0.92rem;
-  line-height: 1.4;
-  margin-top: 1rem;
-}
-
-/* BOTÕES INFERIORES */
-.kst-study-actions {
-  margin-top: 2rem;
-  display: flex;
-  gap: 0.8rem;
-}
-
-
-/* ------------------------
-   CARDS
-------------------------- */
-
-.kst-card {
-  border-radius: var(--kst-radius-lg);
-  background: var(--kst-bg-elevated);
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  box-shadow: var(--kst-shadow-subtle);
-  padding: 1rem 1.1rem;
-}
-
-.kst-card-kpi {
-  padding: 1rem 1.15rem;
-}
-
 .kst-kpi-number {
-  margin: 0.3rem 0 0.2rem;
-  font-size: 1.9rem;
+  margin: 0.4rem 0 0.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
   letter-spacing: -0.04em;
+  color: var(--kst-primary);
 }
 
 .kst-kpi-text {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--kst-text-muted);
 }
 
-.kst-chart-subtitle {
-  margin: 0 0 0.6rem;
-  font-size: 0.85rem;
-  color: var(--kst-text-muted);
+.kst-kpi-text strong {
+  font-weight: 700;
 }
 
-/* Canvas ocupa largura total */
+/* Canvas global */
 canvas {
   width: 100% !important;
   height: auto !important;
+  image-rendering: -webkit-optimize-contrast;
+  margin-top: 0.8rem;
 }
 
-/* ------------------------
-   BOTÕES
-------------------------- */
-
+/* BOTÕES */
 .kst-btn {
   appearance: none;
   border: 1px solid transparent;
@@ -803,8 +631,11 @@ canvas {
   gap: 0.35rem;
   background: var(--kst-bg-elevated-soft);
   color: var(--kst-text-main);
-  transition: background var(--kst-transition-fast), box-shadow var(--kst-transition-fast),
-    transform var(--kst-transition-fast), border-color var(--kst-transition-fast),
+  transition:
+    background var(--kst-transition-fast),
+    box-shadow var(--kst-transition-fast),
+    transform var(--kst-transition-fast),
+    border-color var(--kst-transition-fast),
     color var(--kst-transition-fast);
 }
 
@@ -817,6 +648,7 @@ canvas {
   background: linear-gradient(135deg, #1c9aff, #38bdf8);
   color: var(--kst-text-on-primary);
   border-color: rgba(15, 23, 42, 0.15);
+  box-shadow: 0 8px 24px rgba(28, 154, 255, 0.22);
 }
 
 .kst-btn-primary:hover {
@@ -836,11 +668,24 @@ canvas {
 }
 
 .kst-btn-xs {
-  padding: 0.25rem 0.8rem;
-  font-size: 0.78rem;
+  padding: 0.25rem 0.55rem !important;
+  font-size: 0.78rem !important;
+  border-radius: 6px !important;
 }
 
-/* Ações em linha (tabelas) */
+.kst-btn-lg {
+  padding: 0.85rem 1.6rem;
+  font-size: 1rem;
+}
+
+/* Quick actions */
+.kst-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* Links de ação / inline */
 .kst-link-inline {
   border: 0;
   background: transparent;
@@ -848,10 +693,13 @@ canvas {
   font: inherit;
   color: var(--kst-primary);
   cursor: pointer;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: opacity 0.15s ease;
 }
 
 .kst-link-inline:hover {
+  opacity: 0.7;
   text-decoration: underline;
 }
 
@@ -859,72 +707,53 @@ canvas {
   color: var(--kst-danger);
 }
 
-/* Quick actions (home) */
-.kst-quick-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-/* ------------------------
-   BADGES
-------------------------- */
-
+/* BADGES */
 .kst-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.12rem 0.55rem;
-  font-size: 0.72rem;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.75rem;
   border-radius: 999px;
   background: var(--kst-primary-soft);
   color: var(--kst-text-main);
+  font-weight: 600;
 }
 
-/* ------------------------
-   ALERTAS
-------------------------- */
-
+/* ALERTAS */
 .kst-alert {
   border-radius: var(--kst-radius-md);
-  padding: 0.55rem 0.75rem;
-  font-size: 0.85rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 500;
   border: 1px solid transparent;
 }
 
 .kst-alert-success {
-  background: var(--kst-success-soft);
-  border-color: rgba(22, 163, 74, 0.4);
-  color: var(--kst-text-main);
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
 }
 
 .kst-alert-error {
-  background: var(--kst-danger-soft);
-  border-color: rgba(248, 113, 113, 0.6);
-  color: var(--kst-text-main);
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
 }
 
 
 /* =====================================================================
-   06 — COMPONENTES (FORMULÁRIOS, TABELAS, FILTER BAR, LISTAS)
+   06 — FORMULÁRIOS, TABELAS, FILTER BAR, LISTAS
    ===================================================================== */
 
-/* ------------------------
-   FORMULÁRIOS
-------------------------- */
-
+/* FORMULÁRIOS */
 .kst-form {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
 }
 
-.kst-form-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
+.kst-form-grid,
 .kst-form-row {
   display: grid;
   gap: 1rem;
@@ -946,47 +775,53 @@ canvas {
 /* Inputs base */
 .kst-input,
 .kst-select,
-.kst-textarea,
-.kst-textarea textarea {
+.kst-textarea {
   width: 100%;
-  padding: 0.45rem 0.7rem;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.92rem;
   border-radius: var(--kst-radius-md);
   border: 1px solid var(--kst-border-subtle);
-  font: inherit;
-  font-size: 0.87rem;
-  color: var(--kst-text-main);
   background: var(--kst-bg-elevated-soft);
+  color: var(--kst-text-main);
   outline: none;
-  transition: border-color var(--kst-transition-fast), box-shadow var(--kst-transition-fast),
+  transition:
+    border-color var(--kst-transition-fast),
+    box-shadow var(--kst-transition-fast),
     background var(--kst-transition-fast);
 }
 
 .kst-input:focus,
 .kst-select:focus,
 .kst-textarea:focus {
-  border-color: rgba(28, 154, 255, 0.9);
-  box-shadow: 0 0 0 1px rgba(28, 154, 255, 0.4);
+  border-color: var(--kst-primary);
+  box-shadow: 0 0 0 2px rgba(28, 154, 255, 0.25);
   background: #ffffff;
 }
 
 .kst-textarea {
   resize: vertical;
   min-height: 80px;
+  line-height: 1.4;
 }
 
-/* Fieldset */
+/* Fieldset genérico */
 .kst-fieldset {
+  padding: 1.7rem 1.4rem;
   border-radius: var(--kst-radius-lg);
-  border: 1px dashed var(--kst-border-subtle);
-  padding: 0.9rem 1rem 1rem;
-  background: radial-gradient(circle at top left, rgba(28, 154, 255, 0.06), transparent 55%),
-              var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated-soft);
+  transition: background 0.2s ease;
 }
 
-.kst-fieldset legend {
-  padding: 0 0.4rem;
-  font-size: 0.88rem;
+.kst-fieldset:hover {
+  background: var(--kst-bg-elevated);
+}
+
+.kst-fieldset-title {
+  font-size: 1.05rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.4rem;
   color: var(--kst-text-main);
 }
 
@@ -997,23 +832,21 @@ canvas {
   gap: 0.6rem;
 }
 
-/* Form inline (materias etc.) */
+/* Form inline (ex: matérias) */
 .kst-form-inline {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.8rem;
   align-items: center;
+  margin-top: 1rem;
 }
 
-/* Checkbox/Select padrão */
-.kst-select {
-  padding-right: 0.9rem;
+.kst-form-inline .kst-input {
+  flex: 1;
+  min-width: 240px;
 }
 
-/* ------------------------
-   TABELAS
-------------------------- */
-
+/* TABELAS */
 .kst-table-wrapper {
   width: 100%;
   overflow-x: auto;
@@ -1022,7 +855,7 @@ canvas {
 .kst-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.86rem;
+  font-size: 0.88rem;
 }
 
 .kst-table thead {
@@ -1031,40 +864,48 @@ canvas {
 
 .kst-table thead th {
   text-align: left;
-  padding: 0.55rem 0.6rem;
+  padding: 0.8rem;
   font-weight: 600;
-  font-size: 0.8rem;
-  color: var(--kst-text-muted);
+  font-size: 0.88rem;
+  color: #374151;
   border-bottom: 1px solid var(--kst-border-subtle);
+  white-space: nowrap;
 }
 
 .kst-table tbody td {
-  padding: 0.5rem 0.6rem;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--kst-text-main);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  vertical-align: middle;
+}
+
+.kst-table tbody tr:nth-child(even) {
+  background: #fafafa;
 }
 
 .kst-table tbody tr:hover {
-  background: rgba(28, 154, 255, 0.03);
+  background: rgba(28, 154, 255, 0.05);
+  transition: background 0.16s ease;
 }
 
-/* Ações dentro da tabela (materias) */
+/* Ações na tabela */
 .kst-table-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ------------------------
-   FILTER BAR
-------------------------- */
-
+/* FILTER BAR */
 .kst-filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 1rem;
   align-items: flex-end;
-  padding: 0.7rem 0.9rem;
-  border-radius: var(--kst-radius-lg);
+  padding: 1rem 1.25rem;
+  border-radius: var(--kst-radius-xl);
   background: var(--kst-bg-elevated);
   border: 1px solid var(--kst-border-subtle);
   box-shadow: var(--kst-shadow-subtle);
@@ -1078,22 +919,30 @@ canvas {
 }
 
 .kst-filter-group label {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--kst-text-main);
 }
 
-/* ------------------------
-   HOME (Painel geral)
-------------------------- */
-
-.kst-section h2 + .kst-dashboard-grid {
-  margin-top: 0.8rem;
+.kst-filter-bar input[type="date"] {
+  padding: 0.45rem 0.6rem;
+  background: var(--kst-bg-elevated-soft);
+  border-radius: var(--kst-radius-md);
+  border: 1px solid var(--kst-border-subtle);
+  font-size: 0.85rem;
 }
 
-/* ------------------------
-   LISTAS SIMPLES
-------------------------- */
+.kst-filter-bar input[type="date"]:focus {
+  border-color: var(--kst-primary);
+  box-shadow: 0 0 0 1px rgba(28, 154, 255, 0.4);
+  background: #ffffff;
+}
 
+/* Checkbox */
+.kst-filter-bar input[type="checkbox"] {
+  accent-color: var(--kst-primary);
+}
+
+/* LISTAS SIMPLES (home) */
 .kst-home-list {
   list-style: none;
   padding: 0;
@@ -1124,13 +973,8 @@ canvas {
 
 /* =====================================================================
    08 — PÁGINA: REVISÃO DA MATÉRIA
-   (centralizado aqui — substitui completamente o antigo revisao_materia.css)
    ===================================================================== */
 
-
-/* ---------------------------------------------------------------------
-   BLOCO 1 — CABEÇALHO DA PÁGINA DE REVISÃO
---------------------------------------------------------------------- */
 .kst-rev-header {
   margin-bottom: 1.8rem;
 }
@@ -1149,11 +993,7 @@ canvas {
   color: var(--kst-text-muted);
 }
 
-
-
-/* ---------------------------------------------------------------------
-   BLOCO 2 — CARD DE RESUMO
---------------------------------------------------------------------- */
+/* CARD RESUMO */
 .kst-rev-resumo-card {
   background: var(--kst-bg-elevated);
   border-radius: var(--kst-radius-lg);
@@ -1194,11 +1034,7 @@ canvas {
   color: var(--kst-text-main);
 }
 
-
-
-/* ---------------------------------------------------------------------
-   BLOCO 3 — FORMULÁRIO DE REVISÃO
---------------------------------------------------------------------- */
+/* FORM DE REVISÃO */
 .kst-rev-form-card {
   background: var(--kst-bg-elevated);
   border-radius: var(--kst-radius-lg);
@@ -1244,12 +1080,7 @@ canvas {
   margin-top: 1rem;
 }
 
-
-
-/* =====================================================================
-   HISTÓRICO — TABELA PREMIUM
-===================================================================== */
-
+/* TABELA HISTÓRICO DA MATÉRIA */
 .kst-rev-mat-table-wrapper {
   border-radius: var(--kst-radius-lg);
   border: 1px solid var(--kst-border-soft);
@@ -1285,7 +1116,7 @@ canvas {
   border-bottom: 1px solid var(--kst-border-subtle);
 }
 
-/* hover premium */
+/* Hover */
 .kst-rev-mat-table tbody tr {
   transition: background 0.15s ease-out;
 }
@@ -1301,12 +1132,42 @@ canvas {
   line-height: 1.35;
 }
 
+/* larguras fixas */
+.kst-rev-mat-table th:nth-child(1),
+.kst-rev-mat-table td:nth-child(1) {
+  width: 120px;
+}
+.kst-rev-mat-table th:nth-child(2),
+.kst-rev-mat-table td:nth-child(2) {
+  width: 110px;
+}
+.kst-rev-mat-table th:nth-child(3),
+.kst-rev-mat-table td:nth-child(3) {
+  width: 80px;
+  text-align: center;
+}
+.kst-rev-mat-table th:nth-child(4),
+.kst-rev-mat-table td:nth-child(4) {
+  width: 130px;
+  text-align: center;
+}
+.kst-rev-mat-table th:nth-child(5),
+.kst-rev-mat-table td:nth-child(5) {
+  width: 90px;
+  text-align: center;
+}
+.kst-rev-mat-table th:nth-child(6),
+.kst-rev-mat-table td:nth-child(6) {
+  width: 230px;
+  text-align: center;
+}
+.kst-rev-mat-table th:nth-child(7),
+.kst-rev-mat-table td:nth-child(7) {
+  width: 120px;
+  white-space: nowrap;
+}
 
-
-/* =====================================================================
-   BADGES — COR DO TIPO (REV / EST)
-===================================================================== */
-
+/* BADGES tipo */
 .kst-rev-badge-tipo {
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -1316,47 +1177,33 @@ canvas {
 }
 
 .kst-rev-badge-tipo--rev {
-  background: rgba(34,197,94,0.18);
+  background: rgba(34, 197, 94, 0.18);
   color: #22c55e;
 }
 
 .kst-rev-badge-tipo--est {
-  background: rgba(59,130,246,0.18);
+  background: rgba(59, 130, 246, 0.18);
   color: #3b82f6;
 }
 
-
-
-/* =====================================================================
-   AÇÕES (EDITAR / EXCLUIR)
-===================================================================== */
-
-.kst-link-inline {
-  font-size: 0.78rem;
-  font-weight: 500;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  color: var(--kst-primary);
-  transition: opacity 0.15s ease;
+/* TAXA DE ACERTO cores */
+.kst-taxa {
+  font-weight: 600;
 }
 
-.kst-link-inline:hover {
-  opacity: 0.7;
-  text-decoration: underline;
-}
-
-.kst-link-danger {
+.kst-taxa--low {
   color: var(--kst-danger);
 }
 
+.kst-taxa--mid {
+  color: #f59e0b;
+}
 
+.kst-taxa--high {
+  color: var(--kst-success);
+}
 
-/* =====================================================================
-   FILTRO DO HISTÓRICO
-===================================================================== */
-
+/* FILTRO topo histórico da matéria */
 .kst-hist-header-row {
   display: flex;
   align-items: center;
@@ -1386,17 +1233,12 @@ canvas {
   border-color: var(--kst-primary);
 }
 
-
-
-/* =====================================================================
-   POPUP DE EDIÇÃO PREMIUM
-===================================================================== */
-
+/* POPUP EDIÇÃO */
 .kst-popup-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
   justify-content: center;
   align-items: center;
   z-index: 9999;
@@ -1410,12 +1252,18 @@ canvas {
   max-width: 95%;
   box-shadow: var(--kst-shadow-soft);
   border: 1px solid var(--kst-border-subtle);
-  animation: popupShow .22s ease-out;
+  animation: popupShow 0.22s ease-out;
 }
 
 @keyframes popupShow {
-  from { opacity: 0; transform: scale(.92); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .kst-popup-buttons {
@@ -1426,105 +1274,29 @@ canvas {
 }
 
 
-
-/* =====================================================================
-   TAXA DE ACERTO (cores)
-===================================================================== */
-.kst-taxa {
-  font-weight: 600;
-}
-
-.kst-taxa--low {
-  color: var(--kst-danger);
-}
-
-.kst-taxa--mid {
-  color: #f59e0b;
-}
-
-.kst-taxa--high {
-  color: var(--kst-success);
-}
-
-/* =============================================
-   COLUNAS — LARGURA FIXA E ALINHAMENTO PERFEITO
-   ============================================= */
-
-.kst-rev-mat-table th:nth-child(1),
-.kst-rev-mat-table td:nth-child(1) {
-  width: 120px;   /* Data */
-}
-
-.kst-rev-mat-table th:nth-child(2),
-.kst-rev-mat-table td:nth-child(2) {
-  width: 110px;   /* Tipo */
-}
-
-.kst-rev-mat-table th:nth-child(3),
-.kst-rev-mat-table td:nth-child(3) {
-  width: 80px;    /* Minutos */
-  text-align: center;
-}
-
-.kst-rev-mat-table th:nth-child(4),
-.kst-rev-mat-table td:nth-child(4) {
-  width: 130px;   /* Questões */
-  text-align: center;
-}
-
-.kst-rev-mat-table th:nth-child(5),
-.kst-rev-mat-table td:nth-child(5) {
-  width: 90px;    /* Taxa */
-  text-align: center;
-}
-
-/* COLUNA 6 — TÓPICOS (alinhado com o título) */
-.kst-rev-mat-table th:nth-child(6),
-.kst-rev-mat-table td:nth-child(6) {
-  width: 230px;
-  text-align: center;
-  max-width: 260px;
-  white-space: normal;
-  line-height: 1.35;
-}
-
-
-.kst-rev-mat-table th:nth-child(7),
-.kst-rev-mat-table td:nth-child(7) {
-  width: 120px;   /* Ações */
-  white-space: nowrap;
-}
-
 /* =====================================================================
    09 — HOME (dashboard principal)
    ===================================================================== */
 
-/* -------------------------------
-   TÍTULO E SUBTÍTULO PRINCIPAL
--------------------------------- */
 .kst-home-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.4rem;
 }
 
 .kst-home-title {
-  font-size: 1.9rem;
+  font-size: 2rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   margin: 0 0 0.3rem;
   color: var(--kst-text-main);
 }
 
 .kst-home-subtitle {
   font-size: 0.95rem;
-  margin: 0;
   color: var(--kst-text-muted);
+  margin: 0.35rem 0 0;
 }
 
-
-
-/* -------------------------------
-   GRID DOS KPIs (3 cards)
--------------------------------- */
+/* GRID dos KPIs */
 .kst-home-kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1556,31 +1328,12 @@ canvas {
   color: var(--kst-text-muted);
 }
 
-/* número grande */
-.kst-kpi-number {
-  font-size: 2.1rem;
-  font-weight: 700;
-  margin: 0.2rem 0 0.6rem;
-  color: var(--kst-primary);
-  letter-spacing: -0.02em;
-}
-
-.kst-kpi-text {
-  margin: 0.25rem 0;
-  font-size: 0.88rem;
-  color: var(--kst-text-muted);
-}
-
 .kst-home-btn-full {
   margin-top: 0.8rem;
   display: inline-block;
 }
 
-
-
-/* -------------------------------
-   GRÁFICOS
--------------------------------- */
+/* Título seção gráficos */
 .kst-home-charts-title {
   font-size: 1.45rem;
   font-weight: 600;
@@ -1595,37 +1348,35 @@ canvas {
   margin-bottom: 2.5rem;
 }
 
+/* Card gráfico */
 .kst-chart-card {
-  padding: 1.3rem 1.4rem;
-  border-radius: var(--kst-radius-lg);
-  border: 1px solid var(--kst-border-soft);
+  padding: 1.5rem 1.6rem;
+  border-radius: var(--kst-radius-xl);
   background: var(--kst-bg-elevated);
+  border: 1px solid rgba(148, 163, 184, 0.28);
   box-shadow: var(--kst-shadow-soft);
+  transition: box-shadow 0.18s ease, transform 0.12s ease;
+}
+
+.kst-chart-card:hover {
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .kst-chart-card h3 {
-  font-size: 1.05rem;
-  margin: 0 0 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
+  margin: 0 0 0.65rem;
   color: var(--kst-text-main);
 }
 
-/* Caso vazio */
-.kst-home-charts-empty {
-  display: flex;
-  gap: 0.8rem;
-  margin-top: 1rem;
+.kst-chart-subtitle {
+  color: var(--kst-text-muted);
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
 }
 
-.kst-home-charts-empty .kst-btn {
-  flex-shrink: 0;
-}
-
-
-
-/* -------------------------------
-   AÇÕES RÁPIDAS
--------------------------------- */
+/* HOME — ações rápidas */
 .kst-home-actions {
   margin-top: 2.5rem;
 }
@@ -1646,10 +1397,7 @@ canvas {
   padding: 0.65rem 1.2rem;
 }
 
-/* ============================
-   HOME — SELECTOR DOS GRÁFICOS
-============================ */
-
+/* Selector de gráficos */
 .kst-chart-title {
   display: flex;
   align-items: center;
@@ -1665,38 +1413,43 @@ canvas {
   cursor: pointer;
 }
 
-
-/* -------------------------------
-   RESPONSIVIDADE EXTRA
--------------------------------- */
-@media (max-width: 500px) {
+/* Responsivo home/dashboard */
+@media (max-width: 780px) {
   .kst-home-title {
     font-size: 1.6rem;
   }
 
-  .kst-kpi-number {
-    font-size: 1.8rem;
+  .kst-dashboard-grid {
+    grid-template-columns: 1fr !important;
   }
 
+  .kst-charts-grid,
   .kst-home-charts-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 }
 
-/* ============================================================
-   10 — PÁGINA: REGISTRAR DIA (NOTION PREMIUM)
-   Versão exclusiva, sem conflitos com blocos globais.
-   ============================================================ */
+@media (max-width: 520px) {
+  .kst-filter-bar {
+    padding: 0.85rem 1rem;
+  }
 
-/* ---------- CONTAINER PRINCIPAL ---------- */
+  .kst-filter-bar .kst-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
+/* =====================================================================
+   10 — PÁGINA: REGISTRAR DIA
+   ===================================================================== */
 
 .kst-section-form {
   max-width: 880px;
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem;
 }
-
-/* ---------- HEADER DA PÁGINA ---------- */
 
 .kst-page-header {
   text-align: center;
@@ -1708,6 +1461,7 @@ canvas {
   font-weight: 700;
   color: var(--kst-text-main);
   margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
 }
 
 .kst-page-subtitle {
@@ -1718,8 +1472,7 @@ canvas {
   line-height: 1.45;
 }
 
-/* ---------- CARD DO FORMULÁRIO (NOTION STYLE) ---------- */
-
+/* Card formulário dia */
 .kst-dia-card {
   background: var(--kst-bg-elevated);
   border-radius: var(--kst-radius-lg);
@@ -1731,8 +1484,7 @@ canvas {
   gap: 2.4rem;
 }
 
-/* ---------- FIELDSET PREMIUM (NOTION) ---------- */
-
+/* Fieldset dia */
 .kst-dia-fieldset {
   background: var(--kst-bg-elevated-soft);
   border: 1px solid var(--kst-border-subtle);
@@ -1742,7 +1494,7 @@ canvas {
 }
 
 .kst-dia-fieldset:hover {
-  background: rgba(148, 163, 184, 0.10);
+  background: rgba(148, 163, 184, 0.1);
 }
 
 .kst-dia-legend {
@@ -1753,16 +1505,13 @@ canvas {
   letter-spacing: -0.01em;
 }
 
-/* ---------- ROWS ---------- */
-
+/* Rows e groups */
 .kst-dia-row {
   display: flex;
   flex-wrap: wrap;
   gap: 1.4rem;
   margin-bottom: 1rem;
 }
-
-/* ---------- FORM GROUP ---------- */
 
 .kst-dia-group {
   flex: 1;
@@ -1772,8 +1521,6 @@ canvas {
   gap: 0.35rem;
 }
 
-/* ---------- LABELS ---------- */
-
 .kst-dia-label {
   font-size: 0.89rem;
   font-weight: 600;
@@ -1782,19 +1529,21 @@ canvas {
   line-height: 1.2;
 }
 
-/* ---------- INPUTS (NOTION STYLE) ---------- */
-
+/* Inputs dia */
 .kst-dia-input,
 .kst-dia-select,
 .kst-dia-textarea {
   width: 100%;
-  padding: 0.70rem 0.85rem;
+  padding: 0.7rem 0.85rem;
   font-size: 0.92rem;
   border-radius: var(--kst-radius-md);
   border: 1px solid var(--kst-border-subtle);
   background: var(--kst-bg-elevated);
   color: var(--kst-text-main);
-  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+  transition:
+    border-color 0.16s ease,
+    background 0.16s ease,
+    box-shadow 0.16s ease;
 }
 
 .kst-dia-input:focus,
@@ -1806,16 +1555,13 @@ canvas {
   outline: none;
 }
 
-/* ---------- TEXTAREA ---------- */
-
 .kst-dia-textarea {
   min-height: 80px;
   resize: vertical;
   line-height: 1.45;
 }
 
-/* ---------- BOTÕES ---------- */
-
+/* Ações */
 .kst-dia-actions {
   display: flex;
   justify-content: flex-end;
@@ -1827,14 +1573,12 @@ canvas {
   font-weight: 600;
 }
 
-/* ---------- ALERTA ---------- */
-
+/* Erro */
 #erro-dia {
   margin-bottom: 1.2rem;
 }
 
-/* ---------- RESPONSIVIDADE ---------- */
-
+/* Responsivo registrar dia */
 @media (max-width: 650px) {
   .kst-dia-card {
     padding: 1.6rem 1.2rem 2rem;
@@ -1850,169 +1594,25 @@ canvas {
   }
 }
 
-/* ============================================================
-   11 — HISTÓRICO DE DIAS (PREMIUM)
-   Estilo Notion/Linear para tabela + filtros
-   ============================================================ */
 
-/* ---------- FILTROS ---------- */
+/* =====================================================================
+   11 — HISTÓRICO DE DIAS
+   ===================================================================== */
 
-.kst-filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: flex-end;
-  padding: 0.9rem 1.1rem;
-  border-radius: var(--kst-radius-lg);
-  background: var(--kst-bg-elevated);
-  border: 1px solid var(--kst-border-subtle);
-  box-shadow: var(--kst-shadow-subtle);
-}
-
-.kst-filter-group label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--kst-text-main);
-}
-
-.kst-filter-bar input[type="date"] {
-  padding: 0.45rem 0.6rem;
-  background: var(--kst-bg-elevated-soft);
-  border-radius: var(--kst-radius-md);
-  border: 1px solid var(--kst-border-subtle);
-  font-size: 0.85rem;
-}
-
-.kst-filter-bar input[type="date"]:focus {
-  border-color: var(--kst-primary);
-  box-shadow: 0 0 0 1px rgba(28, 154, 255, 0.4);
-  background: #ffffff;
-}
-
-/* Checkbox */
-.kst-filter-bar input[type="checkbox"] {
-  accent-color: var(--kst-primary);
-}
-
-/* ---------- CARD TABELA ---------- */
-
-.kst-card {
-  border-radius: var(--kst-radius-lg);
-  border: 1px solid var(--kst-border-subtle);
-  background: var(--kst-bg-elevated);
-  box-shadow: var(--kst-shadow-soft);
-  overflow: hidden;
-}
-
-/* ---------- TABELA PREMIUM ---------- */
-
-.kst-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.88rem;
-}
-
-.kst-table thead {
-  background: var(--kst-bg-elevated-soft);
-}
-
-.kst-table th {
-  padding: 0.75rem 0.9rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--kst-text-muted);
-  border-bottom: 1px solid var(--kst-border-subtle);
-  white-space: nowrap;
-}
-
-.kst-table td {
-  padding: 0.80rem 0.9rem;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-  color: var(--kst-text-main);
-  vertical-align: middle;
-}
-
-/* Alinhamento nas colunas */
-.kst-table td:nth-child(1) { font-weight: 600; }
-.kst-table td:nth-child(2),
-.kst-table td:nth-child(3),
-.kst-table td:nth-child(4) {
-  text-align: center;
-}
-
-/* Última coluna (ações) */
-.kst-table td:last-child {
-  text-align: center;
-  white-space: nowrap;
-}
-
-/* Hover premium */
-.kst-table tbody tr {
-  transition: background 0.16s ease;
-}
-
-.kst-table tbody tr:hover {
-  background: rgba(28, 154, 255, 0.05);
-}
-
-/* ---------- BADGES DO HISTÓRICO ---------- */
-
-.kst-badge {
-  background: var(--kst-primary-soft);
-  color: var(--kst-text-main);
-  font-size: 0.75rem;
-  padding: 0.22rem 0.55rem;
-  border-radius: 999px;
-  font-weight: 600;
-}
-
-/* ---------- TAXAS DE ACERTO ---------- */
-
-.kst-taxa {
-  font-size: 0.9rem;
-  font-weight: 700;
-}
+/* aqui usamos kst-filter-bar, kst-card, kst-table globais */
 
 .kst-taxa--low {
   color: var(--kst-danger);
 }
-
 .kst-taxa--mid {
   color: #f59e0b;
 }
-
 .kst-taxa--high {
   color: var(--kst-success);
 }
 
-/* ---------- LINKS DE AÇÃO ---------- */
-
-.kst-link-inline {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--kst-primary);
-  cursor: pointer;
-  padding: 0;
-  border: none;
-  background: none;
-  transition: opacity .15s ease;
-}
-
-.kst-link-inline:hover {
-  opacity: 0.7;
-  text-decoration: underline;
-}
-
-.kst-link-danger {
-  color: var(--kst-danger);
-}
-
-/* ---------- TABELA RESPONSIVA ---------- */
-
+/* Tabela mais compacta no mobile */
 @media (max-width: 680px) {
-
   .kst-table {
     font-size: 0.82rem;
   }
@@ -2023,29 +1623,20 @@ canvas {
   }
 
   .kst-table th:nth-child(5),
-  .kst-table td:nth-child(5) {
-    display: none; /* Esconde coluna F/E no mobile */
-  }
-
+  .kst-table td:nth-child(5),
   .kst-table th:nth-child(6),
-  .kst-table td:nth-child(6) {
-    display: none; /* Esconde coluna Humor no mobile */
-  }
-
+  .kst-table td:nth-child(6),
   .kst-table th:nth-child(7),
   .kst-table td:nth-child(7) {
-    display: none; /* Esconde coluna Meta no mobile */
+    display: none;
   }
-
 }
 
 
-/* ============================================================
+/* =====================================================================
    12 — PÁGINA: EDITAR DIA
-   Usa o mesmo visual Notion Premium do Registrar Dia
-   ============================================================ */
+   ===================================================================== */
 
-/* Card principal da edição de dia */
 .kst-card-form {
   background: var(--kst-bg-elevated);
   border-radius: var(--kst-radius-lg);
@@ -2057,7 +1648,7 @@ canvas {
   gap: 2.1rem;
 }
 
-/* Título dos blocos (Informações gerais, Sono, Estudo etc.) */
+/* Título blocos edição */
 .kst-fieldset-title {
   font-size: 1.02rem;
   font-weight: 600;
@@ -2066,23 +1657,23 @@ canvas {
   margin-bottom: 1.2rem;
 }
 
-/* Espaço entre os blocos (fieldsets) para a tela de edição */
+/* espaçamento fieldset */
 .kst-dia-fieldset + .kst-dia-fieldset {
   margin-top: 0.7rem;
 }
 
-/* Deixar as textareas da edição consistentes com o restante */
+/* textarea edição consistente */
 .kst-dia-textarea {
   font-size: 0.92rem;
   line-height: 1.45;
 }
 
-/* Botões da área de ações (salvar/cancelar) mais sólidos */
+/* botões salvar/cancelar */
 .kst-form-actions .kst-btn-lg {
   min-width: 180px;
 }
 
-/* Responsivo — edição de dia */
+/* responsivo editar dia */
 @media (max-width: 650px) {
   .kst-card-form {
     padding: 1.6rem 1.1rem 2rem;
@@ -2090,12 +1681,12 @@ canvas {
   }
 }
 
-/* ============================================================
-   13 — ESTATÍSTICAS DOS DIAS
-   Painel de resumo + gráficos (Notion/Linear style)
-   ============================================================ */
 
-/* Filtro de período (topo) */
+/* =====================================================================
+   13 — ESTATÍSTICAS DOS DIAS
+   ===================================================================== */
+
+/* Filtro de período */
 .kst-stats-filter {
   justify-content: space-between;
   align-items: center;
@@ -2120,7 +1711,7 @@ canvas {
   gap: 0.4rem;
 }
 
-/* Badge do total de dias */
+/* Badge total dias */
 .kst-badge-soft {
   background: var(--kst-primary-soft);
   color: var(--kst-text-main);
@@ -2128,7 +1719,7 @@ canvas {
   font-weight: 600;
 }
 
-/* Card de "nenhum dado" */
+/* Card nenhum dado */
 .kst-stats-empty {
   text-align: center;
   padding: 2rem 1.5rem;
@@ -2147,12 +1738,12 @@ canvas {
   color: var(--kst-text-muted);
 }
 
-/* Ajustes nos cards de KPI dessa página */
+/* Home-kpi nesta página: já usa .kst-home-kpi */
 .kst-home-kpi p {
   margin: 0;
 }
 
-/* Responsivo */
+/* Responsivo stats dias */
 @media (max-width: 640px) {
   .kst-stats-filter {
     flex-direction: column;
@@ -2167,12 +1758,10 @@ canvas {
   }
 }
 
-/* ============================================================
-   14 — DETALHES DO DIA
-   Tela /dias/:id — visão premium do dia
-   ============================================================ */
 
-/* -------- HERO DO DIA (RESUMO NO TOPO) -------- */
+/* =====================================================================
+   14 — DETALHES DO DIA (/dias/:id)
+   ===================================================================== */
 
 .kst-day-hero {
   margin-bottom: 2rem;
@@ -2183,7 +1772,7 @@ canvas {
   box-shadow: var(--kst-shadow-soft);
 }
 
-/* Topo: data + humor */
+/* Topo */
 .kst-day-hero-top {
   display: flex;
   align-items: center;
@@ -2206,7 +1795,7 @@ canvas {
   color: var(--kst-text-muted);
 }
 
-/* Badge de humor no hero */
+/* Badge humor */
 .kst-badge-humor {
   display: inline-flex;
   align-items: center;
@@ -2217,26 +1806,22 @@ canvas {
   font-weight: 600;
 }
 
-/* Humor bom */
 .kst-badge-humor.bom {
   background: rgba(34, 197, 94, 0.16);
   color: #16a34a;
 }
 
-/* Humor ok */
 .kst-badge-humor.ok {
   background: rgba(245, 158, 11, 0.18);
   color: #c2410c;
 }
 
-/* Humor ruim */
 .kst-badge-humor.ruim {
   background: rgba(239, 68, 68, 0.18);
   color: #dc2626;
 }
 
-/* -------- KPIs DO DIA -------- */
-
+/* KPIs dia */
 .kst-day-kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -2265,9 +1850,7 @@ canvas {
   color: var(--kst-text-main);
 }
 
-
-/* -------- SEÇÕES DETALHADAS -------- */
-
+/* Seções detalhadas */
 .kst-day-sections {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -2298,7 +1881,7 @@ canvas {
   color: var(--kst-text-main);
 }
 
-/* Listas de info (sem bolinha) */
+/* Listas info */
 .kst-day-info,
 .kst-day-list {
   list-style: none;
@@ -2319,14 +1902,7 @@ canvas {
   font-weight: 600;
 }
 
-/* Link de detalhes dentro das listas */
-.kst-day-list .kst-link-inline {
-  font-size: 0.82rem;
-}
-
-
-/* -------- AÇÕES INFERIORES -------- */
-
+/* Ações inferiores */
 .kst-day-actions {
   margin-top: 0.5rem;
   display: flex;
@@ -2334,11 +1910,8 @@ canvas {
   gap: 0.6rem;
 }
 
-
-/* -------- RESPONSIVIDADE -------- */
-
+/* Responsivo detalhes dia */
 @media (max-width: 640px) {
-
   .kst-day-hero {
     padding: 1.3rem 1.1rem 1.6rem;
   }
@@ -2353,41 +1926,12 @@ canvas {
   }
 }
 
-/* ============================================================
+
+/* =====================================================================
    15 — ESTUDO POR MATÉRIA (NOVO / EDITAR)
-   Mesma estética do Registrar Dia — Premium
-   ============================================================ */
+   ===================================================================== */
 
-/* -------- Container principal -------- */
-
-.kst-section-form {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem 4rem;
-}
-
-/* -------- Cabeçalho da página -------- */
-
-.kst-page-header {
-  margin-bottom: 2.2rem;
-  text-align: center;
-}
-
-.kst-page-title {
-  font-size: 1.95rem;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.02em;
-  color: var(--kst-text-main);
-}
-
-.kst-page-subtitle {
-  margin-top: 0.35rem;
-  font-size: 0.95rem;
-  color: var(--kst-text-muted);
-}
-
-/* -------- Card do formulário -------- */
+/* reaproveita .kst-section-form, .kst-page-header etc. */
 
 .kst-card-form {
   background: var(--kst-bg-elevated);
@@ -2400,94 +1944,13 @@ canvas {
   gap: 2.1rem;
 }
 
-/* -------- Fieldset premium -------- */
-
-.kst-fieldset {
-  padding: 1.7rem 1.4rem;
-  border-radius: var(--kst-radius-lg);
-  border: 1px solid var(--kst-border-subtle);
-  background: var(--kst-bg-elevated-soft);
-  transition: background 0.2s ease;
-}
-
-.kst-fieldset:hover {
-  background: var(--kst-bg-elevated);
-}
-
-.kst-fieldset-title {
-  font-size: 1.05rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  margin-bottom: 1.4rem;
-  color: var(--kst-text-main);
-}
-
-/* -------- Inputs -------- */
-
-.kst-input,
-.kst-select,
-.kst-textarea {
-  width: 100%;
-  padding: 0.7rem 0.9rem;
-  font-size: 0.92rem;
-  background: var(--kst-input-bg);
-  border: 1px solid var(--kst-border-subtle);
-  border-radius: var(--kst-radius-md);
-  color: var(--kst-text-main);
-  transition: border 0.2s ease, background 0.2s ease;
-}
-
-.kst-input:focus,
-.kst-select:focus,
-.kst-textarea:focus {
-  border-color: var(--kst-primary);
-  background: var(--kst-input-focus);
-  outline: none;
-}
-
-.kst-textarea {
-  min-height: 78px;
-  line-height: 1.4;
-}
-
-/* -------- Linha do formulário -------- */
-
-.kst-form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.4rem;
-  margin-bottom: 0.6rem;
-}
-
-.kst-form-group {
-  flex: 1;
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.kst-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--kst-text-main);
-}
-
-/* -------- Botão principal -------- */
-
-.kst-btn-lg {
-  padding: 0.85rem 1.6rem;
-  font-size: 1rem;
-}
-
-/* -------- Erros -------- */
+/* já temos .kst-fieldset, .kst-form-row, .kst-form-group, .kst-label, .kst-input etc. */
 
 #erro-estudo {
   margin-bottom: 1.1rem;
 }
 
-/* -------- Mobile -------- */
-
+/* Responsivo estudo matéria */
 @media (max-width: 620px) {
   .kst-card-form {
     padding: 1.5rem 1.2rem;
@@ -2507,11 +1970,26 @@ canvas {
   }
 }
 
-/* ================================
-   LISTA DE MATÉRIAS – PREMIUM
-   ================================ */
 
-/* Wrapper da tabela */
+/* =====================================================================
+   LISTA DE MATÉRIAS – PREMIUM
+   ===================================================================== */
+
+.kst-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.kst-card-block {
+  padding: 1.4rem 1.6rem;
+  border-radius: var(--kst-radius-lg);
+  background: #ffffff;
+  border: 1px solid #e8ecf2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* tabela de matérias usa .kst-table, mas com leve custom no card */
 .kst-card .kst-table {
   width: 100%;
   border-collapse: collapse;
@@ -2520,136 +1998,7 @@ canvas {
   overflow: hidden;
 }
 
-/* Cabeçalho */
-.kst-table thead th {
-  background: #f9fafb;
-  color: #374151;
-  font-weight: 600;
-  padding: 1rem;
-  font-size: 0.9rem;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-}
-
-/* Células */
-.kst-table tbody td {
-  padding: 0.9rem 1rem;
-  font-size: 0.92rem;
-  color: #374151;
-  border-bottom: 1px solid #f1f1f3;
-}
-
-/* Alternância de linhas */
-.kst-table tbody tr:nth-child(even) {
-  background: #fcfcfc;
-}
-
-/* Hover nas linhas */
-.kst-table tbody tr:hover {
-  background: #f1f5f9;
-  transition: 0.2s ease;
-}
-
-/* ============================
-   AÇÕES (botões pequenininhos)
-   ============================ */
-
-.kst-table-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-}
-
-/* Botões XS */
-.kst-btn-xs {
-  padding: 0.25rem 0.55rem !important;
-  font-size: 0.78rem !important;
-  border-radius: 6px !important;
-}
-
-/* Botão XS principal */
-.kst-btn-xs.kst-btn-primary {
-  background: #0090f7;
-  color: white;
-}
-
-/* Secundário */
-.kst-btn-xs.kst-btn-secondary {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-/* Perigo */
-.kst-btn-xs.kst-btn-danger {
-  background: #ef4444;
-  color: white;
-}
-
-/* Hover */
-.kst-btn-xs:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-  transition: 0.2s;
-}
-
-/* ============================
-   FORM INLINE (adicionar matéria)
-   ============================ */
-
-.kst-form-inline {
-  display: flex;
-  gap: 0.8rem;
-  margin-top: 1rem;
-}
-
-.kst-form-inline .kst-input {
-  flex: 1;
-  min-width: 240px;
-}
-
-/* ============================
-   Feedbacks / alertas
-   ============================ */
-
-.kst-alert {
-  padding: 0.8rem 1rem;
-  border-radius: var(--kst-radius-md);
-  font-size: 0.88rem;
-  font-weight: 500;
-}
-
-.kst-alert-success {
-  background: #ecfdf5;
-  color: #059669;
-  border: 1px solid #a7f3d0;
-}
-
-.kst-alert-error {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
-}
-
-/* ============================
-   CARD: Adicionar Matéria
-   ============================ */
-
-.kst-card-title {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #111827;
-}
-
-.kst-card {
-  background: white;
-  border-radius: var(--kst-radius-lg);
-  padding: 1.5rem;
-  border: 1px solid #eef1f5;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-}
-
-/* Espaçamento das colunas */
+/* Espaçamento colunas */
 .kst-table th:nth-child(1) {
   width: 70%;
 }
@@ -2657,10 +2006,7 @@ canvas {
   text-align: center;
 }
 
-/* ============================
-   GRID DA PÁGINA DE MATÉRIAS
-   ============================ */
-
+/* GRID 2 colunas página matérias */
 .kst-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2674,29 +2020,7 @@ canvas {
   }
 }
 
-/* ============================
-   BLOCO DE DETALHES
-   ============================ */
-
-.kst-card-block {
-  padding: 1.4rem 1.6rem;
-  border-radius: var(--kst-radius-lg);
-  background: #ffffff;
-  border: 1px solid #e8ecf2;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-}
-
-.kst-block-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 1rem;
-}
-
-/* ============================
-   LINHAS DE DETALHES
-   ============================ */
-
+/* Linha detalhes */
 .kst-details-line {
   margin-bottom: 0.45rem;
   font-size: 0.92rem;
@@ -2707,10 +2031,7 @@ canvas {
   color: #111827;
 }
 
-/* ============================
-   TAG DE SUCESSO (taxa acerto)
-   ============================ */
-
+/* Tag sucesso taxa acerto */
 .kst-tag-success {
   background: #d1fae5;
   color: #065f46;
@@ -2720,28 +2041,22 @@ canvas {
   font-weight: 600;
 }
 
-/* ============================
-   AÇÕES
-   ============================ */
-
+/* Ações linha */
 .kst-actions-row {
   display: flex;
   gap: 0.8rem;
 }
 
-/* =========================================
-   ESTATÍSTICAS POR MATÉRIA — PREMIUM
-   ========================================= */
 
-/* Espaçamento geral da página */
+/* =====================================================================
+   ESTATÍSTICAS POR MATÉRIA — PREMIUM
+   ===================================================================== */
+
 .kst-mstats {
   margin-top: 1.5rem;
 }
 
-/* ------------------------------
-   FILTROS PREMIUM
------------------------------- */
-
+/* Filtros */
 .kst-mstats-filters {
   display: flex;
   align-items: center;
@@ -2749,7 +2064,7 @@ canvas {
   padding: 1rem 1.2rem;
   background: #ffffff;
   border-radius: var(--kst-radius-lg);
-  box-shadow: var(--kst-shadow-sm);
+  box-shadow: var(--kst-shadow-subtle);
 }
 
 .kst-btn-filter {
@@ -2758,6 +2073,8 @@ canvas {
   border-radius: 10px;
   font-size: 0.88rem;
   transition: 0.2s;
+  border: none;
+  cursor: pointer;
 }
 
 .kst-btn-filter:hover {
@@ -2770,10 +2087,7 @@ canvas {
   font-weight: 600;
 }
 
-/* ------------------------------
-   KPI CARDS
------------------------------- */
-
+/* KPI cards */
 .kst-mstats-kpis {
   margin-top: 1.8rem;
 }
@@ -2782,7 +2096,7 @@ canvas {
   background: #ffffff;
   border-radius: var(--kst-radius-lg);
   padding: 1.4rem 1.5rem;
-  box-shadow: var(--kst-shadow-sm);
+  box-shadow: var(--kst-shadow-subtle);
   border: 1px solid #eef1f4;
 }
 
@@ -2804,22 +2118,12 @@ canvas {
   font-size: 0.9rem;
 }
 
-/* ------------------------------
-   GRÁFICOS
------------------------------- */
-
+/* Gráficos matéria */
 .kst-mstats-charts {
   margin-top: 2rem;
 }
 
-.kst-chart-card {
-  background: #ffffff;
-  border-radius: var(--kst-radius-lg);
-  padding: 1.3rem 1.5rem;
-  box-shadow: var(--kst-shadow-sm);
-  border: 1px solid #eef1f4;
-}
-
+/* Card header */
 .kst-card-header h3 {
   margin: 0;
   font-size: 1.1rem;
@@ -2832,17 +2136,7 @@ canvas {
   margin-top: 0.3rem;
 }
 
-/* Canvas */
-.kst-chart-card canvas {
-  margin-top: 1.2rem;
-  width: 100% !important;
-  height: 330px !important;
-}
-
-/* ------------------------------
-   TABELA PREMIUM
------------------------------- */
-
+/* tabela stats matéria */
 .kst-mstats-table {
   margin-top: 2rem;
   padding: 1.2rem 1.5rem;
@@ -2852,47 +2146,14 @@ canvas {
   margin-bottom: 1.1rem;
 }
 
-.kst-mstats-table h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-/* Tabela */
-.kst-table thead tr {
-  background: #f9fafb;
-}
-
-.kst-table th {
-  padding: 0.8rem;
-  font-size: 0.88rem;
-  color: #374151;
-}
-
-.kst-table td {
-  padding: 0.75rem;
-  font-size: 0.9rem;
-}
-
-/* Listras suaves */
-.kst-table tbody tr:nth-child(even) {
-  background: #fafafa;
-}
-
-.kst-table tbody tr:hover {
-  background: #f2f6ff;
-}
-
-/* ------------------------------
-   EMPTY STATE
------------------------------- */
-
+/* EMPTY state matéria */
 .kst-empty-state {
   padding: 2rem;
   text-align: center;
   background: #ffffff;
   border-radius: var(--kst-radius-lg);
   border: 1px solid #eef1f4;
-  box-shadow: var(--kst-shadow-sm);
+  box-shadow: var(--kst-shadow-subtle);
 }
 
 .kst-empty-state p {
@@ -2900,23 +2161,13 @@ canvas {
   margin-bottom: 1rem;
 }
 
-/* ------------------------------
-   GRID SYSTEM
------------------------------- */
-
+/* Grids auxiliares */
 .kst-grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.2rem;
 }
 
-.kst-grid-2 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.4rem;
-}
-
-/* Responsivo */
 @media (max-width: 1030px) {
   .kst-grid-4 {
     grid-template-columns: repeat(2, 1fr);
@@ -2927,20 +2178,14 @@ canvas {
   .kst-grid-4 {
     grid-template-columns: 1fr;
   }
-  .kst-grid-2 {
-    grid-template-columns: 1fr;
-  }
 }
 
-/* ============================================================
+
+/* =====================================================================
    16 — SIMULADOS (NOVO / LISTA / DETALHES)
-   Estilo premium — Kaue Study Tracker
-   ============================================================ */
+   ===================================================================== */
 
-/* -----------------------------
-   TÍTULO / SUBTÍTULO DA PÁGINA
------------------------------- */
-
+/* Cabeçalho simulados */
 .kst-sim-header {
   margin-bottom: 2rem;
   text-align: center;
@@ -2960,10 +2205,7 @@ canvas {
   margin: 0;
 }
 
-/* -----------------------------
-   CARD PRINCIPAL DO FORMULÁRIO
------------------------------- */
-
+/* Card principal form simulado */
 .kst-sim-card {
   background: var(--kst-bg-elevated);
   border-radius: var(--kst-radius-lg);
@@ -2974,7 +2216,7 @@ canvas {
   margin: 0 auto 2.5rem;
 }
 
-/* Fieldset adaptado */
+/* Fieldset simulados */
 .kst-sim-fieldset {
   border-radius: var(--kst-radius-lg);
   border: 1px dashed var(--kst-border-subtle);
@@ -2990,12 +2232,7 @@ canvas {
   color: var(--kst-text-main);
 }
 
-/* Inputs usam padrão global, então não precisa duplicar */
-
-/* -----------------------------
-   LISTA DE ACERTOS POR ÁREA
------------------------------- */
-
+/* Grid áreas de acerto */
 .kst-sim-grid-areas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -3018,10 +2255,7 @@ canvas {
   color: var(--kst-text-main);
 }
 
-/* -----------------------------
-   BADGES DE DESEMPENHO (0–45)
------------------------------- */
-
+/* Badges desempenho (0–45) */
 .kst-sim-badge {
   font-size: 0.75rem;
   padding: 0.25rem 0.6rem;
@@ -3030,28 +2264,22 @@ canvas {
   display: inline-block;
 }
 
-/* Verde — bom desempenho */
 .kst-sim-badge--good {
   background: rgba(34, 197, 94, 0.18);
   color: #16a34a;
 }
 
-/* Médio — laranja */
 .kst-sim-badge--mid {
   background: rgba(245, 158, 11, 0.18);
   color: #c2410c;
 }
 
-/* Baixo — vermelho */
 .kst-sim-badge--low {
   background: rgba(239, 68, 68, 0.18);
   color: #dc2626;
 }
 
-/* -----------------------------
-   RESUMO DO SIMULADO (DETALHES)
------------------------------- */
-
+/* Resumo simulado detalhes */
 .kst-sim-summary {
   margin-top: 2rem;
   padding: 1.6rem 1.7rem;
@@ -3078,10 +2306,7 @@ canvas {
   font-weight: 600;
 }
 
-/* -----------------------------
-   GRID DE KPI POR ÁREA (DETALHES)
------------------------------- */
-
+/* KPIs por área (detalhes) */
 .kst-sim-kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -3113,10 +2338,7 @@ canvas {
   letter-spacing: -0.02em;
 }
 
-/* -----------------------------
-   TABELA DA LISTA DE SIMULADOS
------------------------------- */
-
+/* Tabela lista simulados */
 .kst-sim-table-wrapper {
   margin-top: 1.8rem;
   border-radius: var(--kst-radius-lg);
@@ -3160,7 +2382,7 @@ canvas {
   background: rgba(28, 154, 255, 0.04);
 }
 
-/* Ações */
+/* Ações tabela simulados */
 .kst-sim-actions {
   display: flex;
   gap: 0.45rem;
@@ -3172,10 +2394,7 @@ canvas {
   font-size: 0.8rem;
 }
 
-/* -----------------------------
-   EMPTY STATE
------------------------------- */
-
+/* Empty state simulados */
 .kst-sim-empty {
   padding: 2rem;
   text-align: center;
@@ -3183,12 +2402,8 @@ canvas {
   font-size: 0.95rem;
 }
 
-/* -----------------------------
-   RESPONSIVIDADE
------------------------------- */
-
+/* Responsivo simulados */
 @media (max-width: 650px) {
-
   .kst-sim-card {
     padding: 1.4rem 1rem 1.8rem;
   }
@@ -3199,153 +2414,6 @@ canvas {
 
   .kst-sim-table th:nth-child(3),
   .kst-sim-table td:nth-child(3) {
-    display: none; /* Exemplo: esconder tempo no mobile */
-  }
-}
-
-/* ============================================================
-   ESTATÍSTICAS DE SIMULADOS — MODERNIZAÇÃO PREMIUM
-   ============================================================ */
-
-/* ----------------------------------------------
-   Cabeçalho da página
----------------------------------------------- */
-.kst-home-header {
-  margin-bottom: 2.4rem;
-}
-
-.kst-home-title {
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-}
-
-.kst-home-subtitle {
-  font-size: 0.95rem;
-  color: var(--kst-text-muted);
-  margin-top: 0.35rem;
-}
-
-/* ----------------------------------------------
-   Filtros — visual mais limpo
----------------------------------------------- */
-.kst-filter-bar {
-  padding: 1rem 1.25rem;
-  border-radius: var(--kst-radius-xl);
-  background: var(--kst-bg-elevated);
-  border: 1px solid var(--kst-border-subtle);
-  box-shadow: var(--kst-shadow-subtle);
-}
-
-.kst-filter-bar .kst-btn {
-  padding: 0.45rem 1rem;
-  border-radius: 999px;
-}
-
-.kst-btn-primary {
-  box-shadow: 0 8px 24px rgba(28,154,255,0.22);
-}
-
-/* ----------------------------------------------
-   KPIs — deixar mais premium e claros
----------------------------------------------- */
-.kst-card-kpi {
-  padding: 1.6rem 1.5rem !important;
-  border-radius: var(--kst-radius-lg);
-  border: 1px solid rgba(148,163,184,0.28);
-}
-
-.kst-card-kpi h3 {
-  margin: 0 0 0.6rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--kst-text-main);
-}
-
-.kst-kpi-number {
-  font-size: 2.2rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  margin: 0.4rem 0 0.5rem;
-  color: var(--kst-primary);
-}
-
-.kst-kpi-text strong {
-  font-weight: 700;
-}
-
-/* ----------------------------------------------
-   Grid dos KPIs — mais espaçamento
----------------------------------------------- */
-.kst-dashboard-grid {
-  gap: 1.4rem !important;
-  margin-bottom: 2rem;
-}
-
-/* ----------------------------------------------
-   Cards dos gráficos — visual “app premium”
----------------------------------------------- */
-.kst-chart-card {
-  padding: 1.5rem 1.6rem !important;
-  border-radius: var(--kst-radius-xl);
-  background: var(--kst-bg-elevated);
-  border: 1px solid rgba(148,163,184,0.28);
-  box-shadow: var(--kst-shadow-soft);
-  transition: box-shadow .18s ease, transform .12s ease;
-}
-
-.kst-chart-card:hover {
-  box-shadow: 0 18px 36px rgba(0,0,0,0.08);
-  transform: translateY(-2px);
-}
-
-.kst-chart-card h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 0.65rem;
-  color: var(--kst-text-main);
-}
-
-.kst-chart-subtitle {
-  color: var(--kst-text-muted);
-  margin-bottom: 1rem;
-  font-size: 0.88rem;
-}
-
-/* ----------------------------------------------
-   Canvas gráfico — nitidez e responsividade
----------------------------------------------- */
-canvas {
-  width: 100% !important;
-  height: auto !important;
-  image-rendering: -webkit-optimize-contrast;
-  margin-top: 0.8rem;
-}
-
-/* ----------------------------------------------
-   Mobile — organização fluida
----------------------------------------------- */
-@media (max-width: 780px) {
-  .kst-home-title {
-    font-size: 1.6rem;
-  }
-
-  .kst-dashboard-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .kst-charts-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-@media (max-width: 520px) {
-  .kst-filter-bar {
-    padding: 0.85rem 1rem;
-  }
-
-  .kst-filter-bar .kst-btn {
-    width: 100%;
-    justify-content: center;
+    display: none;
   }
 }
