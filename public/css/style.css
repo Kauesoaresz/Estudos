@@ -2487,25 +2487,32 @@ body.kst-focus-mode .kst-exit-focus-btn {
 
 
 /* ============================================
-   TELA DE RECORDES PESSOAIS — ESTILO PREMIUM
-   ============================================ */
+   TELA DE RECORDES PESSOAIS — PREMIUM
+   SUPORTE COMPLETO AO MODO CLARO E ESCURO
+============================================ */
 
-/* Container geral da página */
+/* Container geral */
 .kst-recordes-wrapper {
   margin-top: 2rem;
 }
 
 /* Card principal */
 .kst-recordes-card {
-  background: var(--kst-color-bg-elevated, #ffffff);
+  background: var(--kst-color-bg-elevated);
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: var(--kst-shadow-elevated, 0 6px 18px rgba(0, 0, 0, 0.06));
+  border: 1px solid var(--kst-color-border, rgba(0, 0, 0, 0.06));
   backdrop-filter: blur(10px);
+  transition: 0.25s ease;
 }
 
-/* Título da seção */
+.kst-recordes-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--kst-shadow-elevated-hover, 0 10px 24px rgba(0,0,0,0.08));
+}
+
+/* Título */
 .kst-recordes-title {
   font-size: 1.6rem;
   font-weight: 700;
@@ -2513,28 +2520,28 @@ body.kst-focus-mode .kst-exit-focus-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--kst-color-text-strong);
 }
 
 .kst-recordes-title .emoji {
   font-size: 1.8rem;
 }
 
-/* Cada linha do recorde */
+/* Itens do recorde */
 .kst-recordes-item {
   padding: 0.55rem 0;
   font-size: 1.1rem;
-  color: var(--kst-color-text, #333);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  color: var(--kst-color-text);
+  border-bottom: 1px solid var(--kst-color-border-soft, rgba(0,0,0,0.05));
 }
 
 .kst-recordes-item:last-child {
   border-bottom: none;
 }
 
-/* Label (ex: "Maior número de horas estudadas:") */
 .kst-recordes-item strong {
+  color: var(--kst-color-text-strong);
   font-weight: 600;
-  color: var(--kst-color-text-strong, #111);
 }
 
 /* Botão voltar */
@@ -2548,6 +2555,23 @@ body.kst-focus-mode .kst-exit-focus-btn {
   font-size: 1rem;
 }
 
+/* ============================================
+   MODO ESCURO
+============================================ */
+body.theme-dark .kst-recordes-card {
+  background: var(--kst-color-bg-elevated-dark, #1e1e1e);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 6px 18px rgba(255,255,255,0.05);
+}
+
+body.theme-dark .kst-recordes-card:hover {
+  box-shadow: 0 10px 24px rgba(255,255,255,0.07);
+}
+
+body.theme-dark .kst-recordes-item {
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
 /* RESPONSIVO */
 @media (max-width: 600px) {
   .kst-recordes-card {
@@ -2558,6 +2582,7 @@ body.kst-focus-mode .kst-exit-focus-btn {
     font-size: 1rem;
   }
 }
+
 
 /* ============================================
    MAPA DE CALOR — VERSÃO PREMIUM
