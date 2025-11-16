@@ -1,35 +1,75 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
-<section class="kst-section">
-  <h2>Detalhes da matéria</h2>
+<section class="kst-container">
 
-  <div class="kst-card">
-    <p><strong>Nome:</strong> <%= materia.nome %></p>
-
-    <h3 class="kst-form-section-title">Resumo de estudos</h3>
-    <p><strong>Horas totais:</strong> <%= resumo.horasTotais.toFixed(2) %> h</p>
-    <p><strong>Minutos totais:</strong> <%= resumo.totalMinutos %> min</p>
-    <p><strong>Dias estudados:</strong> <%= resumo.diasEstudados %></p>
-    <p><strong>Questões (certas/total):</strong>
-      <% if (resumo.totalQuestoes > 0) { %>
-        <%= resumo.totalCertas %>/<%= resumo.totalQuestoes %>
-      <% } else { %>
-        -
-      <% } %>
-    </p>
-    <p><strong>% de acerto:</strong>
-      <% if (resumo.taxaAcerto != null) { %>
-        <%= resumo.taxaAcerto %>%
-      <% } else { %>
-        -
-      <% } %>
-    </p>
+  <!-- Cabeçalho -->
+  <div class="kst-home-header" style="margin-bottom: 2rem;">
+    <h1 class="kst-home-title"><%= materia.nome %></h1>
+    <p class="kst-home-subtitle">Resumo geral de tudo que você estudou nessa matéria.</p>
   </div>
 
-  <div style="margin-top:1rem;">
+  <!-- GRID PRINCIPAL -->
+  <div class="kst-grid-2">
+
+    <!-- CARD 1 → Informações gerais -->
+    <div class="kst-card kst-card-block">
+      <h3 class="kst-block-title">Informações gerais</h3>
+
+      <div class="kst-details-line"><strong>Nome:</strong> <%= materia.nome %></div>
+
+      <div class="kst-details-line">
+        <strong>Dias estudados:</strong> <%= resumo.diasEstudados %>
+      </div>
+
+      <div class="kst-details-line">
+        <strong>Total de minutos:</strong> <%= resumo.totalMinutos %> min
+      </div>
+
+      <div class="kst-details-line">
+        <strong>Horas totais:</strong> <%= resumo.horasTotais.toFixed(2) %> h
+      </div>
+    </div>
+
+    <!-- CARD 2 → Questões -->
+    <div class="kst-card kst-card-block">
+      <h3 class="kst-block-title">Questões</h3>
+
+      <div class="kst-details-line">
+        <strong>Total feitas:</strong>
+        <% if (resumo.totalQuestoes > 0) { %>
+          <%= resumo.totalQuestoes %>
+        <% } else { %>
+          -
+        <% } %>
+      </div>
+
+      <div class="kst-details-line">
+        <strong>Certas:</strong>
+        <% if (resumo.totalQuestoes > 0) { %>
+          <%= resumo.totalCertas %>
+        <% } else { %>
+          -
+        <% } %>
+      </div>
+
+      <div class="kst-details-line">
+        <strong>Taxa de acerto:</strong>
+        <% if (resumo.taxaAcerto != null) { %>
+          <span class="kst-tag-success"><%= resumo.taxaAcerto %>%</span>
+        <% } else { %>
+          -
+        <% } %>
+      </div>
+    </div>
+
+  </div> <!-- fim grid -->
+
+  <!-- AÇÕES -->
+  <div class="kst-actions-row" style="margin-top: 1.5rem;">
     <a href="/materias" class="kst-btn kst-btn-secondary">Voltar</a>
     <a href="/materias/<%= materia.id %>/editar" class="kst-btn kst-btn-primary">Editar nome</a>
   </div>
+
 </section>
 
 <%- include("partials/footer") %>

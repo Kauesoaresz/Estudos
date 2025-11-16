@@ -1,34 +1,101 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
-<section class="kst-section">
-  <h2>Detalhes do estudo</h2>
+<section class="kst-study-details-wrapper">
 
-  <div class="kst-card">
-    <p><strong>Data:</strong> <%= estudo.dia ? estudo.dia.data : "-" %></p>
-    <p><strong>Matéria:</strong> <%= estudo.materia ? estudo.materia.nome : "-" %></p>
-    <p><strong>Tempo de estudo:</strong> <%= estudo.minutos_estudados != null ? estudo.minutos_estudados + " min" : "-" %></p>
-    <p><strong>Tipo de estudo:</strong>
-      <% if (estudo.tipo_estudo === "CONTEUDO_NOVO") { %>
-        Conteúdo novo
-      <% } else if (estudo.tipo_estudo === "REVISAO") { %>
-        Revisão
-      <% } else if (estudo.tipo_estudo === "REVISAO_ERRO") { %>
-        Revisão de erro
-      <% } else { %>
-        -
-      <% } %>
+  <!-- Cabeçalho -->
+  <div class="kst-study-header">
+    <h1 class="kst-study-title">Detalhes do Estudo</h1>
+    <p class="kst-study-subtitle">
+      Informações completas do bloco de estudo realizado.
     </p>
-    <p><strong>Questões feitas:</strong> <%= estudo.questoes_feitas != null ? estudo.questoes_feitas : "-" %></p>
-    <p><strong>Questões certas:</strong> <%= estudo.questoes_certas != null ? estudo.questoes_certas : "-" %></p>
-    <p><strong>Questões marcadas para revisão:</strong> <%= estudo.questoes_marcadas_revisao != null ? estudo.questoes_marcadas_revisao : "-" %></p>
-
-    <p><strong>Tópicos estudados:</strong> <%= estudo.topicos_estudados || "-" %></p>
   </div>
 
-  <div style="margin-top:1rem;">
+  <!-- CARD PRINCIPAL -->
+  <div class="kst-study-main-card">
+
+    <!-- GRID SUPERIOR -->
+    <div class="kst-study-grid">
+
+      <!-- INFORMAÇÕES GERAIS -->
+      <div class="kst-study-mini-card">
+        <h4>Informações gerais</h4>
+
+        <p>📅 <strong>Data:</strong> 
+          <%= estudo.dia ? estudo.dia.data : "-" %>
+        </p>
+
+        <p>📘 <strong>Matéria:</strong> 
+          <%= estudo.materia ? estudo.materia.nome : "-" %>
+        </p>
+
+        <p>⏱ <strong>Tempo de estudo:</strong> 
+          <%= estudo.minutos_estudados != null ? estudo.minutos_estudados + " min" : "-" %>
+        </p>
+
+        <p><strong>Tipo de estudo:</strong>
+          <% if (estudo.tipo_estudo === "CONTEUDO_NOVO") { %>
+            <span class="kst-badge-tipo-estudo kst-badge--novo">CONTEÚDO</span>
+          <% } else if (estudo.tipo_estudo === "REVISAO") { %>
+            <span class="kst-badge-tipo-estudo kst-badge--revisao">REVISÃO</span>
+          <% } else if (estudo.tipo_estudo === "REVISAO_ERRO") { %>
+            <span class="kst-badge-tipo-estudo kst-badge--erro">REVISÃO DE ERRO</span>
+          <% } else { %>
+            -
+          <% } %>
+        </p>
+      </div>
+
+      <!-- QUESTÕES -->
+      <div class="kst-study-mini-card">
+        <h4>Questões</h4>
+
+        <p><strong>Total feitas:</strong> 
+          <%= estudo.questoes_feitas != null ? estudo.questoes_feitas : "-" %>
+        </p>
+
+        <p><strong>Certas:</strong> 
+          <%= estudo.questoes_certas != null ? estudo.questoes_certas : "-" %>
+        </p>
+
+        <p><strong>Marcadas para revisão:</strong> 
+          <%= estudo.questoes_marcadas_revisao != null ? estudo.questoes_marcadas_revisao : "-" %>
+        </p>
+
+        <!-- TAXA DE ACERTO -->
+        <p><strong>Taxa de acerto:</strong>
+          <% if (estudo.questoes_feitas && estudo.questoes_certas != null) { 
+               const taxa = Math.round((estudo.questoes_certas / estudo.questoes_feitas) * 100); 
+          %>
+            <% if (taxa >= 70) { %>
+              <span class="kst-badge-acerto kst-acerto-alto"><%= taxa %>%</span>
+            <% } else if (taxa >= 40) { %>
+              <span class="kst-badge-acerto kst-acerto-medio"><%= taxa %>%</span>
+            <% } else { %>
+              <span class="kst-badge-acerto kst-acerto-baixo"><%= taxa %>%</span>
+            <% } %>
+          <% } else { %>
+            -
+          <% } %>
+        </p>
+
+      </div>
+    </div> <!-- fim grid -->
+
+    <!-- TÓPICOS -->
+    <h3 class="kst-study-section-title">Tópicos estudados</h3>
+
+    <div class="kst-study-topicos">
+      <%= estudo.topicos_estudados || "-" %>
+    </div>
+
+  </div> <!-- fim card -->
+
+  <!-- AÇÕES -->
+  <div class="kst-study-actions">
     <a href="/estudos" class="kst-btn kst-btn-secondary">Voltar ao histórico</a>
     <a href="/estudos/<%= estudo.id %>/editar" class="kst-btn kst-btn-primary">Editar estudo</a>
   </div>
+
 </section>
 
 <%- include("partials/footer") %>

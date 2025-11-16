@@ -1,26 +1,37 @@
-<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+<%- include("partials/header", { tituloPagina }) %>
 
 <section class="kst-section">
-  <h2>Matérias</h2>
-  <p class="kst-section-subtitle">
-    Cadastre aqui as matérias que você estuda (Matemática, Física, Redação, etc.).
-  </p>
 
-  <% if (erroExcluir) { %>
-    <p style="color:#f97373; margin-bottom: 1rem;">
-      Não é possível excluir uma matéria que já possui estudos registrados.
+  <!-- Cabeçalho da página -->
+  <div class="kst-home-header" style="margin-bottom: 2rem;">
+    <h1 class="kst-home-title">Matérias</h1>
+    <p class="kst-home-subtitle">
+      Todas as matérias cadastradas para organizar seus estudos.
     </p>
+  </div>
+
+  <!-- ALERTAS -->
+  <% if (erroExcluir) { %>
+    <div class="kst-alert kst-alert-error" style="margin-bottom: 1.2rem;">
+      Não é possível excluir uma matéria que já possui estudos registrados.
+    </div>
   <% } %>
 
-  <div class="kst-card" style="margin-bottom: 1.5rem;">
-    <h3>Adicionar nova matéria</h3>
+  <% if (erro) { %>
+    <div class="kst-alert kst-alert-error" style="margin-bottom: 1rem;">
+      Informe um nome válido.
+    </div>
+  <% } %>
 
-    <% if (erro) { %>
-      <p style="color:#f97373;">Informe um nome válido.</p>
-    <% } %>
-    <% if (sucesso) { %>
-      <p style="color:#4ade80;">Matéria cadastrada com sucesso!</p>
-    <% } %>
+  <% if (sucesso) { %>
+    <div class="kst-alert kst-alert-success" style="margin-bottom: 1rem;">
+      Matéria cadastrada com sucesso!
+    </div>
+  <% } %>
+
+  <!-- CARD DE ADIÇÃO -->
+  <div class="kst-card" style="padding: 1.6rem; margin-bottom: 2rem;">
+    <h3 class="kst-card-title" style="margin-bottom: 1rem;">Adicionar nova matéria</h3>
 
     <form action="/materias" method="post" class="kst-form-inline">
       <input
@@ -29,41 +40,60 @@
         placeholder="Ex.: Matemática"
         class="kst-input"
         required
+        style="max-width: 320px;"
       />
       <button type="submit" class="kst-btn kst-btn-primary">Adicionar</button>
     </form>
   </div>
 
+  <!-- LISTA DE MATÉRIAS -->
   <% if (!materias || materias.length === 0) { %>
-    <p>Nenhuma matéria cadastrada ainda.</p>
+
+    <div class="kst-card" style="padding: 1.6rem; text-align: center;">
+      <p style="margin: 0 0 1rem;">Nenhuma matéria cadastrada ainda.</p>
+      <p style="color: var(--kst-text-soft);">Comece adicionando uma matéria acima.</p>
+    </div>
+
   <% } else { %>
-    <div class="kst-table-wrapper">
+
+    <div class="kst-card" style="padding: 0; overflow: hidden;">
       <table class="kst-table">
         <thead>
           <tr>
-            <th>Matéria</th>
-            <th style="width: 220px;">Ações</th>
+            <th style="width: 70%;">Matéria</th>
+            <th style="text-align: center;">Ações</th>
           </tr>
         </thead>
+
         <tbody>
           <% materias.forEach(function(m) { %>
             <tr>
-              <td><%= m.nome %></td>
-              <td>
-                <div class="kst-table-actions">
-                  <a href="/materias/<%= m.id %>" class="kst-btn kst-btn-xs">Ver</a>
-                  <a href="/materias/<%= m.id %>/editar" class="kst-btn kst-btn-xs kst-btn-secondary">Editar</a>
-                  <form action="/materias/<%= m.id %>/excluir" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta matéria?');" style="display:inline;">
-                    <button type="submit" class="kst-btn kst-btn-xs kst-btn-danger">Excluir</button>
-                  </form>
-                </div>
+              <td style="font-weight: 600;"><%= m.nome %></td>
+
+              <td style="text-align:center;">
+
+                <div class="kst-table-actions-links">
+  <a href="/materias/<%= m.id %>" class="kst-link-inline">Ver</a>
+  <span class="kst-sep">|</span>
+  
+  <a href="/materias/<%= m.id %>/editar" class="kst-link-inline">Editar</a>
+  <span class="kst-sep">|</span>
+
+  <form action="/materias/<%= m.id %>/excluir" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta matéria?');">
+    <button type="submit" class="kst-link-inline kst-link-danger">Excluir</button>
+  </form>
+</div>
+
+
               </td>
             </tr>
           <% }) %>
         </tbody>
       </table>
     </div>
+
   <% } %>
+
 </section>
 
 <%- include("partials/footer") %>

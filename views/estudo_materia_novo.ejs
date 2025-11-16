@@ -1,136 +1,155 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
-<section class="kst-section">
-  <h2>Registrar estudo por matéria</h2>
-  <p class="kst-section-subtitle">
-    Registre o que você estudou em cada matéria, quanto tempo, questões e acertos.
-  </p>
+<section class="kst-section-form">
+  
+  <!-- Cabeçalho da página -->
+  <div class="kst-page-header">
+    <h1 class="kst-page-title">Registrar estudo por matéria</h1>
+    <p class="kst-page-subtitle">
+      Registre quanto estudou, o tipo de estudo, questões e acertos.
+    </p>
+  </div>
 
+  <!-- Alertas -->
   <% if (sucesso) { %>
-    <div class="kst-alert kst-alert-success">
+    <div class="kst-alert kst-alert-success kst-mb-xl">
       Estudo registrado com sucesso!
     </div>
   <% } %>
 
   <% if (erro) { %>
-    <div class="kst-alert kst-alert-error">
+    <div class="kst-alert kst-alert-error kst-mb-xl">
       Verifique os campos obrigatórios e os valores informados.
     </div>
   <% } %>
 
   <div id="erro-estudo" class="kst-alert kst-alert-error" style="display:none;"></div>
 
-  <form action="/estudos" method="POST" class="kst-form" onsubmit="return validarEstudo(event)">
+  <!-- Card do formulário -->
+  <div class="kst-card-form">
 
-    <div class="kst-form-row">
-      <div class="kst-form-group">
-        <label class="kst-label" for="data">Data do estudo *</label>
-        <input
-          type="date"
-          id="data"
-          name="data"
-          class="kst-input"
-          required
-        />
-      </div>
+    <form action="/estudos" method="POST" class="kst-form" onsubmit="return validarEstudo(event)">
 
-      <div class="kst-form-group">
-        <label class="kst-label" for="materia_id">Matéria *</label>
-        <select id="materia_id" name="materia_id" class="kst-select" required>
-          <option value="">Selecione uma matéria</option>
-          <% materias.forEach(function(m) { %>
-            <option value="<%= m.id %>"><%= m.nome %></option>
-          <% }) %>
-        </select>
-      </div>
-    </div>
+      <!-- Bloco: data + matéria -->
+      <div class="kst-fieldset">
+        <div class="kst-fieldset-title">Informações básicas</div>
 
-    <fieldset class="kst-fieldset">
-      <legend>Tempo e tipo de estudo</legend>
+        <div class="kst-form-row">
+          <div class="kst-form-group">
+            <label class="kst-label" for="data">Data do estudo *</label>
+            <input
+              type="date"
+              id="data"
+              name="data"
+              class="kst-input"
+              required
+            />
+          </div>
 
-      <div class="kst-form-row">
-        <div class="kst-form-group">
-          <label class="kst-label" for="minutos_estudados">Minutos estudados</label>
-          <input
-            type="number"
-            min="0"
-            id="minutos_estudados"
-            name="minutos_estudados"
-            class="kst-input"
-            placeholder="Ex: 90"
-          />
-        </div>
-
-        <div class="kst-form-group">
-          <label class="kst-label" for="tipo_estudo">Tipo de estudo</label>
-          <select id="tipo_estudo" name="tipo_estudo" class="kst-select">
-            <option value="">Selecione</option>
-            <option value="CONTEUDO_NOVO">Conteúdo novo</option>
-            <option value="REVISAO">Revisão</option>
-            <option value="REVISAO_ERRO">Revisão de erro</option>
-          </select>
+          <div class="kst-form-group">
+            <label class="kst-label" for="materia_id">Matéria *</label>
+            <select id="materia_id" name="materia_id" class="kst-select" required>
+              <option value="">Selecione uma matéria</option>
+              <% materias.forEach(function(m) { %>
+                <option value="<%= m.id %>"><%= m.nome %></option>
+              <% }) %>
+            </select>
+          </div>
         </div>
       </div>
 
-      <div class="kst-form-group">
-        <label class="kst-label" for="topicos_estudados">Tópicos estudados</label>
-        <textarea
-          id="topicos_estudados"
-          name="topicos_estudados"
-          class="kst-textarea"
-          rows="2"
-        ></textarea>
-      </div>
-    </fieldset>
+      <!-- Bloco: tempo + tipo -->
+      <div class="kst-fieldset">
+        <div class="kst-fieldset-title">Tempo e tipo de estudo</div>
 
-    <fieldset class="kst-fieldset">
-      <legend>Questões</legend>
+        <div class="kst-form-row">
+          <div class="kst-form-group">
+            <label class="kst-label" for="minutos_estudados">Minutos estudados</label>
+            <input
+              type="number"
+              min="0"
+              id="minutos_estudados"
+              name="minutos_estudados"
+              class="kst-input"
+              placeholder="Ex: 90"
+            />
+          </div>
 
-      <div class="kst-form-row">
-        <div class="kst-form-group">
-          <label class="kst-label" for="questoes_feitas">Questões feitas</label>
-          <input
-            type="number"
-            min="0"
-            id="questoes_feitas"
-            name="questoes_feitas"
-            class="kst-input"
-          />
+          <div class="kst-form-group">
+            <label class="kst-label" for="tipo_estudo">Tipo de estudo</label>
+            <select id="tipo_estudo" name="tipo_estudo" class="kst-select">
+              <option value="">Selecione</option>
+              <option value="CONTEUDO_NOVO">Conteúdo novo</option>
+              <option value="REVISAO">Revisão</option>
+              <option value="REVISAO_ERRO">Revisão de erro</option>
+            </select>
+          </div>
         </div>
 
         <div class="kst-form-group">
-          <label class="kst-label" for="questoes_certas">Questões certas</label>
-          <input
-            type="number"
-            min="0"
-            id="questoes_certas"
-            name="questoes_certas"
-            class="kst-input"
-          />
-        </div>
-
-        <div class="kst-form-group">
-          <label class="kst-label" for="questoes_marcadas_revisao">Questões marcadas para revisão</label>
-          <input
-            type="number"
-            min="0"
-            id="questoes_marcadas_revisao"
-            name="questoes_marcadas_revisao"
-            class="kst-input"
-          />
+          <label class="kst-label" for="topicos_estudados">Tópicos estudados</label>
+          <textarea
+            id="topicos_estudados"
+            name="topicos_estudados"
+            class="kst-textarea"
+            rows="2"
+          ></textarea>
         </div>
       </div>
-    </fieldset>
 
-    <div class="kst-form-actions">
-      <button type="submit" class="kst-btn kst-btn-primary">
-        Salvar estudo
-      </button>
-    </div>
-  </form>
+      <!-- Bloco: Questões -->
+      <div class="kst-fieldset">
+        <div class="kst-fieldset-title">Questões</div>
+
+        <div class="kst-form-row">
+          <div class="kst-form-group">
+            <label class="kst-label" for="questoes_feitas">Questões feitas</label>
+            <input
+              type="number"
+              min="0"
+              id="questoes_feitas"
+              name="questoes_feitas"
+              class="kst-input"
+            />
+          </div>
+
+          <div class="kst-form-group">
+            <label class="kst-label" for="questoes_certas">Questões certas</label>
+            <input
+              type="number"
+              min="0"
+              id="questoes_certas"
+              name="questoes_certas"
+              class="kst-input"
+            />
+          </div>
+
+          <div class="kst-form-group">
+            <label class="kst-label" for="questoes_marcadas_revisao">Questões marcadas para revisão</label>
+            <input
+              type="number"
+              min="0"
+              id="questoes_marcadas_revisao"
+              name="questoes_marcadas_revisao"
+              class="kst-input"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão -->
+      <div class="kst-form-actions">
+        <button type="submit" class="kst-btn kst-btn-primary kst-btn-lg">
+          Salvar estudo
+        </button>
+      </div>
+
+    </form>
+  </div>
 </section>
 
 <%- include("partials/footer") %>
+
 
 <script>
   function validarEstudo(event) {
@@ -143,45 +162,27 @@
     const questoesCertas = document.getElementById("questoes_certas").value;
     const questoesRevisao = document.getElementById("questoes_marcadas_revisao").value;
 
-    if (!data) {
-      erros.push("A data do estudo é obrigatória.");
-    }
+    if (!data) erros.push("A data do estudo é obrigatória.");
+    if (!materiaId) erros.push("Selecione uma matéria.");
 
-    if (!materiaId) {
-      erros.push("Selecione uma matéria.");
-    }
+    if (minutosEstudados && (Number(minutosEstudados) < 0))
+      erros.push("Minutos estudados não pode ser negativo.");
 
-    if (minutosEstudados) {
-      const m = Number(minutosEstudados);
-      if (isNaN(m) || m < 0) {
-        erros.push("Minutos estudados não pode ser negativo.");
-      }
-    }
-
-    let qt = null;
-    if (questoesFeitas) {
-      qt = Number(questoesFeitas);
-      if (isNaN(qt) || qt < 0) {
-        erros.push("Questões feitas não pode ser negativo.");
-      }
-    }
+    let qt = questoesFeitas ? Number(questoesFeitas) : null;
+    if (qt < 0) erros.push("Questões feitas não pode ser negativo.");
 
     if (questoesCertas) {
       const qc = Number(questoesCertas);
-      if (isNaN(qc) || qc < 0) {
-        erros.push("Questões certas não pode ser negativo.");
-      } else if (qt !== null && qc > qt) {
+      if (qc < 0) erros.push("Questões certas não pode ser negativo.");
+      if (qt !== null && qc > qt)
         erros.push("Questões certas não pode ser maior que questões feitas.");
-      }
     }
 
     if (questoesRevisao) {
       const qr = Number(questoesRevisao);
-      if (isNaN(qr) || qr < 0) {
-        erros.push("Questões marcadas para revisão não pode ser negativo.");
-      } else if (qt !== null && qr > qt) {
+      if (qr < 0) erros.push("Questões marcadas para revisão não pode ser negativo.");
+      if (qt !== null && qr > qt)
         erros.push("Questões marcadas para revisão não pode ser maior que questões feitas.");
-      }
     }
 
     const boxErro = document.getElementById("erro-estudo");
@@ -191,10 +192,9 @@
       boxErro.style.display = "block";
       boxErro.innerHTML = erros.join("<br>");
       return false;
-    } else {
-      boxErro.style.display = "none";
-      boxErro.innerHTML = "";
-      return true;
     }
+
+    boxErro.style.display = "none";
+    return true;
   }
 </script>

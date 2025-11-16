@@ -595,6 +595,154 @@ body.theme-dark .kst-theme-switch-knob {
 /* =====================================================================
    05 — COMPONENTES (CARDS, BOTÕES, BADGES, ALERTAS)
    ===================================================================== */
+/* ============================================================
+   DETALHES DO ESTUDO — ESTILO PREMIUM (IGUAL DETALHES DO DIA)
+   ============================================================ */
+
+.kst-study-details-wrapper {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 2rem 1.2rem 3rem;
+}
+
+.kst-study-header {
+  margin-bottom: 2rem;
+}
+
+.kst-study-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--kst-text-main);
+  margin: 0;
+}
+
+.kst-study-subtitle {
+  margin: 0.25rem 0 1.8rem;
+  font-size: 0.95rem;
+  color: var(--kst-text-muted);
+}
+
+/* CARD GERAL */
+.kst-study-main-card {
+  background: var(--kst-bg-elevated);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--kst-shadow-soft);
+  border: 1px solid var(--kst-border-subtle);
+}
+
+/* TÍTULOS DAS SEÇÕES */
+.kst-study-section-title {
+  margin-top: 1.8rem;
+  margin-bottom: 0.9rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+/* LINHAS DE INFO */
+.kst-study-info p {
+  margin: 0.25rem 0;
+  font-size: 0.92rem;
+  color: var(--kst-text-main);
+}
+
+.kst-study-info strong {
+  font-weight: 600;
+}
+
+/* GRID DAS SEÇÕES DO CARD */
+.kst-study-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.2rem;
+}
+
+/* MINI-CARDS INTERNOS */
+.kst-study-mini-card {
+  background: var(--kst-bg-elevated-soft);
+  padding: 1.3rem 1.4rem;
+  border-radius: 14px;
+  border: 1px solid var(--kst-border-subtle);
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-study-mini-card h4 {
+  margin: 0 0 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+.kst-study-mini-card p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+/* BADGE DO TIPO DE ESTUDO */
+.kst-badge-tipo-estudo {
+  padding: 0.18rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 6px;
+  color: white;
+}
+
+.kst-badge--novo {
+  background: #3b82f6;
+}
+
+.kst-badge--revisao {
+  background: #22c55e;
+}
+
+.kst-badge--erro {
+  background: #eab308;
+}
+
+/* BADGE ACERTO */
+.kst-badge-acerto {
+  display: inline-block;
+  padding: 0.18rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+}
+
+.kst-acerto-alto {
+  background: #22c55e;
+}
+
+.kst-acerto-medio {
+  background: #f59e0b;
+}
+
+.kst-acerto-baixo {
+  background: #ef4444;
+}
+
+/* TÓPICOS ESTUDADOS */
+.kst-study-topicos {
+  background: var(--kst-bg-elevated-soft);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 1.3rem 1.4rem;
+  border-radius: 14px;
+  box-shadow: var(--kst-shadow-subtle);
+  white-space: pre-wrap;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  margin-top: 1rem;
+}
+
+/* BOTÕES INFERIORES */
+.kst-study-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 0.8rem;
+}
+
 
 /* ------------------------
    CARDS
@@ -2202,6 +2350,585 @@ canvas {
 
   .kst-day-date {
     font-size: 1.25rem;
+  }
+}
+
+/* ============================================================
+   15 — ESTUDO POR MATÉRIA (NOVO / EDITAR)
+   Mesma estética do Registrar Dia — Premium
+   ============================================================ */
+
+/* -------- Container principal -------- */
+
+.kst-section-form {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+/* -------- Cabeçalho da página -------- */
+
+.kst-page-header {
+  margin-bottom: 2.2rem;
+  text-align: center;
+}
+
+.kst-page-title {
+  font-size: 1.95rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+  color: var(--kst-text-main);
+}
+
+.kst-page-subtitle {
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--kst-text-muted);
+}
+
+/* -------- Card do formulário -------- */
+
+.kst-card-form {
+  background: var(--kst-bg-elevated);
+  padding: 2.3rem 2rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-soft);
+  box-shadow: var(--kst-shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 2.1rem;
+}
+
+/* -------- Fieldset premium -------- */
+
+.kst-fieldset {
+  padding: 1.7rem 1.4rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated-soft);
+  transition: background 0.2s ease;
+}
+
+.kst-fieldset:hover {
+  background: var(--kst-bg-elevated);
+}
+
+.kst-fieldset-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.4rem;
+  color: var(--kst-text-main);
+}
+
+/* -------- Inputs -------- */
+
+.kst-input,
+.kst-select,
+.kst-textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.92rem;
+  background: var(--kst-input-bg);
+  border: 1px solid var(--kst-border-subtle);
+  border-radius: var(--kst-radius-md);
+  color: var(--kst-text-main);
+  transition: border 0.2s ease, background 0.2s ease;
+}
+
+.kst-input:focus,
+.kst-select:focus,
+.kst-textarea:focus {
+  border-color: var(--kst-primary);
+  background: var(--kst-input-focus);
+  outline: none;
+}
+
+.kst-textarea {
+  min-height: 78px;
+  line-height: 1.4;
+}
+
+/* -------- Linha do formulário -------- */
+
+.kst-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.kst-form-group {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.kst-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--kst-text-main);
+}
+
+/* -------- Botão principal -------- */
+
+.kst-btn-lg {
+  padding: 0.85rem 1.6rem;
+  font-size: 1rem;
+}
+
+/* -------- Erros -------- */
+
+#erro-estudo {
+  margin-bottom: 1.1rem;
+}
+
+/* -------- Mobile -------- */
+
+@media (max-width: 620px) {
+  .kst-card-form {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .kst-fieldset {
+    padding: 1.2rem 1rem;
+  }
+
+  .kst-form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .kst-page-title {
+    font-size: 1.65rem;
+  }
+}
+
+/* ================================
+   LISTA DE MATÉRIAS – PREMIUM
+   ================================ */
+
+/* Wrapper da tabela */
+.kst-card .kst-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: var(--kst-radius-lg);
+  overflow: hidden;
+}
+
+/* Cabeçalho */
+.kst-table thead th {
+  background: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+  padding: 1rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+/* Células */
+.kst-table tbody td {
+  padding: 0.9rem 1rem;
+  font-size: 0.92rem;
+  color: #374151;
+  border-bottom: 1px solid #f1f1f3;
+}
+
+/* Alternância de linhas */
+.kst-table tbody tr:nth-child(even) {
+  background: #fcfcfc;
+}
+
+/* Hover nas linhas */
+.kst-table tbody tr:hover {
+  background: #f1f5f9;
+  transition: 0.2s ease;
+}
+
+/* ============================
+   AÇÕES (botões pequenininhos)
+   ============================ */
+
+.kst-table-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+/* Botões XS */
+.kst-btn-xs {
+  padding: 0.25rem 0.55rem !important;
+  font-size: 0.78rem !important;
+  border-radius: 6px !important;
+}
+
+/* Botão XS principal */
+.kst-btn-xs.kst-btn-primary {
+  background: #0090f7;
+  color: white;
+}
+
+/* Secundário */
+.kst-btn-xs.kst-btn-secondary {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Perigo */
+.kst-btn-xs.kst-btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+/* Hover */
+.kst-btn-xs:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  transition: 0.2s;
+}
+
+/* ============================
+   FORM INLINE (adicionar matéria)
+   ============================ */
+
+.kst-form-inline {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.kst-form-inline .kst-input {
+  flex: 1;
+  min-width: 240px;
+}
+
+/* ============================
+   Feedbacks / alertas
+   ============================ */
+
+.kst-alert {
+  padding: 0.8rem 1rem;
+  border-radius: var(--kst-radius-md);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.kst-alert-success {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.kst-alert-error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+/* ============================
+   CARD: Adicionar Matéria
+   ============================ */
+
+.kst-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.kst-card {
+  background: white;
+  border-radius: var(--kst-radius-lg);
+  padding: 1.5rem;
+  border: 1px solid #eef1f5;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* Espaçamento das colunas */
+.kst-table th:nth-child(1) {
+  width: 70%;
+}
+.kst-table th:nth-child(2) {
+  text-align: center;
+}
+
+/* ============================
+   GRID DA PÁGINA DE MATÉRIAS
+   ============================ */
+
+.kst-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+  margin-bottom: 1.2rem;
+}
+
+@media (max-width: 780px) {
+  .kst-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================
+   BLOCO DE DETALHES
+   ============================ */
+
+.kst-card-block {
+  padding: 1.4rem 1.6rem;
+  border-radius: var(--kst-radius-lg);
+  background: #ffffff;
+  border: 1px solid #e8ecf2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.kst-block-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+/* ============================
+   LINHAS DE DETALHES
+   ============================ */
+
+.kst-details-line {
+  margin-bottom: 0.45rem;
+  font-size: 0.92rem;
+  color: #374151;
+}
+
+.kst-details-line strong {
+  color: #111827;
+}
+
+/* ============================
+   TAG DE SUCESSO (taxa acerto)
+   ============================ */
+
+.kst-tag-success {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ============================
+   AÇÕES
+   ============================ */
+
+.kst-actions-row {
+  display: flex;
+  gap: 0.8rem;
+}
+
+/* =========================================
+   ESTATÍSTICAS POR MATÉRIA — PREMIUM
+   ========================================= */
+
+/* Espaçamento geral da página */
+.kst-mstats {
+  margin-top: 1.5rem;
+}
+
+/* ------------------------------
+   FILTROS PREMIUM
+------------------------------ */
+
+.kst-mstats-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.2rem;
+  background: #ffffff;
+  border-radius: var(--kst-radius-lg);
+  box-shadow: var(--kst-shadow-sm);
+}
+
+.kst-btn-filter {
+  background: #f4f6f8;
+  padding: 0.55rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  transition: 0.2s;
+}
+
+.kst-btn-filter:hover {
+  background: #e9ecef;
+}
+
+.kst-btn-filter.active {
+  background: var(--kst-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ------------------------------
+   KPI CARDS
+------------------------------ */
+
+.kst-mstats-kpis {
+  margin-top: 1.8rem;
+}
+
+.kst-kpi-box {
+  background: #ffffff;
+  border-radius: var(--kst-radius-lg);
+  padding: 1.4rem 1.5rem;
+  box-shadow: var(--kst-shadow-sm);
+  border: 1px solid #eef1f4;
+}
+
+.kst-kpi-box h3 {
+  margin: 0 0 0.8rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.kst-kpi-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--kst-primary);
+  margin-bottom: 0.4rem;
+}
+
+.kst-kpi-desc {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* ------------------------------
+   GRÁFICOS
+------------------------------ */
+
+.kst-mstats-charts {
+  margin-top: 2rem;
+}
+
+.kst-chart-card {
+  background: #ffffff;
+  border-radius: var(--kst-radius-lg);
+  padding: 1.3rem 1.5rem;
+  box-shadow: var(--kst-shadow-sm);
+  border: 1px solid #eef1f4;
+}
+
+.kst-card-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.kst-card-header p {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.3rem;
+}
+
+/* Canvas */
+.kst-chart-card canvas {
+  margin-top: 1.2rem;
+  width: 100% !important;
+  height: 330px !important;
+}
+
+/* ------------------------------
+   TABELA PREMIUM
+------------------------------ */
+
+.kst-mstats-table {
+  margin-top: 2rem;
+  padding: 1.2rem 1.5rem;
+}
+
+.kst-mstats-table .kst-card-header {
+  margin-bottom: 1.1rem;
+}
+
+.kst-mstats-table h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Tabela */
+.kst-table thead tr {
+  background: #f9fafb;
+}
+
+.kst-table th {
+  padding: 0.8rem;
+  font-size: 0.88rem;
+  color: #374151;
+}
+
+.kst-table td {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* Listras suaves */
+.kst-table tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.kst-table tbody tr:hover {
+  background: #f2f6ff;
+}
+
+/* ------------------------------
+   EMPTY STATE
+------------------------------ */
+
+.kst-empty-state {
+  padding: 2rem;
+  text-align: center;
+  background: #ffffff;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid #eef1f4;
+  box-shadow: var(--kst-shadow-sm);
+}
+
+.kst-empty-state p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ------------------------------
+   GRID SYSTEM
+------------------------------ */
+
+.kst-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+}
+
+.kst-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.4rem;
+}
+
+/* Responsivo */
+@media (max-width: 1030px) {
+  .kst-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .kst-grid-4 {
+    grid-template-columns: 1fr;
+  }
+  .kst-grid-2 {
+    grid-template-columns: 1fr;
   }
 }
 
