@@ -1,0 +1,103 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-container">
+
+  <!-- Título -->
+  <div class="kst-home-header">
+    <h1 class="kst-home-title">Calendário de Estudos</h1>
+    <p class="kst-home-subtitle">Veja sua constância de estudos mês a mês.</p>
+  </div>
+
+  <!-- Navegação -->
+  <div class="kst-calendar-nav">
+    <a href="/calendario?ano=<%= anoAnterior %>&mes=<%= mesAnterior %>" class="kst-btn kst-btn-secondary">
+      ⬅ Mês anterior
+    </a>
+
+    <span class="kst-calendar-nav-title"><%= mesLabel %></span>
+
+    <a href="/calendario?ano=<%= anoProximo %>&mes=<%= mesProximo %>" class="kst-btn kst-btn-secondary">
+      Próximo mês ➜
+    </a>
+  </div>
+
+  <% if (!possuiDados) { %>
+
+    <div class="kst-calendar-card">
+      <p>Nenhum registro encontrado para este mês.</p>
+    </div>
+
+  <% } else { %>
+
+    <!-- CALENDÁRIO -->
+    <div class="kst-calendar-card">
+
+      
+
+      <div class="kst-calendar-grid">
+
+        <% diasMes.forEach(function(d) { %>
+
+          <div class="kst-cal-day kst-cal-<%= d.cor %>" title="<%= d.horas %> horas">
+
+            <% if (d.destaque) { %>
+              <div class="kst-cal-badge">🔥</div>
+            <% } %>
+
+            <span><%= d.dia %></span>
+
+          </div>
+
+        <% }) %>
+
+      </div>
+
+      <!-- LEGENDA -->
+      <div class="kst-cal-legend">
+
+        <div class="kst-cal-legend-item"><div class="l h8"></div> 8h+</div>
+        <div class="kst-cal-legend-item"><div class="l h7"></div> 7h</div>
+        <div class="kst-cal-legend-item"><div class="l h6"></div> 6h</div>
+        <div class="kst-cal-legend-item"><div class="l h5"></div> 5h</div>
+        <div class="kst-cal-legend-item"><div class="l h4"></div> 4h</div>
+        <div class="kst-cal-legend-item"><div class="l h3"></div> 3h</div>
+        <div class="kst-cal-legend-item"><div class="l h2"></div> 2h</div>
+        <div class="kst-cal-legend-item"><div class="l h1"></div> 1h</div>
+        <div class="kst-cal-legend-item"><div class="l zero"></div> 0h</div>
+
+      </div>
+
+    </div>
+
+    <!-- RESUMO DO MÊS -->
+<div class="kst-month-summary">
+
+  <h3 class="kst-month-summary-title">Resumo do mês</h3>
+
+  <div class="kst-month-summary-grid">
+
+    <div class="kst-month-summary-item">
+      <span class="kst-month-summary-label">Total de horas estudadas</span>
+      <span class="kst-month-summary-value"><%= totalHorasMes %> h</span>
+    </div>
+
+    <div class="kst-month-summary-item">
+      <span class="kst-month-summary-label">Dias estudados</span>
+      <span class="kst-month-summary-value"><%= diasEstudados %></span>
+    </div>
+
+    <div class="kst-month-summary-item">
+      <span class="kst-month-summary-label">Média por dia estudado</span>
+      <span class="kst-month-summary-value"><%= mediaDiaria %> h</span>
+    </div>
+
+  </div>
+
+</div>
+
+
+  <% } %>
+
+</section>
+
+<%- include("partials/footer") %>

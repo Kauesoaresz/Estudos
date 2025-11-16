@@ -31,4 +31,13 @@ router.get("/dias/:id/editar", diaController.editarDiaForm);
 router.post("/dias/:id/atualizar", diaController.atualizarDia);
 router.post("/dias/:id/excluir", diaController.excluirDia);
 
+/*Recordes*/ 
+
+router.get("/recordes", diaController.recordesPessoais);
+
+// Calendário
+router.get("/calendario/:ano?/:mes?", diaController.calendarioEstudos);
+
+
+
 module.exports = router;

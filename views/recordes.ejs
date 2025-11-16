@@ -1,0 +1,56 @@
+<%- include("partials/header", { tituloPagina: tituloPagina }) %>
+
+<section class="kst-container kst-recordes-wrapper">
+
+  <div class="kst-home-header">
+    <h1 class="kst-home-title">Recordes pessoais</h1>
+    <p class="kst-home-subtitle">Seus melhores desempenhos registrados.</p>
+  </div>
+
+  <% if (!possuiDados) { %>
+
+    <div class="kst-recordes-card">
+      <p>Você ainda não registrou nenhum dia com dados suficientes para gerar recordes.</p>
+    </div>
+
+  <% } else { %>
+
+    <div class="kst-recordes-card">
+      <h3 class="kst-recordes-title">
+        <span class="emoji">🏆</span> Recordes gerais
+      </h3>
+
+      <div class="kst-recordes-item">
+        <strong>Maior número de horas estudadas:</strong> <%= maiorHoras %> h
+      </div>
+
+      <div class="kst-recordes-item">
+        <strong>Maior número de questões feitas:</strong> <%= maiorQuestoes %>
+      </div>
+
+      <div class="kst-recordes-item">
+        <strong>Maior taxa de acerto:</strong> <%= maiorAcerto %>%
+      </div>
+
+      <div class="kst-recordes-item">
+        <strong>Maior nível de foco:</strong> <%= maiorFoco %>/10
+      </div>
+
+      <div class="kst-recordes-item">
+        <strong>Maior nível de energia:</strong> <%= maiorEnergia %>/10
+      </div>
+
+      <div class="kst-recordes-item">
+        <strong>Maior sequência estudando:</strong> <%= maiorSequencia %> dias
+      </div>
+    </div>
+
+  <% } %>
+
+  <div class="kst-recordes-back">
+    <a href="/" class="kst-btn kst-btn-secondary">Voltar ao início</a>
+  </div>
+
+</section>
+
+<%- include("partials/footer") %>

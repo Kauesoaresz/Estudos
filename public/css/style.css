@@ -2417,3 +2417,368 @@ canvas {
     display: none;
   }
 }
+
+/* =========================================================
+   MODO FOCO – PREMIUM
+   ========================================================= */
+
+body.kst-focus-mode {
+  background: var(--kst-bg-body) !important;
+  overflow-y: scroll;
+}
+
+/* Esconde header e footer */
+body.kst-focus-mode .kst-header,
+body.kst-focus-mode .kst-footer {
+  display: none !important;
+}
+
+/* Container maior e texto melhor para leitura */
+body.kst-focus-mode .kst-container,
+body.kst-focus-mode main,
+body.kst-focus-mode .kst-main {
+  max-width: 880px !important;
+  margin: 0 auto !important;
+  padding-top: 2.2rem !important;
+  font-size: 1.08rem !important;
+  line-height: 1.65 !important;
+}
+
+/* Elevar conteúdo */
+body.kst-focus-mode .kst-container > *,
+body.kst-focus-mode main > * {
+  background: var(--kst-bg-elevated) !important;
+  border-radius: var(--kst-radius-lg) !important;
+  padding: 2rem !important;
+  box-shadow: var(--kst-shadow-soft) !important;
+}
+
+/* Remover barras laterais que “atraem o olhar” */
+body.kst-focus-mode *::-webkit-scrollbar {
+  width: 0px !important;
+}
+
+/* Botão para sair do foco */
+.kst-exit-focus-btn {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 9999;
+  background: var(--kst-primary);
+  color: var(--kst-text-on-primary);
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  font-size: 0.9rem;
+  border: none;
+  box-shadow: var(--kst-shadow-soft);
+  cursor: pointer;
+  display: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+body.kst-focus-mode .kst-exit-focus-btn {
+  display: inline-flex;
+}
+
+.kst-exit-focus-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+
+/* ============================================
+   TELA DE RECORDES PESSOAIS — ESTILO PREMIUM
+   ============================================ */
+
+/* Container geral da página */
+.kst-recordes-wrapper {
+  margin-top: 2rem;
+}
+
+/* Card principal */
+.kst-recordes-card {
+  background: var(--kst-color-bg-elevated, #ffffff);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(10px);
+}
+
+/* Título da seção */
+.kst-recordes-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kst-recordes-title .emoji {
+  font-size: 1.8rem;
+}
+
+/* Cada linha do recorde */
+.kst-recordes-item {
+  padding: 0.55rem 0;
+  font-size: 1.1rem;
+  color: var(--kst-color-text, #333);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.kst-recordes-item:last-child {
+  border-bottom: none;
+}
+
+/* Label (ex: "Maior número de horas estudadas:") */
+.kst-recordes-item strong {
+  font-weight: 600;
+  color: var(--kst-color-text-strong, #111);
+}
+
+/* Botão voltar */
+.kst-recordes-back {
+  margin-top: 1.8rem;
+}
+
+.kst-recordes-back .kst-btn-secondary {
+  padding: 0.7rem 1.4rem;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+/* RESPONSIVO */
+@media (max-width: 600px) {
+  .kst-recordes-card {
+    padding: 1.5rem;
+  }
+
+  .kst-recordes-item {
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   MAPA DE CALOR — VERSÃO PREMIUM
+============================================ */
+
+.kst-calendar-card {
+  background: var(--kst-color-bg-elevated);
+  padding: 2rem;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  margin-bottom: 2rem;
+}
+
+.kst-calendar-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.kst-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+/* Quadrados */
+.kst-cal-day {
+  position: relative;
+  aspect-ratio: 1/1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--kst-color-text-strong);
+  transition: transform .2s ease;
+}
+
+.kst-cal-day:hover {
+  transform: scale(1.07);
+}
+
+/* Badge para dias 8h+ */
+.kst-cal-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.8rem;
+}
+
+/* ============================================
+   ESCALA DE CORES (0h até 8h+)
+============================================ */
+
+.kst-cal-zero { background: #f0f0f0; color:#333; }
+
+.kst-cal-h1  { background: #ffb3b3; color:#fff; }
+.kst-cal-h2  { background: #ff8080; color:#fff; }
+.kst-cal-h3  { background: #ff6666; color:#fff; }
+
+.kst-cal-h4  { background: #ffd24d; color:#333; }
+.kst-cal-h5  { background: #c6ff4d; color:#333; }
+.kst-cal-h6  { background: #7dff4d; color:#333; }
+
+.kst-cal-h7  { background: #2ecc71; color:#fff; }
+.kst-cal-h8  { background: #006400; color:#fff; }
+
+/* Tema escuro ajustando 0h */
+body.theme-dark .kst-cal-zero {
+  background: #3a3a3a;
+  color:#ccc;
+}
+
+/* ============================================
+   LEGENDA COMPLETA
+============================================ */
+
+.kst-cal-legend {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: .5rem 0 1rem 0;
+}
+
+.kst-cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  font-size: 1rem;
+  color: var(--kst-color-text);
+}
+
+/* Quadradinhos da legenda */
+.kst-cal-legend .l {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Mesmas cores */
+.l.zero { background: #ededed; }
+.l.h1 { background: #ffb3b3; }
+.l.h2 { background: #ff8080; }
+.l.h3 { background: #ff6666; }
+
+.l.h4 { background: #ffd24d; }
+.l.h5 { background: #c6ff4d; }
+.l.h6 { background: #7dff4d; }
+
+.l.h7 { background: #2ecc71; }
+.l.h8 { background: #006400; }
+
+body.theme-dark .l.zero {
+  background: #3a3a3a;
+}
+
+/* ============================================
+   NAVIGAÇÃO DO CALENDÁRIO — PREMIUM
+============================================ */
+
+.kst-calendar-nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+}
+
+.kst-cal-nav-btn {
+  background: var(--kst-color-bg-elevated);
+  padding: .6rem 1rem;
+  border-radius: 10px;
+  font-size: .95rem;
+  font-weight: 500;
+  color: var(--kst-color-text-strong);
+  border: 1px solid rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.kst-cal-nav-btn:hover {
+  background: var(--kst-color-primary-soft, #e9f5ff);
+  transform: translateY(-2px);
+}
+
+.kst-calendar-nav strong {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--kst-color-text-strong);
+}
+
+/* ============================================
+   RESUMO DO MÊS — PREMIUM
+============================================ */
+
+.kst-month-summary {
+  background: var(--kst-color-bg-elevated);
+  padding: 2rem 2.2rem;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  transition: .25s ease;
+}
+
+.kst-month-summary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+}
+
+.kst-month-summary-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--kst-color-text-strong);
+}
+
+.kst-month-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.kst-month-summary-item {
+  display: flex;
+  flex-direction: column;
+  background: var(--kst-color-bg);
+  padding: 1.2rem 1.4rem;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.kst-month-summary-label {
+  font-size: 0.95rem;
+  color: var(--kst-color-text);
+  margin-bottom: 4px;
+}
+
+.kst-month-summary-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--kst-color-text-strong);
+}
+
+/* MODO ESCURO */
+body.theme-dark .kst-month-summary {
+  box-shadow: 0 8px 24px rgba(255,255,255,0.05);
+}
+
+body.theme-dark .kst-month-summary:hover {
+  box-shadow: 0 12px 28px rgba(255,255,255,0.07);
+}
+
+body.theme-dark .kst-month-summary-item {
+  background: var(--kst-color-bg-elevated);
+}
+

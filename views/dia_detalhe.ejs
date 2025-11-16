@@ -67,6 +67,19 @@
     </div>
   </div>
 
+  <!-- 📌 INSIGHTS AUTOMÁTICOS -->
+  <% if (insights && insights.length > 0) { %>
+  <div class="kst-card kst-day-section" style="margin-top: 2rem;">
+    <h3 class="kst-day-section-title">Insights automáticos do seu dia</h3>
+    
+    <ul class="kst-day-info">
+      <% insights.forEach(function(i){ %>
+        <li style="margin-bottom: .4rem;"><%= i %></li>
+      <% }) %>
+    </ul>
+  </div>
+  <% } %>
+
   <!-- SEÇÕES DETALHADAS -->
   <div class="kst-day-sections">
 
