@@ -140,6 +140,15 @@
         });
       });
 
+      // Preencher automaticamente todos os inputs type="date" com a data de hoje
+      document.addEventListener("DOMContentLoaded", () => {
+      const hoje = new Date().toISOString().split("T")[0];
+      document.querySelectorAll('input[type="date"]').forEach(campo => {
+       if (!campo.value) campo.value = hoje;
+      });
+      });
+
+
     })();
   </script>
 

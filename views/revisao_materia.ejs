@@ -2,75 +2,113 @@
 
 <div class="kst-rev-mat-page kst-container">
 
-  <!-- ============================================
-       TÍTULO DA MATÉRIA
-  ============================================= -->
-  <h1 class="kst-rev-mat-title">Revisão – <%= materia.nome %></h1>
-  <p class="kst-rev-mat-subtitle">
-    Veja seu desempenho, registre revisões e acompanhe sua evolução.
+  <!-- ================================
+     CABEÇALHO DA MATÉRIA
+================================ -->
+<section class="kst-rev-header">
+  <h1 class="kst-rev-title"><%= materia.nome %></h1>
+
+  <p class="kst-rev-subtitle">
+    Revisão • Painel completo da matéria
   </p>
+</section>
 
 
 
-  <!-- ============================================
-       CARD (RESUMO DA MATÉRIA)
-  ============================================= -->
-  <div class="kst-card kst-rev-mat-card">
-    <h3>Resumo da matéria</h3>
 
-    <ul class="kst-rev-mat-list">
-      <li><strong>Horas totais:</strong> <%= resumo.horasTotais.toFixed(2) %> h</li>
-      <li><strong>Minutos:</strong> <%= resumo.totalMinutos %></li>
-      <li><strong>Questões feitas:</strong> <%= resumo.totalQuestoes %></li>
-      <li><strong>Questões certas:</strong> <%= resumo.totalCertas %></li>
-      <li><strong>Questões marcadas p/ revisão:</strong> <%= resumo.totalMarcadas %></li>
-      <li><strong>Taxa de acerto geral:</strong>
-        <% if (resumo.taxaAcertoGeral === null) { %>
-          —
-        <% } else { %>
-          <%= resumo.taxaAcertoGeral %>%
-        <% } %>
-      </li>
-    </ul>
+  <!-- ======================================
+     BLOCO 2 — CARD DE RESUMO
+====================================== -->
+<section class="kst-rev-resumo-card">
+
+  <h2 class="kst-rev-resumo-title">Resumo da Matéria</h2>
+
+  <div class="kst-rev-resumo-grid">
+
+    <div class="kst-rev-resumo-item">
+      <span class="kst-rev-resumo-label">Horas estudadas</span>
+      <span class="kst-rev-resumo-value">
+        <%= resumo.horasTotais.toFixed(1) %>h
+      </span>
+    </div>
+
+    <div class="kst-rev-resumo-item">
+      <span class="kst-rev-resumo-label">Questões feitas</span>
+      <span class="kst-rev-resumo-value"><%= resumo.totalQuestoes %></span>
+    </div>
+
+    <div class="kst-rev-resumo-item">
+      <span class="kst-rev-resumo-label">Questões certas</span>
+      <span class="kst-rev-resumo-value"><%= resumo.totalCertas %></span>
+    </div>
+
+    <div class="kst-rev-resumo-item">
+      <span class="kst-rev-resumo-label">Marcadas p/ revisão</span>
+      <span class="kst-rev-resumo-value"><%= resumo.totalMarcadas %></span>
+    </div>
+
+    <div class="kst-rev-resumo-item">
+      <span class="kst-rev-resumo-label">Taxa de acerto</span>
+      <span class="kst-rev-resumo-value">
+        <%= resumo.taxaAcertoGeral !== null ? resumo.taxaAcertoGeral + "%" : "—" %>
+      </span>
+    </div>
+
   </div>
 
+</section>
 
 
-  <!-- ============================================
-       FORMULÁRIO PREMIUM
-  ============================================= -->
-  <form action="/revisao/registrar" method="POST" class="kst-form kst-rev-mat-form">
 
-    <h3>Registrar revisão desta matéria</h3>
+
+  <!-- ======================================
+     BLOCO 3 — FORMULÁRIO DE REVISÃO
+====================================== -->
+<section class="kst-rev-form-card">
+
+  <h2 class="kst-rev-form-title">Registrar revisão</h2>
+
+  <form action="/revisao/registrar" method="POST" class="kst-rev-form">
 
     <input type="hidden" name="materia_id" value="<%= materia.id %>">
 
-    <div class="kst-form-group">
-      <label>Data</label>
-      <input type="date" name="data" class="kst-input" required>
+    <!-- GRID DE CAMPOS -->
+    <div class="kst-rev-form-grid">
+
+      <div class="kst-form-group">
+        <label class="kst-label">Data</label>
+        <input type="date" name="data" class="kst-input" required>
+      </div>
+
+      <div class="kst-form-group">
+        <label class="kst-label">Minutos revisados</label>
+        <input type="number" name="minutos_estudados" min="1" class="kst-input">
+      </div>
+
     </div>
 
+    <!-- TIPOS DE REVISÃO -->
     <div class="kst-form-group">
-      <label>Tipo(s) de revisão</label>
+      <label class="kst-label">Tipo(s) de revisão</label>
 
-      <div class="kst-checkbox-group">
+      <div class="kst-rev-checkboxes">
 
-        <label class="kst-checkbox">
+        <label class="kst-rev-check">
           <input type="checkbox" name="tipo_revisao" value="Resumo">
           <span>Resumo</span>
         </label>
 
-        <label class="kst-checkbox">
+        <label class="kst-rev-check">
           <input type="checkbox" name="tipo_revisao" value="Questões">
           <span>Questões</span>
         </label>
 
-        <label class="kst-checkbox">
+        <label class="kst-rev-check">
           <input type="checkbox" name="tipo_revisao" value="Flashcards">
           <span>Flashcards</span>
         </label>
 
-        <label class="kst-checkbox">
+        <label class="kst-rev-check">
           <input type="checkbox" name="tipo_revisao" value="Releitura">
           <span>Releitura</span>
         </label>
@@ -78,31 +116,34 @@
       </div>
     </div>
 
+    <!-- TÓPICOS -->
     <div class="kst-form-group">
-      <label>Minutos revisados</label>
-      <input type="number" class="kst-input" name="minutos_estudados" min="1">
+      <label class="kst-label">Tópicos revisados</label>
+      <textarea name="topicos_revisados" class="kst-textarea"></textarea>
     </div>
 
-    <div class="kst-form-group">
-      <label>Tópicos revisados</label>
-      <textarea class="kst-textarea" name="topicos_revisados"></textarea>
+    <!-- QUESTÕES -->
+    <div class="kst-rev-form-grid">
+      <div class="kst-form-group">
+        <label class="kst-label">Questões feitas</label>
+        <input type="number" name="questoes_feitas" min="0" class="kst-input">
+      </div>
+
+      <div class="kst-form-group">
+        <label class="kst-label">Questões certas</label>
+        <input type="number" name="questoes_certas" min="0" class="kst-input">
+      </div>
     </div>
 
-    <div class="kst-form-group">
-      <label>Questões feitas</label>
-      <input type="number" class="kst-input" name="questoes_feitas" min="0">
-    </div>
-
-    <div class="kst-form-group">
-      <label>Questões certas</label>
-      <input type="number" class="kst-input" name="questoes_certas" min="0">
-    </div>
-
-    <div class="kst-form-footer">
-      <button type="submit" class="kst-btn kst-btn-primary">Salvar revisão</button>
-    </div>
+    <!-- BOTÃO -->
+    <button type="submit" class="kst-btn kst-btn-primary kst-rev-form-btn">
+      Salvar revisão
+    </button>
 
   </form>
+
+</section>
+
 
 
 
@@ -173,11 +214,11 @@
             <% } %>
           </td>
 
-          <td>
+          <td class="kst-taxa-cell">
             <% if (e.taxaAcerto === null) { %>
               —
             <% } else { %>
-              <%= e.taxaAcerto %>%
+              <%= e.taxaAcerto %>% 
             <% } %>
           </td>
 
@@ -189,7 +230,7 @@
             </button>
 
             <form action="/revisao/<%= e.id %>/excluir" method="POST" style="display:inline;">
-              <button class="kst-link-inline" onclick="return confirm('Excluir revisão?');">
+              <button class="kst-link-inline kst-link-danger" onclick="return confirm('Excluir revisão?');">
                 Excluir
               </button>
             </form>
@@ -259,14 +300,14 @@
      SCRIPTS
 ============================================ -->
 <script>
-  // --------- FILTRO HISTÓRICO (front-end) ----------
+  // --------- FILTRO HISTÓRICO ----------
   (function () {
     const botoes = document.querySelectorAll(".kst-filtro-btn");
     const linhas = document.querySelectorAll(".kst-rev-mat-table tbody tr");
 
     botoes.forEach(btn => {
       btn.addEventListener("click", () => {
-        const filtro = btn.getAttribute("data-filter-hist"); 
+        const filtro = btn.getAttribute("data-filter-hist");
 
         botoes.forEach(b => b.classList.remove("kst-filtro-btn--ativo"));
         btn.classList.add("kst-filtro-btn--ativo");
@@ -280,11 +321,12 @@
   })();
 
 
-  // --------- POPUP EDITAR (CORRIGIDO) ----------
+  // --------- POPUP EDITAR ----------
   function abrirPopupEditar(id) {
     fetch(`/revisao/api/revisao/${id}`)
       .then(res => res.json())
       .then(dados => {
+
         document.getElementById("edit_data").value = dados.data;
         document.getElementById("edit_min").value = dados.minutos || "";
         document.getElementById("edit_topicos").value = dados.topicos || "";
@@ -296,16 +338,30 @@
         document.getElementById("popupEditar").style.display = "flex";
       })
       .catch(err => {
-        console.error(err);
-        alert('Não foi possível carregar os dados da revisão para editar.');
+        console.error("Erro ao carregar revisão:", err);
+        alert("Não foi possível carregar os dados da revisão.");
       });
   }
 
   function fecharPopup() {
     document.getElementById("popupEditar").style.display = "none";
   }
-</script>
 
+
+  // --------- CORES DA TAXA DE ACERTO ----------
+  document.querySelectorAll(".kst-taxa-cell").forEach(td => {
+    const raw = td.innerText.replace("%", "");
+    const taxa = parseInt(raw);
+
+    if (isNaN(taxa)) return;
+
+    td.classList.add("kst-taxa");
+
+    if (taxa <= 50) td.classList.add("kst-taxa--low");
+    else if (taxa < 80) td.classList.add("kst-taxa--mid");
+    else td.classList.add("kst-taxa--high");
+  });
+</script>
 
 
 <%- include('partials/footer') %>
