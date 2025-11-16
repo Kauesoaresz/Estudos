@@ -1534,3 +1534,674 @@ canvas {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   10 — PÁGINA: REGISTRAR DIA (NOTION PREMIUM)
+   Versão exclusiva, sem conflitos com blocos globais.
+   ============================================================ */
+
+/* ---------- CONTAINER PRINCIPAL ---------- */
+
+.kst-section-form {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+/* ---------- HEADER DA PÁGINA ---------- */
+
+.kst-page-header {
+  text-align: center;
+  margin-bottom: 2.6rem;
+}
+
+.kst-page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--kst-text-main);
+  margin-bottom: 0.25rem;
+}
+
+.kst-page-subtitle {
+  font-size: 1rem;
+  color: var(--kst-text-muted);
+  max-width: 580px;
+  margin: 0.25rem auto 0;
+  line-height: 1.45;
+}
+
+/* ---------- CARD DO FORMULÁRIO (NOTION STYLE) ---------- */
+
+.kst-dia-card {
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 2.2rem 2.2rem 2.6rem;
+  box-shadow: var(--kst-shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+/* ---------- FIELDSET PREMIUM (NOTION) ---------- */
+
+.kst-dia-fieldset {
+  background: var(--kst-bg-elevated-soft);
+  border: 1px solid var(--kst-border-subtle);
+  border-radius: var(--kst-radius-lg);
+  padding: 1.7rem 1.4rem 1.9rem;
+  transition: background 0.18s ease;
+}
+
+.kst-dia-fieldset:hover {
+  background: rgba(148, 163, 184, 0.10);
+}
+
+.kst-dia-legend {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 1.4rem;
+  color: var(--kst-text-main);
+  letter-spacing: -0.01em;
+}
+
+/* ---------- ROWS ---------- */
+
+.kst-dia-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------- FORM GROUP ---------- */
+
+.kst-dia-group {
+  flex: 1;
+  min-width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* ---------- LABELS ---------- */
+
+.kst-dia-label {
+  font-size: 0.89rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+  opacity: 0.88;
+  line-height: 1.2;
+}
+
+/* ---------- INPUTS (NOTION STYLE) ---------- */
+
+.kst-dia-input,
+.kst-dia-select,
+.kst-dia-textarea {
+  width: 100%;
+  padding: 0.70rem 0.85rem;
+  font-size: 0.92rem;
+  border-radius: var(--kst-radius-md);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated);
+  color: var(--kst-text-main);
+  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+
+.kst-dia-input:focus,
+.kst-dia-select:focus,
+.kst-dia-textarea:focus {
+  border-color: var(--kst-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(28, 154, 255, 0.25);
+  outline: none;
+}
+
+/* ---------- TEXTAREA ---------- */
+
+.kst-dia-textarea {
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+/* ---------- BOTÕES ---------- */
+
+.kst-dia-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kst-dia-btn-lg {
+  padding: 0.95rem 1.8rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* ---------- ALERTA ---------- */
+
+#erro-dia {
+  margin-bottom: 1.2rem;
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+
+@media (max-width: 650px) {
+  .kst-dia-card {
+    padding: 1.6rem 1.2rem 2rem;
+  }
+
+  .kst-dia-fieldset {
+    padding: 1.2rem 1rem 1.5rem;
+  }
+
+  .kst-dia-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* ============================================================
+   11 — HISTÓRICO DE DIAS (PREMIUM)
+   Estilo Notion/Linear para tabela + filtros
+   ============================================================ */
+
+/* ---------- FILTROS ---------- */
+
+.kst-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--kst-radius-lg);
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-filter-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+.kst-filter-bar input[type="date"] {
+  padding: 0.45rem 0.6rem;
+  background: var(--kst-bg-elevated-soft);
+  border-radius: var(--kst-radius-md);
+  border: 1px solid var(--kst-border-subtle);
+  font-size: 0.85rem;
+}
+
+.kst-filter-bar input[type="date"]:focus {
+  border-color: var(--kst-primary);
+  box-shadow: 0 0 0 1px rgba(28, 154, 255, 0.4);
+  background: #ffffff;
+}
+
+/* Checkbox */
+.kst-filter-bar input[type="checkbox"] {
+  accent-color: var(--kst-primary);
+}
+
+/* ---------- CARD TABELA ---------- */
+
+.kst-card {
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated);
+  box-shadow: var(--kst-shadow-soft);
+  overflow: hidden;
+}
+
+/* ---------- TABELA PREMIUM ---------- */
+
+.kst-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.kst-table thead {
+  background: var(--kst-bg-elevated-soft);
+}
+
+.kst-table th {
+  padding: 0.75rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--kst-text-muted);
+  border-bottom: 1px solid var(--kst-border-subtle);
+  white-space: nowrap;
+}
+
+.kst-table td {
+  padding: 0.80rem 0.9rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  color: var(--kst-text-main);
+  vertical-align: middle;
+}
+
+/* Alinhamento nas colunas */
+.kst-table td:nth-child(1) { font-weight: 600; }
+.kst-table td:nth-child(2),
+.kst-table td:nth-child(3),
+.kst-table td:nth-child(4) {
+  text-align: center;
+}
+
+/* Última coluna (ações) */
+.kst-table td:last-child {
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Hover premium */
+.kst-table tbody tr {
+  transition: background 0.16s ease;
+}
+
+.kst-table tbody tr:hover {
+  background: rgba(28, 154, 255, 0.05);
+}
+
+/* ---------- BADGES DO HISTÓRICO ---------- */
+
+.kst-badge {
+  background: var(--kst-primary-soft);
+  color: var(--kst-text-main);
+  font-size: 0.75rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ---------- TAXAS DE ACERTO ---------- */
+
+.kst-taxa {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.kst-taxa--low {
+  color: var(--kst-danger);
+}
+
+.kst-taxa--mid {
+  color: #f59e0b;
+}
+
+.kst-taxa--high {
+  color: var(--kst-success);
+}
+
+/* ---------- LINKS DE AÇÃO ---------- */
+
+.kst-link-inline {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--kst-primary);
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: none;
+  transition: opacity .15s ease;
+}
+
+.kst-link-inline:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+.kst-link-danger {
+  color: var(--kst-danger);
+}
+
+/* ---------- TABELA RESPONSIVA ---------- */
+
+@media (max-width: 680px) {
+
+  .kst-table {
+    font-size: 0.82rem;
+  }
+
+  .kst-table th,
+  .kst-table td {
+    padding: 0.65rem 0.6rem;
+  }
+
+  .kst-table th:nth-child(5),
+  .kst-table td:nth-child(5) {
+    display: none; /* Esconde coluna F/E no mobile */
+  }
+
+  .kst-table th:nth-child(6),
+  .kst-table td:nth-child(6) {
+    display: none; /* Esconde coluna Humor no mobile */
+  }
+
+  .kst-table th:nth-child(7),
+  .kst-table td:nth-child(7) {
+    display: none; /* Esconde coluna Meta no mobile */
+  }
+
+}
+
+
+/* ============================================================
+   12 — PÁGINA: EDITAR DIA
+   Usa o mesmo visual Notion Premium do Registrar Dia
+   ============================================================ */
+
+/* Card principal da edição de dia */
+.kst-card-form {
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 2.2rem 2.1rem 2.4rem;
+  box-shadow: var(--kst-shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 2.1rem;
+}
+
+/* Título dos blocos (Informações gerais, Sono, Estudo etc.) */
+.kst-fieldset-title {
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--kst-text-main);
+  margin-bottom: 1.2rem;
+}
+
+/* Espaço entre os blocos (fieldsets) para a tela de edição */
+.kst-dia-fieldset + .kst-dia-fieldset {
+  margin-top: 0.7rem;
+}
+
+/* Deixar as textareas da edição consistentes com o restante */
+.kst-dia-textarea {
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+/* Botões da área de ações (salvar/cancelar) mais sólidos */
+.kst-form-actions .kst-btn-lg {
+  min-width: 180px;
+}
+
+/* Responsivo — edição de dia */
+@media (max-width: 650px) {
+  .kst-card-form {
+    padding: 1.6rem 1.1rem 2rem;
+    gap: 1.6rem;
+  }
+}
+
+/* ============================================================
+   13 — ESTATÍSTICAS DOS DIAS
+   Painel de resumo + gráficos (Notion/Linear style)
+   ============================================================ */
+
+/* Filtro de período (topo) */
+.kst-stats-filter {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kst-stats-filter-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.kst-stats-period-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--kst-text-muted);
+}
+
+.kst-stats-period-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Badge do total de dias */
+.kst-badge-soft {
+  background: var(--kst-primary-soft);
+  color: var(--kst-text-main);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* Card de "nenhum dado" */
+.kst-stats-empty {
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+.kst-stats-empty-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+.kst-stats-empty-text {
+  margin: 0 0 1.2rem;
+  font-size: 0.9rem;
+  color: var(--kst-text-muted);
+}
+
+/* Ajustes nos cards de KPI dessa página */
+.kst-home-kpi p {
+  margin: 0;
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+  .kst-stats-filter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .kst-stats-filter-right {
+    align-self: stretch;
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+/* ============================================================
+   14 — DETALHES DO DIA
+   Tela /dias/:id — visão premium do dia
+   ============================================================ */
+
+/* -------- HERO DO DIA (RESUMO NO TOPO) -------- */
+
+.kst-day-hero {
+  margin-bottom: 2rem;
+  padding: 1.6rem 1.7rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated);
+  box-shadow: var(--kst-shadow-soft);
+}
+
+/* Topo: data + humor */
+.kst-day-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+.kst-day-date {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--kst-text-main);
+}
+
+.kst-day-subinfo {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--kst-text-muted);
+}
+
+/* Badge de humor no hero */
+.kst-badge-humor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Humor bom */
+.kst-badge-humor.bom {
+  background: rgba(34, 197, 94, 0.16);
+  color: #16a34a;
+}
+
+/* Humor ok */
+.kst-badge-humor.ok {
+  background: rgba(245, 158, 11, 0.18);
+  color: #c2410c;
+}
+
+/* Humor ruim */
+.kst-badge-humor.ruim {
+  background: rgba(239, 68, 68, 0.18);
+  color: #dc2626;
+}
+
+/* -------- KPIs DO DIA -------- */
+
+.kst-day-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.9rem;
+}
+
+.kst-day-kpi {
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--kst-radius-md);
+  background: var(--kst-bg-elevated-soft);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.kst-day-kpi-label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--kst-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.kst-day-kpi-value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+
+/* -------- SEÇÕES DETALHADAS -------- */
+
+.kst-day-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.4rem;
+  margin-bottom: 2rem;
+}
+
+.kst-day-section {
+  padding: 1.2rem 1.3rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated);
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-day-section-title {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--kst-text-main);
+}
+
+.kst-day-subtitle {
+  margin: 0.9rem 0 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+/* Listas de info (sem bolinha) */
+.kst-day-info,
+.kst-day-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.kst-day-info li,
+.kst-day-list li {
+  font-size: 0.9rem;
+  color: var(--kst-text-main);
+  padding: 0.22rem 0;
+  line-height: 1.4;
+}
+
+.kst-day-info li strong,
+.kst-day-list li strong {
+  font-weight: 600;
+}
+
+/* Link de detalhes dentro das listas */
+.kst-day-list .kst-link-inline {
+  font-size: 0.82rem;
+}
+
+
+/* -------- AÇÕES INFERIORES -------- */
+
+.kst-day-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+
+/* -------- RESPONSIVIDADE -------- */
+
+@media (max-width: 640px) {
+
+  .kst-day-hero {
+    padding: 1.3rem 1.1rem 1.6rem;
+  }
+
+  .kst-day-hero-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .kst-day-date {
+    font-size: 1.25rem;
+  }
+}
+

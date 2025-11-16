@@ -1,126 +1,178 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
-<section class="kst-section">
-  <h2>Editar dia</h2>
+<section class="kst-section-form kst-mb-xl">
 
-  <form action="/dias/<%= dia.id %>/atualizar" method="post" class="kst-form">
-    <div class="kst-form-grid">
-      <div class="kst-form-group">
-        <label>Data *</label>
-        <input type="date" name="data" class="kst-input" required value="<%= dia.data %>" />
-      </div>
+  <!-- CABEÇALHO -->
+  <div class="kst-page-header">
+    <h1 class="kst-page-title">Editar dia</h1>
+    <p class="kst-page-subtitle">Atualize as informações do dia registrado.</p>
+  </div>
 
-      <div class="kst-form-group">
-        <label>Hora que acordou</label>
-        <input type="time" name="hora_acordou" class="kst-input" value="<%= dia.hora_acordou || '' %>" />
-      </div>
+  <form action="/dias/<%= dia.id %>/atualizar" method="post">
 
-      <div class="kst-form-group">
-        <label>Hora que dormiu</label>
-        <input type="time" name="hora_dormiu" class="kst-input" value="<%= dia.hora_dormiu || '' %>" />
-      </div>
+    <!-- CARD PRINCIPAL -->
+    <div class="kst-card-form">
 
-      <div class="kst-form-group">
-        <label>Horas totais de sono</label>
-        <input type="number" step="0.25" name="horas_sono_total" class="kst-input" value="<%= dia.horas_sono_total || '' %>" />
-      </div>
+      <!-- 📌 BLOCO 1 — INFORMAÇÕES GERAIS -->
+      <fieldset class="kst-dia-fieldset">
+        <legend class="kst-fieldset-title">Informações gerais</legend>
 
-      <div class="kst-form-group">
-        <label>Qualidade do sono (0–10)</label>
-        <input type="number" min="0" max="10" name="qualidade_sono_nota" class="kst-input" value="<%= dia.qualidade_sono_nota || '' %>" />
-      </div>
+        <div class="kst-dia-row">
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Data *</label>
+            <input type="date" name="data" class="kst-dia-input" required value="<%= dia.data %>" />
+          </div>
+        </div>
+      </fieldset>
 
-      <div class="kst-form-group">
-        <label>Tirou soneca?</label>
-        <select name="tirou_soneca" class="kst-input">
-          <option value="" <%= dia.tirou_soneca == null ? "selected" : "" %> >Não informar</option>
-          <option value="SIM" <%= dia.tirou_soneca === 1 ? "selected" : "" %>>Sim</option>
-          <option value="NAO" <%= dia.tirou_soneca === 0 ? "selected" : "" %>>Não</option>
-        </select>
-      </div>
 
-      <div class="kst-form-group">
-        <label>Minutos de soneca</label>
-        <input type="number" name="minutos_soneca" class="kst-input" value="<%= dia.minutos_soneca || '' %>" />
-      </div>
+      <!-- 📌 BLOCO 2 — SONO -->
+      <fieldset class="kst-dia-fieldset">
+        <legend class="kst-fieldset-title">Sono</legend>
 
-      <div class="kst-form-group">
-        <label>Horas líquidas de estudo</label>
-        <input type="number" step="0.25" name="horas_estudo_liquidas" class="kst-input" value="<%= dia.horas_estudo_liquidas || '' %>" />
-      </div>
+        <div class="kst-dia-row">
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Hora que acordou</label>
+            <input type="time" name="hora_acordou" class="kst-dia-input" value="<%= dia.hora_acordou || '' %>" />
+          </div>
 
-      <div class="kst-form-group">
-        <label>Questões feitas (total)</label>
-        <input type="number" name="questoes_feitas_total" class="kst-input" value="<%= dia.questoes_feitas_total || '' %>" />
-      </div>
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Hora que dormiu</label>
+            <input type="time" name="hora_dormiu" class="kst-dia-input" value="<%= dia.hora_dormiu || '' %>" />
+          </div>
+        </div>
 
-      <div class="kst-form-group">
-        <label>Questões certas (total)</label>
-        <input type="number" name="questoes_acertos_total" class="kst-input" value="<%= dia.questoes_acertos_total || '' %>" />
-      </div>
+        <div class="kst-dia-row">
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Horas totais de sono</label>
+            <input type="number" step="0.25" name="horas_sono_total" class="kst-dia-input" value="<%= dia.horas_sono_total || '' %>" />
+          </div>
+
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Qualidade do sono (0–10)</label>
+            <input type="number" min="0" max="10" name="qualidade_sono_nota" class="kst-dia-input" value="<%= dia.qualidade_sono_nota || '' %>" />
+          </div>
+        </div>
+
+        <div class="kst-dia-row">
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Tirou soneca?</label>
+            <select name="tirou_soneca" class="kst-dia-select">
+              <option value="" <%= dia.tirou_soneca == null ? "selected" : "" %>>Não informar</option>
+              <option value="SIM" <%= dia.tirou_soneca === 1 ? "selected" : "" %>>Sim</option>
+              <option value="NAO" <%= dia.tirou_soneca === 0 ? "selected" : "" %>>Não</option>
+            </select>
+          </div>
+
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Minutos de soneca</label>
+            <input type="number" name="minutos_soneca" class="kst-dia-input" value="<%= dia.minutos_soneca || '' %>" />
+          </div>
+        </div>
+      </fieldset>
+
+
+      <!-- 📌 BLOCO 3 — ESTUDO -->
+      <fieldset class="kst-dia-fieldset">
+        <legend class="kst-fieldset-title">Estudo do dia</legend>
+
+        <div class="kst-dia-row">
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Horas líquidas</label>
+            <input type="number" step="0.25" name="horas_estudo_liquidas" class="kst-dia-input" value="<%= dia.horas_estudo_liquidas || '' %>" />
+          </div>
+
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Questões feitas</label>
+            <input type="number" name="questoes_feitas_total" class="kst-dia-input" value="<%= dia.questoes_feitas_total || '' %>" />
+          </div>
+
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Questões certas</label>
+            <input type="number" name="questoes_acertos_total" class="kst-dia-input" value="<%= dia.questoes_acertos_total || '' %>" />
+          </div>
+        </div>
+      </fieldset>
+
+
+      <!-- 📌 BLOCO 4 — REFLEXÃO -->
+      <fieldset class="kst-dia-fieldset">
+        <legend class="kst-fieldset-title">Reflexão</legend>
+
+        <div class="kst-dia-group">
+          <label class="kst-dia-label">Erros que cometi</label>
+          <textarea name="erros_do_dia" class="kst-dia-textarea" rows="3"><%= dia.erros_do_dia || '' %></textarea>
+        </div>
+
+        <div class="kst-dia-group">
+          <label class="kst-dia-label">O que melhorar para o dia seguinte</label>
+          <textarea name="melhorar_amanha" class="kst-dia-textarea" rows="3"><%= dia.melhorar_amanha || '' %></textarea>
+        </div>
+
+        <div class="kst-dia-group">
+          <label class="kst-dia-label">Ponto alto do dia</label>
+          <textarea name="ponto_alto_dia" class="kst-dia-textarea" rows="2"><%= dia.ponto_alto_dia || '' %></textarea>
+        </div>
+
+        <div class="kst-dia-group">
+          <label class="kst-dia-label">Maior vacilo do dia</label>
+          <textarea name="maior_vacilo_dia" class="kst-dia-textarea" rows="2"><%= dia.maior_vacilo_dia || '' %></textarea>
+        </div>
+      </fieldset>
+
+
+      <!-- 📌 BLOCO 5 — META + NÍVEIS -->
+      <fieldset class="kst-dia-fieldset">
+        <legend class="kst-fieldset-title">Meta e energia</legend>
+
+        <div class="kst-dia-row">
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Meta principal</label>
+            <textarea name="meta_principal_dia" class="kst-dia-textarea" rows="2"><%= dia.meta_principal_dia || '' %></textarea>
+          </div>
+
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Status da meta</label>
+            <select name="status_meta" class="kst-dia-select">
+              <option value="" <%= !dia.status_meta ? "selected" : "" %>>Não informar</option>
+              <option value="SIM" <%= dia.status_meta === "SIM" ? "selected" : "" %>>Cumprida</option>
+              <option value="PARCIAL" <%= dia.status_meta === "PARCIAL" ? "selected" : "" %>>Parcial</option>
+              <option value="NAO" <%= dia.status_meta === "NAO" ? "selected" : "" %>>Não cumprida</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="kst-dia-row">
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Nível de foco (0–10)</label>
+            <input type="number" min="0" max="10" name="nivel_foco" class="kst-dia-input" value="<%= dia.nivel_foco || '' %>" />
+          </div>
+
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Nível de energia (0–10)</label>
+            <input type="number" min="0" max="10" name="nivel_energia" class="kst-dia-input" value="<%= dia.nivel_energia || '' %>" />
+          </div>
+
+          <div class="kst-dia-group">
+            <label class="kst-dia-label">Humor</label>
+            <select name="humor" class="kst-dia-select">
+              <option value="" <%= !dia.humor ? "selected" : "" %>>Não informar</option>
+              <option value="BOM" <%= dia.humor === "BOM" ? "selected" : "" %>>Bom</option>
+              <option value="OK" <%= dia.humor === "OK" ? "selected" : "" %>>Ok</option>
+              <option value="RUIM" <%= dia.humor === "RUIM" ? "selected" : "" %>>Ruim</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
     </div>
 
-    <div class="kst-form-group">
-      <label>Erros que cometi no dia</label>
-      <textarea name="erros_do_dia" class="kst-input" rows="3"><%= dia.erros_do_dia || '' %></textarea>
-    </div>
-
-    <div class="kst-form-group">
-      <label>O que melhorar para o dia seguinte</label>
-      <textarea name="melhorar_amanha" class="kst-input" rows="3"><%= dia.melhorar_amanha || '' %></textarea>
-    </div>
-
-    <div class="kst-form-group">
-      <label>Ponto alto do dia</label>
-      <textarea name="ponto_alto_dia" class="kst-input" rows="2"><%= dia.ponto_alto_dia || '' %></textarea>
-    </div>
-
-    <div class="kst-form-group">
-      <label>Maior vacilo do dia</label>
-      <textarea name="maior_vacilo_dia" class="kst-input" rows="2"><%= dia.maior_vacilo_dia || '' %></textarea>
-    </div>
-
-    <div class="kst-form-grid">
-      <div class="kst-form-group">
-        <label>Meta principal do dia</label>
-        <textarea name="meta_principal_dia" class="kst-input" rows="2"><%= dia.meta_principal_dia || '' %></textarea>
-      </div>
-
-      <div class="kst-form-group">
-        <label>Status da meta</label>
-        <select name="status_meta" class="kst-input">
-          <option value="" <%= !dia.status_meta ? "selected" : "" %> >Não informar</option>
-          <option value="SIM" <%= dia.status_meta === "SIM" ? "selected" : "" %> >Cumprida</option>
-          <option value="PARCIAL" <%= dia.status_meta === "PARCIAL" ? "selected" : "" %> >Parcial</option>
-          <option value="NAO" <%= dia.status_meta === "NAO" ? "selected" : "" %> >Não cumprida</option>
-        </select>
-      </div>
-
-      <div class="kst-form-group">
-        <label>Nível de foco (0–10)</label>
-        <input type="number" min="0" max="10" name="nivel_foco" class="kst-input" value="<%= dia.nivel_foco || '' %>" />
-      </div>
-
-      <div class="kst-form-group">
-        <label>Nível de energia (0–10)</label>
-        <input type="number" min="0" max="10" name="nivel_energia" class="kst-input" value="<%= dia.nivel_energia || '' %>" />
-      </div>
-
-      <div class="kst-form-group">
-        <label>Humor</label>
-        <select name="humor" class="kst-input">
-          <option value="" <%= !dia.humor ? "selected" : "" %> >Não informar</option>
-          <option value="BOM" <%= dia.humor === "BOM" ? "selected" : "" %> >Bom</option>
-          <option value="OK" <%= dia.humor === "OK" ? "selected" : "" %> >Ok</option>
-          <option value="RUIM" <%= dia.humor === "RUIM" ? "selected" : "" %> >Ruim</option>
-        </select>
-      </div>
-    </div>
-
-    <div style="margin-top:1rem;">
-      <button type="submit" class="kst-btn kst-btn-primary">Salvar alterações</button>
+    <!-- BOTÕES -->
+    <div class="kst-form-actions" style="margin-top:1.4rem;">
+      <button type="submit" class="kst-btn kst-btn-primary kst-btn-lg">Salvar alterações</button>
       <a href="/dias" class="kst-btn kst-btn-secondary">Cancelar</a>
     </div>
+
   </form>
 </section>
 

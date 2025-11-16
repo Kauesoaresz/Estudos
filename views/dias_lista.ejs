@@ -1,62 +1,90 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
-<section class="kst-section">
-  <h2>Histórico de dias</h2>
-  <p class="kst-section-subtitle">
-    Resumo dos seus dias registrados. Clique em "Ver" para ver tudo do dia.
-  </p>
+<section class="kst-container">
 
-  <form method="GET" action="/dias" class="kst-filter-bar" style="margin-bottom: 1rem;">
+  <!-- Cabeçalho da Página -->
+  <div class="kst-home-header" style="margin-bottom: 2.2rem;">
+    <h1 class="kst-home-title">Histórico de Dias</h1>
+    <p class="kst-home-subtitle">Veja rapidamente como foi cada dia registrado.</p>
+  </div>
+
+  <!-- FILTROS -->
+  <form method="GET" action="/dias" class="kst-filter-bar" style="margin-bottom: 1.4rem;">
+    
     <div class="kst-filter-group">
-      <label for="de">De:</label>
-      <input type="date" id="de" name="de" value="<%= de || '' %>">
+      <label for="de">De</label>
+      <input type="date" id="de" name="de" value="<%= de || '' %>" class="kst-input">
     </div>
+
     <div class="kst-filter-group">
-      <label for="ate">Até:</label>
-      <input type="date" id="ate" name="ate" value="<%= ate || '' %>">
+      <label for="ate">Até</label>
+      <input type="date" id="ate" name="ate" value="<%= ate || '' %>" class="kst-input">
     </div>
-    <div class="kst-filter-group">
-      <label>
-        <input type="checkbox" name="somente_com_estudo" value="1"
-          <%= somente_com_estudo === '1' ? 'checked' : '' %> />
+
+    <div class="kst-filter-group" style="margin-top: 0.1rem;">
+      <label style="display:flex; align-items:center; gap:0.4rem; font-weight:500; font-size:0.85rem;">
+        <input 
+          type="checkbox" 
+          name="somente_com_estudo" 
+          value="1"
+          <%= somente_com_estudo === '1' ? 'checked' : '' %> 
+          style="width:15px; height:15px;"
+        />
         Apenas dias com estudo
       </label>
     </div>
+
     <button type="submit" class="kst-btn kst-btn-primary">Filtrar</button>
-    <a href="/dias" class="kst-btn">Limpar</a>
+    <a href="/dias" class="kst-btn kst-btn-secondary">Limpar</a>
   </form>
 
+
+  <!-- NENHUM RESULTADO -->
   <% if (!dias || dias.length === 0) { %>
-    <p>Nenhum dia encontrado com esse filtro.</p>
-    <p>
+    <div class="kst-card" style="padding:1.5rem; text-align:center;">
+      <p style="margin:0 0 1rem;">Nenhum dia encontrado com esse filtro.</p>
       <a href="/dia/novo" class="kst-btn kst-btn-primary">Registrar novo dia</a>
-    </p>
+    </div>
+
   <% } else { %>
-    <div class="kst-card">
+
+    <!-- CARD PRINCIPAL DA TABELA -->
+    <div class="kst-card" style="padding:0; overflow:hidden; border-radius: var(--kst-radius-lg);">
+
       <table class="kst-table">
+
         <thead>
           <tr>
             <th>Data</th>
-            <th>Horas de estudo</th>
+            <th>Estudo</th>
             <th>Questões</th>
-            <th>Taxa de acerto</th>
+            <th>Taxa</th>
             <th>Foco / Energia</th>
             <th>Humor</th>
             <th>Meta</th>
-            <th>Ações</th>
+            <th style="text-align:center;">Ações</th>
           </tr>
         </thead>
+
         <tbody>
+
           <% dias.forEach(function(dia) { %>
+
             <tr>
-              <td><%= dia.dataFormatada %></td>
+
+              <!-- Data -->
+              <td><strong><%= dia.dataFormatada %></strong></td>
+
+              <!-- Horas Estudo -->
               <td>
                 <% if (dia.horas_estudo_liquidas != null) { %>
-                  <%= Number(dia.horas_estudo_liquidas).toFixed(2) %> h
+                  <span style="font-weight:600;"><%= Number(dia.horas_estudo_liquidas).toFixed(1) %>h</span>
                 <% } else { %>
                   —
                 <% } %>
               </td>
+
+              <!-- Questões -->
               <td>
                 <% if (dia.questoes_feitas_total != null) { %>
                   <%= dia.questoes_feitas_total %>
@@ -64,30 +92,45 @@
                   —
                 <% } %>
               </td>
+
+              <!-- Taxa -->
               <td>
                 <% if (dia.taxaAcerto != null) { %>
-                  <%= dia.taxaAcerto %>%
+                  <% if (dia.taxaAcerto < 30) { %>
+                    <span class="kst-taxa kst-taxa--low"><%= dia.taxaAcerto %>%</span>
+                  <% } else if (dia.taxaAcerto < 70) { %>
+                    <span class="kst-taxa kst-taxa--mid"><%= dia.taxaAcerto %>%</span>
+                  <% } else { %>
+                    <span class="kst-taxa kst-taxa--high"><%= dia.taxaAcerto %>%</span>
+                  <% } %>
                 <% } else { %>
                   —
                 <% } %>
               </td>
+
+              <!-- Foco / Energia -->
               <td>
                 <% if (dia.nivel_foco != null || dia.nivel_energia != null) { %>
-                  F:<%= dia.nivel_foco != null ? dia.nivel_foco : '—' %> /
-                  E:<%= dia.nivel_energia != null ? dia.nivel_energia : '—' %>
+                  <span style="font-weight:600;">F:<%= dia.nivel_foco || "—" %></span>
+                  /
+                  <span style="font-weight:600;">E:<%= dia.nivel_energia || "—" %></span>
                 <% } else { %>
                   —
                 <% } %>
               </td>
+
+              <!-- Humor -->
               <td>
                 <% if (dia.humor) { %>
                   <span class="kst-badge">
-                    <%= dia.humor.toLowerCase() %>
+                    <%= dia.humor.toUpperCase() %>
                   </span>
                 <% } else { %>
                   —
                 <% } %>
               </td>
+
+              <!-- Meta -->
               <td>
                 <% if (dia.status_meta) { %>
                   <span class="kst-badge"><%= dia.status_meta %></span>
@@ -95,19 +138,42 @@
                   —
                 <% } %>
               </td>
-              <td>
-                <a href="/dias/<%= dia.id %>" class="kst-link-inline">Ver</a> |
-                <a href="/dias/<%= dia.id %>/editar" class="kst-link-inline">Editar</a> |
-                <form action="/dias/<%= dia.id %>/excluir" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este dia?');">
-                  <button type="submit" class="kst-link-inline kst-link-danger">Excluir</button>
+
+              <!-- Ações -->
+              <td style="text-align:center; white-space:nowrap;">
+
+                <a href="/dias/<%= dia.id %>" class="kst-link-inline">Ver</a>
+
+                <span style="color:var(--kst-text-soft); margin:0 4px;">|</span>
+
+                <a href="/dias/<%= dia.id %>/editar" class="kst-link-inline">Editar</a>
+
+                <span style="color:var(--kst-text-soft); margin:0 4px;">|</span>
+
+                <form 
+                  action="/dias/<%= dia.id %>/excluir" 
+                  method="POST" 
+                  style="display:inline;" 
+                  onsubmit="return confirm('Tem certeza que deseja excluir este dia?');"
+                >
+                  <button type="submit" class="kst-link-inline kst-link-danger">
+                    Excluir
+                  </button>
                 </form>
+
               </td>
+
             </tr>
+
           <% }) %>
+
         </tbody>
+
       </table>
     </div>
+
   <% } %>
+
 </section>
 
 <%- include("partials/footer") %>
