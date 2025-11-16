@@ -1,45 +1,116 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
 <section class="kst-section">
-  <h2>Detalhes do simulado</h2>
 
-  <div class="kst-card">
-    <p><strong>Data:</strong> <%= simulado.dia ? simulado.dia.data : "-" %></p>
-    <p><strong>Tempo total:</strong>
-      <% if (simulado.tempo_total_minutos != null) { %>
-        <%= simulado.tempo_total_minutos %> min
-      <% } else { %>
-        -
-      <% } %>
+  <!-- HERO DO SIMULADO -->
+  <div class="kst-day-hero">
+
+    <div class="kst-day-hero-top">
+      <h2 class="kst-day-date">
+        <%= simulado.dia ? simulado.dia.data : "—" %>
+      </h2>
+
+      <% 
+        const totalL = simulado.acertos_linguagens || 0;
+        const totalH = simulado.acertos_humanas || 0;
+        const totalN = simulado.acertos_naturezas || 0;
+        const totalM = simulado.acertos_matematica || 0;
+        const totalGeral = totalL + totalH + totalN + totalM;
+      %>
+
+      <span class="kst-badge-humor bom" style="font-size:0.82rem;">
+        <strong><%= totalGeral %>/180</strong> pontos
+      </span>
+    </div>
+
+    <p class="kst-day-subinfo">
+      Desempenho geral do simulado • ENEM
     </p>
 
-    <h3 class="kst-form-section-title">Acertos por área</h3>
-    <p><strong>Linguagens:</strong> <%= simulado.acertos_linguagens != null ? simulado.acertos_linguagens : "-" %>/45</p>
-    <p><strong>Humanas:</strong> <%= simulado.acertos_humanas != null ? simulado.acertos_humanas : "-" %>/45</p>
-    <p><strong>Naturezas:</strong> <%= simulado.acertos_naturezas != null ? simulado.acertos_naturezas : "-" %>/45</p>
-    <p><strong>Matemática:</strong> <%= simulado.acertos_matematica != null ? simulado.acertos_matematica : "-" %>/45</p>
+    <!-- KPIs RESUMIDOS -->
+    <div class="kst-day-kpi-grid">
+      <div class="kst-day-kpi">
+        <span class="kst-day-kpi-label">Tempo total</span>
+        <span class="kst-day-kpi-value">
+          <%= simulado.tempo_total_minutos != null ? simulado.tempo_total_minutos + " min" : "—" %>
+        </span>
+      </div>
 
-    <% 
-      const totalL = simulado.acertos_linguagens || 0;
-      const totalH = simulado.acertos_humanas || 0;
-      const totalN = simulado.acertos_naturezas || 0;
-      const totalM = simulado.acertos_matematica || 0;
-      const totalGeral = totalL + totalH + totalN + totalM;
-    %>
-    <p><strong>Total de acertos:</strong> <%= totalGeral %>/180</p>
+      <div class="kst-day-kpi">
+        <span class="kst-day-kpi-label">Melhor área</span>
+        <span class="kst-day-kpi-value">
+          <% 
+            const mapa = {
+              linguagens: totalL,
+              humanas: totalH,
+              naturezas: totalN,
+              matematica: totalM
+            };
+            const melhor = Object.entries(mapa).sort((a,b)=>b[1]-a[1])[0];
+          %>
+          <%= melhor[1] === 0 ? "—" : melhor[0].charAt(0).toUpperCase() + melhor[0].slice(1) %>
+        </span>
+      </div>
 
-    <h3 class="kst-form-section-title">Análise qualitativa</h3>
-    <p><strong>Área que mais errou:</strong> <%= simulado.area_que_mais_errou || "-" %></p>
-    <p><strong>Principal dificuldade:</strong> <%= simulado.principal_dificuldade || "-" %></p>
+      <div class="kst-day-kpi">
+        <span class="kst-day-kpi-label">Pior área</span>
+        <span class="kst-day-kpi-value">
+          <% 
+            const pior = Object.entries(mapa).sort((a,b)=>a[1]-b[1])[0];
+          %>
+          <%= pior[1] === 0 ? "—" : pior[0].charAt(0).toUpperCase() + pior[0].slice(1) %>
+        </span>
+      </div>
+    </div>
 
-    <h3 class="kst-form-section-title">Resultado / resumo</h3>
-    <p><%= simulado.resultado_resumo || "-" %></p>
   </div>
 
-  <div style="margin-top:1rem;">
+  <!-- SEÇÕES DETALHADAS -->
+  <div class="kst-day-sections">
+
+    <!-- ACERTOS POR ÁREA -->
+    <div class="kst-day-section">
+      <h3 class="kst-day-section-title">Acertos por área</h3>
+
+      <ul class="kst-day-list">
+        <li><strong>Linguagens:</strong> <%= totalL %>/45</li>
+        <li><strong>Humanas:</strong> <%= totalH %>/45</li>
+        <li><strong>Naturezas:</strong> <%= totalN %>/45</li>
+        <li><strong>Matemática:</strong> <%= totalM %>/45</li>
+      </ul>
+
+      <p style="margin-top:0.9rem; font-size:0.92rem;">
+        <strong>Total geral:</strong> <%= totalGeral %>/180
+      </p>
+    </div>
+
+    <!-- ANÁLISE QUALITATIVA -->
+    <div class="kst-day-section">
+      <h3 class="kst-day-section-title">Análise qualitativa</h3>
+
+      <ul class="kst-day-info">
+        <li><strong>Área que mais errou:</strong> <%= simulado.area_que_mais_errou || "—" %></li>
+        <li><strong>Dificuldade principal:</strong> <%= simulado.principal_dificuldade || "—" %></li>
+      </ul>
+    </div>
+
+    <!-- RESUMO -->
+    <div class="kst-day-section">
+      <h3 class="kst-day-section-title">Resumo geral</h3>
+
+      <p style="white-space:pre-wrap; font-size:0.92rem;">
+        <%= simulado.resultado_resumo || "—" %>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="kst-day-actions">
     <a href="/simulados" class="kst-btn kst-btn-secondary">Voltar ao histórico</a>
     <a href="/simulados/<%= simulado.id %>/editar" class="kst-btn kst-btn-primary">Editar simulado</a>
   </div>
+
 </section>
 
 <%- include("partials/footer") %>

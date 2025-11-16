@@ -1,10 +1,14 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
 <section class="kst-section">
-  <h2>Registrar simulado</h2>
-  <p class="kst-section-subtitle">
-    Registre um simulado estilo ENEM com acertos por área e dificuldades.
-  </p>
+
+  <!-- HEADER DA PÁGINA -->
+  <div class="kst-sim-header">
+    <h2 class="kst-sim-title">Registrar Simulado</h2>
+    <p class="kst-sim-subtitle">
+      Registre um simulado estilo ENEM com acertos por área, dificuldades e resumo detalhado.
+    </p>
+  </div>
 
   <% if (sucesso) { %>
     <div class="kst-alert kst-alert-success">
@@ -20,132 +24,84 @@
 
   <div id="erro-simulado" class="kst-alert kst-alert-error" style="display:none;"></div>
 
-  <form action="/simulados" method="POST" class="kst-form" onsubmit="return validarSimulado(event)">
+  <!-- CARD DO FORMULÁRIO -->
+  <div class="kst-sim-card">
 
-    <div class="kst-form-row">
-      <div class="kst-form-group">
-        <label class="kst-label" for="data">Data do simulado *</label>
-        <input
-          type="date"
-          id="data"
-          name="data"
-          class="kst-input"
-          required
-        />
-      </div>
+    <form action="/simulados" method="POST" class="kst-form" onsubmit="return validarSimulado(event)">
 
-      <div class="kst-form-group">
-        <label class="kst-label" for="tempo_total_minutos">Tempo total (minutos)</label>
-        <input
-          type="number"
-          min="0"
-          id="tempo_total_minutos"
-          name="tempo_total_minutos"
-          class="kst-input"
-          placeholder="Ex: 300"
-        />
-      </div>
-    </div>
-
-    <fieldset class="kst-fieldset">
-      <legend>Acertos por área (0 a 45)</legend>
-
+      <!-- DATA + TEMPO -->
       <div class="kst-form-row">
         <div class="kst-form-group">
-          <label class="kst-label" for="acertos_linguagens">Linguagens (0–45)</label>
-          <input
-            type="number"
-            min="0"
-            max="45"
-            id="acertos_linguagens"
-            name="acertos_linguagens"
-            class="kst-input"
-          />
+          <label class="kst-label" for="data">Data do simulado *</label>
+          <input type="date" id="data" name="data" class="kst-input" required />
         </div>
 
         <div class="kst-form-group">
-          <label class="kst-label" for="acertos_humanas">Humanas (0–45)</label>
-          <input
-            type="number"
-            min="0"
-            max="45"
-            id="acertos_humanas"
-            name="acertos_humanas"
-            class="kst-input"
-          />
+          <label class="kst-label" for="tempo_total_minutos">Tempo total (minutos)</label>
+          <input type="number" min="0" id="tempo_total_minutos" name="tempo_total_minutos" class="kst-input" placeholder="Ex: 300" />
         </div>
       </div>
 
-      <div class="kst-form-row">
+      <!-- ACERTOS POR ÁREA -->
+      <fieldset class="kst-sim-fieldset">
+        <legend>Acertos por área (0 a 45)</legend>
+
+        <div class="kst-sim-grid-areas">
+
+          <div class="kst-sim-area-card">
+            <h4>Linguagens</h4>
+            <input type="number" min="0" max="45" id="acertos_linguagens" name="acertos_linguagens" class="kst-input" />
+          </div>
+
+          <div class="kst-sim-area-card">
+            <h4>Humanas</h4>
+            <input type="number" min="0" max="45" id="acertos_humanas" name="acertos_humanas" class="kst-input" />
+          </div>
+
+          <div class="kst-sim-area-card">
+            <h4>Naturezas</h4>
+            <input type="number" min="0" max="45" id="acertos_naturezas" name="acertos_naturezas" class="kst-input" />
+          </div>
+
+          <div class="kst-sim-area-card">
+            <h4>Matemática</h4>
+            <input type="number" min="0" max="45" id="acertos_matematica" name="acertos_matematica" class="kst-input" />
+          </div>
+
+        </div>
+      </fieldset>
+
+      <!-- DIFICULDADES -->
+      <fieldset class="kst-sim-fieldset">
+        <legend>Dificuldades e resumo</legend>
+
         <div class="kst-form-group">
-          <label class="kst-label" for="acertos_naturezas">Naturezas (0–45)</label>
-          <input
-            type="number"
-            min="0"
-            max="45"
-            id="acertos_naturezas"
-            name="acertos_naturezas"
-            class="kst-input"
-          />
+          <label class="kst-label" for="area_que_mais_errou">Área que mais errou</label>
+          <input type="text" id="area_que_mais_errou" name="area_que_mais_errou" class="kst-input" placeholder="Ex: Matemática, Naturezas..." />
         </div>
 
         <div class="kst-form-group">
-          <label class="kst-label" for="acertos_matematica">Matemática (0–45)</label>
-          <input
-            type="number"
-            min="0"
-            max="45"
-            id="acertos_matematica"
-            name="acertos_matematica"
-            class="kst-input"
-          />
+          <label class="kst-label" for="principal_dificuldade">Principal dificuldade</label>
+          <input type="text" id="principal_dificuldade" name="principal_dificuldade" class="kst-input" placeholder="Ex: tempo, cansaço, falta de conteúdo..." />
         </div>
-      </div>
-    </fieldset>
 
-    <fieldset class="kst-fieldset">
-      <legend>Dificuldades e resumo</legend>
+        <div class="kst-form-group">
+          <label class="kst-label" for="resultado_resumo">Resumo do resultado</label>
+          <textarea id="resultado_resumo" name="resultado_resumo" class="kst-textarea" rows="3" placeholder="Ex: Fui bem em linguagens, errei muito em Matemática nas questões de função..."></textarea>
+        </div>
 
-      <div class="kst-form-group">
-        <label class="kst-label" for="area_que_mais_errou">Área que mais errou</label>
-        <input
-          type="text"
-          id="area_que_mais_errou"
-          name="area_que_mais_errou"
-          class="kst-input"
-          placeholder="Ex: Matemática, Naturezas..."
-        />
+      </fieldset>
+
+      <!-- AÇÃO -->
+      <div class="kst-form-actions">
+        <button type="submit" class="kst-btn kst-btn-primary">
+          Salvar simulado
+        </button>
       </div>
 
-      <div class="kst-form-group">
-        <label class="kst-label" for="principal_dificuldade">Principal dificuldade</label>
-        <input
-          type="text"
-          id="principal_dificuldade"
-          name="principal_dificuldade"
-          class="kst-input"
-          placeholder="Ex: tempo, cansaço, falta de conteúdo..."
-        />
-      </div>
+    </form>
+  </div>
 
-      <div class="kst-form-group">
-        <label class="kst-label" for="resultado_resumo">Resumo do resultado</label>
-        <textarea
-          id="resultado_resumo"
-          name="resultado_resumo"
-          class="kst-textarea"
-          rows="3"
-          placeholder="Ex: Fui bem em linguagens, errei muito em Matemática nas questões de função..."
-        ></textarea>
-      </div>
-    </fieldset>
-
-    <div class="kst-form-actions">
-      <button type="submit" class="kst-btn kst-btn-primary">
-        Salvar simulado
-      </button>
-    </div>
-  </form>
 </section>
 
 <%- include("partials/footer") %>

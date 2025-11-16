@@ -2932,3 +2932,420 @@ canvas {
   }
 }
 
+/* ============================================================
+   16 — SIMULADOS (NOVO / LISTA / DETALHES)
+   Estilo premium — Kaue Study Tracker
+   ============================================================ */
+
+/* -----------------------------
+   TÍTULO / SUBTÍTULO DA PÁGINA
+------------------------------ */
+
+.kst-sim-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.kst-sim-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--kst-text-main);
+  margin: 0 0 0.35rem;
+}
+
+.kst-sim-subtitle {
+  font-size: 0.95rem;
+  color: var(--kst-text-muted);
+  margin: 0;
+}
+
+/* -----------------------------
+   CARD PRINCIPAL DO FORMULÁRIO
+------------------------------ */
+
+.kst-sim-card {
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 1.8rem 1.9rem 2.3rem;
+  box-shadow: var(--kst-shadow-subtle);
+  max-width: 900px;
+  margin: 0 auto 2.5rem;
+}
+
+/* Fieldset adaptado */
+.kst-sim-fieldset {
+  border-radius: var(--kst-radius-lg);
+  border: 1px dashed var(--kst-border-subtle);
+  background: var(--kst-bg-elevated-soft);
+  padding: 1.3rem 1.4rem 1.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.kst-sim-fieldset legend {
+  padding: 0 0.4rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+/* Inputs usam padrão global, então não precisa duplicar */
+
+/* -----------------------------
+   LISTA DE ACERTOS POR ÁREA
+------------------------------ */
+
+.kst-sim-grid-areas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.kst-sim-area-card {
+  background: var(--kst-bg-elevated-soft);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 1rem;
+  border-radius: var(--kst-radius-lg);
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-sim-area-card h4 {
+  margin: 0 0 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+/* -----------------------------
+   BADGES DE DESEMPENHO (0–45)
+------------------------------ */
+
+.kst-sim-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Verde — bom desempenho */
+.kst-sim-badge--good {
+  background: rgba(34, 197, 94, 0.18);
+  color: #16a34a;
+}
+
+/* Médio — laranja */
+.kst-sim-badge--mid {
+  background: rgba(245, 158, 11, 0.18);
+  color: #c2410c;
+}
+
+/* Baixo — vermelho */
+.kst-sim-badge--low {
+  background: rgba(239, 68, 68, 0.18);
+  color: #dc2626;
+}
+
+/* -----------------------------
+   RESUMO DO SIMULADO (DETALHES)
+------------------------------ */
+
+.kst-sim-summary {
+  margin-top: 2rem;
+  padding: 1.6rem 1.7rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated);
+  box-shadow: var(--kst-shadow-soft);
+}
+
+.kst-sim-summary h3 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+.kst-sim-summary p {
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+  color: var(--kst-text-main);
+}
+
+.kst-sim-summary strong {
+  font-weight: 600;
+}
+
+/* -----------------------------
+   GRID DE KPI POR ÁREA (DETALHES)
+------------------------------ */
+
+.kst-sim-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.1rem;
+  margin-top: 1.4rem;
+}
+
+.kst-sim-kpi {
+  background: var(--kst-bg-elevated-soft);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--kst-radius-lg);
+  box-shadow: var(--kst-shadow-subtle);
+  text-align: center;
+}
+
+.kst-sim-kpi-label {
+  font-size: 0.8rem;
+  color: var(--kst-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kst-sim-kpi-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: var(--kst-primary);
+  letter-spacing: -0.02em;
+}
+
+/* -----------------------------
+   TABELA DA LISTA DE SIMULADOS
+------------------------------ */
+
+.kst-sim-table-wrapper {
+  margin-top: 1.8rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated);
+  overflow: hidden;
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-sim-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.kst-sim-table thead {
+  background: var(--kst-bg-elevated-soft);
+}
+
+.kst-sim-table th {
+  padding: 0.75rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--kst-text-muted);
+  border-bottom: 1px solid var(--kst-border-subtle);
+  text-transform: uppercase;
+}
+
+.kst-sim-table td {
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  color: var(--kst-text-main);
+}
+
+.kst-sim-table tbody tr {
+  transition: background 0.16s ease;
+}
+
+.kst-sim-table tbody tr:hover {
+  background: rgba(28, 154, 255, 0.04);
+}
+
+/* Ações */
+.kst-sim-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.kst-sim-actions .kst-link-inline {
+  font-size: 0.8rem;
+}
+
+/* -----------------------------
+   EMPTY STATE
+------------------------------ */
+
+.kst-sim-empty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--kst-text-muted);
+  font-size: 0.95rem;
+}
+
+/* -----------------------------
+   RESPONSIVIDADE
+------------------------------ */
+
+@media (max-width: 650px) {
+
+  .kst-sim-card {
+    padding: 1.4rem 1rem 1.8rem;
+  }
+
+  .kst-sim-kpi-value {
+    font-size: 1.55rem;
+  }
+
+  .kst-sim-table th:nth-child(3),
+  .kst-sim-table td:nth-child(3) {
+    display: none; /* Exemplo: esconder tempo no mobile */
+  }
+}
+
+/* ============================================================
+   ESTATÍSTICAS DE SIMULADOS — MODERNIZAÇÃO PREMIUM
+   ============================================================ */
+
+/* ----------------------------------------------
+   Cabeçalho da página
+---------------------------------------------- */
+.kst-home-header {
+  margin-bottom: 2.4rem;
+}
+
+.kst-home-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.kst-home-subtitle {
+  font-size: 0.95rem;
+  color: var(--kst-text-muted);
+  margin-top: 0.35rem;
+}
+
+/* ----------------------------------------------
+   Filtros — visual mais limpo
+---------------------------------------------- */
+.kst-filter-bar {
+  padding: 1rem 1.25rem;
+  border-radius: var(--kst-radius-xl);
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-filter-bar .kst-btn {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+}
+
+.kst-btn-primary {
+  box-shadow: 0 8px 24px rgba(28,154,255,0.22);
+}
+
+/* ----------------------------------------------
+   KPIs — deixar mais premium e claros
+---------------------------------------------- */
+.kst-card-kpi {
+  padding: 1.6rem 1.5rem !important;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid rgba(148,163,184,0.28);
+}
+
+.kst-card-kpi h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+.kst-kpi-number {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin: 0.4rem 0 0.5rem;
+  color: var(--kst-primary);
+}
+
+.kst-kpi-text strong {
+  font-weight: 700;
+}
+
+/* ----------------------------------------------
+   Grid dos KPIs — mais espaçamento
+---------------------------------------------- */
+.kst-dashboard-grid {
+  gap: 1.4rem !important;
+  margin-bottom: 2rem;
+}
+
+/* ----------------------------------------------
+   Cards dos gráficos — visual “app premium”
+---------------------------------------------- */
+.kst-chart-card {
+  padding: 1.5rem 1.6rem !important;
+  border-radius: var(--kst-radius-xl);
+  background: var(--kst-bg-elevated);
+  border: 1px solid rgba(148,163,184,0.28);
+  box-shadow: var(--kst-shadow-soft);
+  transition: box-shadow .18s ease, transform .12s ease;
+}
+
+.kst-chart-card:hover {
+  box-shadow: 0 18px 36px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.kst-chart-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.65rem;
+  color: var(--kst-text-main);
+}
+
+.kst-chart-subtitle {
+  color: var(--kst-text-muted);
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+}
+
+/* ----------------------------------------------
+   Canvas gráfico — nitidez e responsividade
+---------------------------------------------- */
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  image-rendering: -webkit-optimize-contrast;
+  margin-top: 0.8rem;
+}
+
+/* ----------------------------------------------
+   Mobile — organização fluida
+---------------------------------------------- */
+@media (max-width: 780px) {
+  .kst-home-title {
+    font-size: 1.6rem;
+  }
+
+  .kst-dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .kst-charts-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .kst-filter-bar {
+    padding: 0.85rem 1rem;
+  }
+
+  .kst-filter-bar .kst-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

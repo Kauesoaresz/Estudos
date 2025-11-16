@@ -1,144 +1,189 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
 <section class="kst-section">
-  <h2>Estatísticas de simulados</h2>
-  <p class="kst-section-subtitle">
-    Acompanhe sua evolução nos simulados estilo ENEM por total de acertos e por área.
-  </p>
 
-  <div class="kst-filter-bar" style="margin-bottom: 1rem;">
-    <span style="margin-right: 0.5rem;">Período:</span>
-    <a href="/estatisticas/simulados?periodo=7d"
-       class="kst-btn <%= periodo === '7d' ? 'kst-btn-primary' : '' %>">
-      Últimos 7 dias
-    </a>
-    <a href="/estatisticas/simulados?periodo=30d"
-       class="kst-btn <%= periodo === '30d' ? 'kst-btn-primary' : '' %>">
-      Últimos 30 dias
-    </a>
-    <a href="/estatisticas/simulados?periodo=todos"
-       class="kst-btn <%= periodo === 'todos' ? 'kst-btn-primary' : '' %>">
-      Todos os simulados
-    </a>
+  <div class="kst-home-header">
+    <h1 class="kst-home-title">Estatísticas dos Simulados</h1>
+    <p class="kst-home-subtitle">
+      Acompanhe sua evolução geral, desempenho por área e gráficos de progresso.
+    </p>
+  </div>
+
+  <!-- ===========================
+       FILTROS
+  ============================ -->
+  <div class="kst-filter-bar" style="margin-bottom: 1.4rem;">
+    <div class="kst-filter-group">
+      <label>Período:</label>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+
+        <a href="/estatisticas/simulados?periodo=7d"
+          class="kst-btn <%= periodo === '7d' ? 'kst-btn-primary' : '' %>">
+          Últimos 7 dias
+        </a>
+
+        <a href="/estatisticas/simulados?periodo=30d"
+          class="kst-btn <%= periodo === '30d' ? 'kst-btn-primary' : '' %>">
+          Últimos 30 dias
+        </a>
+
+        <a href="/estatisticas/simulados?periodo=todos"
+          class="kst-btn <%= periodo === 'todos' ? 'kst-btn-primary' : '' %>">
+          Todos os simulados
+        </a>
+
+      </div>
+    </div>
   </div>
 
   <% if (!totalSimulados || totalSimulados === 0) { %>
-    <p>Nenhum simulado encontrado neste período.</p>
-    <p>
+
+    <div class="kst-card" style="padding:1.5rem; text-align:center;">
+      <h3 style="margin-bottom:0.8rem;">Nenhum simulado encontrado</h3>
+      <p style="margin-bottom:1rem; color:var(--kst-text-muted);">
+        Registre agora seu primeiro simulado estilo ENEM.
+      </p>
       <a href="/simulados/novo" class="kst-btn kst-btn-primary">Registrar simulado</a>
-    </p>
-  <% } else { %>
-    <div class="kst-dashboard-grid">
-      <div class="kst-card kst-card-kpi">
-        <h3>Total de simulados</h3>
-        <p class="kst-kpi-number"><%= totalSimulados %></p>
-        <p class="kst-kpi-text">
-          Melhor total de acertos: 
-          <strong><%= melhorTotal %></strong><br />
-          Pior total de acertos: 
-          <strong><%= piorTotal %></strong>
-        </p>
-      </div>
-
-      <div class="kst-card kst-card-kpi">
-        <h3>Médias por área</h3>
-        <p class="kst-kpi-text">
-          Linguagens: <strong><%= mediaLinguagens.toFixed(2) %></strong> / 45<br />
-          Humanas: <strong><%= mediaHumanas.toFixed(2) %></strong> / 45<br />
-          Naturezas: <strong><%= mediaNaturezas.toFixed(2) %></strong> / 45<br />
-          Matemática: <strong><%= mediaMatematica.toFixed(2) %></strong> / 45
-        </p>
-      </div>
-
-      <div class="kst-card kst-card-kpi">
-        <h3>Média total por simulado</h3>
-        <% 
-          const mediaTotal = (mediaLinguagens + mediaHumanas + mediaNaturezas + mediaMatematica);
-        %>
-        <p class="kst-kpi-text">
-          Média total de acertos (4 provas): 
-          <strong><%= mediaTotal.toFixed(1) %></strong> / 180
-        </p>
-      </div>
     </div>
 
+  <% } else { %>
+
+    <!-- ===========================
+         KPIs PRINCIPAIS
+    ============================ -->
+    <div class="kst-dashboard-grid">
+
+      <div class="kst-card kst-card-kpi">
+        <h3 class="kst-kpi-text">Total de simulados</h3>
+        <p class="kst-kpi-number"><%= totalSimulados %></p>
+        <p class="kst-kpi-text">
+          Melhor: <strong><%= melhorTotal %></strong><br>
+          Pior: <strong><%= piorTotal %></strong>
+        </p>
+      </div>
+
+      <div class="kst-card kst-card-kpi">
+        <h3 class="kst-kpi-text">Médias por área</h3>
+        <p class="kst-kpi-text">
+          Linguagens: <strong><%= mediaLinguagens.toFixed(1) %></strong> / 45<br>
+          Humanas: <strong><%= mediaHumanas.toFixed(1) %></strong> / 45<br>
+          Naturezas: <strong><%= mediaNaturezas.toFixed(1) %></strong> / 45<br>
+          Matemática: <strong><%= mediaMatematica.toFixed(1) %></strong> / 45
+        </p>
+      </div>
+
+      <div class="kst-card kst-card-kpi">
+        <h3 class="kst-kpi-text">Média total por simulado</h3>
+        <% const mediaTotal = (mediaLinguagens + mediaHumanas + mediaNaturezas + mediaMatematica); %>
+        <p class="kst-kpi-number" style="font-size:1.8rem;"><%= mediaTotal.toFixed(1) %></p>
+        <p class="kst-kpi-text">de 180 possíveis</p>
+      </div>
+
+    </div>
+
+    <!-- ===========================
+         GRÁFICOS
+    ============================ -->
     <div class="kst-charts-grid">
-      <div class="kst-card">
+
+      <div class="kst-chart-card">
         <h3>Total de acertos por simulado</h3>
         <p class="kst-chart-subtitle">
-          Soma dos acertos em Linguagens, Humanas, Naturezas e Matemática em cada simulado.
+          Evolução geral somando as quatro áreas.
         </p>
         <canvas id="chartTotalSimulados"></canvas>
       </div>
 
-      <div class="kst-card">
+      <div class="kst-chart-card">
         <h3>Média de acertos por área</h3>
-        <p class="kst-chart-subtitle">
-          Médias da quantidade de acertos em cada área.
-        </p>
+        <p class="kst-chart-subtitle">Comparação das áreas do ENEM</p>
         <canvas id="chartMediasArea"></canvas>
       </div>
+
     </div>
+
   <% } %>
+
 </section>
 
 <%- include("partials/footer") %>
 
+<!-- ===========================
+     SCRIPTS
+=========================== -->
 <% if (totalSimulados && totalSimulados > 0) { %>
 <script>
-  (function () {
-    const labels = <%- labelsJSON %>;
-    const totalDataset = <%- totalDatasetJSON %>;
-    const mediasPorAreaLabels = <%- mediasPorAreaLabelsJSON %>;
-    const mediasPorAreaValores = <%- mediasPorAreaValoresJSON %>;
+(function () {
+  const labels = <%- labelsJSON %>;
+  const totalDataset = <%- totalDatasetJSON %>;
+  const mediasPorAreaLabels = <%- mediasPorAreaLabelsJSON %>;
+  const mediasPorAreaValores = <%- mediasPorAreaValoresJSON %>;
 
-    const ctxTotal = document.getElementById("chartTotalSimulados");
-    if (ctxTotal) {
-      new Chart(ctxTotal, {
-        type: "line",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: "Total de acertos",
-            data: totalDataset,
-            fill: false,
-            tension: 0.2
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              suggestedMax: 180
-            }
+  /* ========================
+     LINE — Totais por Simulado
+  ========================== */
+  const ctxTotal = document.getElementById("chartTotalSimulados");
+  if (ctxTotal) {
+    new Chart(ctxTotal, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Total de acertos",
+          data: totalDataset,
+          borderColor: "#1c9aff",
+          backgroundColor: "rgba(28,154,255,0.10)",
+          tension: 0.28,
+          borderWidth: 2,
+          pointRadius: 3,
+          pointBackgroundColor: "#1c9aff"
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 180
           }
         }
-      });
-    }
+      }
+    });
+  }
 
-    const ctxArea = document.getElementById("chartMediasArea");
-    if (ctxArea) {
-      new Chart(ctxArea, {
-        type: "bar",
-        data: {
-          labels: mediasPorAreaLabels,
-          datasets: [{
-            label: "Média de acertos",
-            data: mediasPorAreaValores
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              suggestedMax: 45
-            }
+  /* ========================
+     BAR — Médias por Área
+  ========================== */
+  const ctxArea = document.getElementById("chartMediasArea");
+  if (ctxArea) {
+    new Chart(ctxArea, {
+      type: "bar",
+      data: {
+        labels: mediasPorAreaLabels,
+        datasets: [{
+          label: "Média de acertos",
+          data: mediasPorAreaValores,
+          backgroundColor: [
+            "rgba(28,154,255,0.55)",
+            "rgba(59,130,246,0.55)",
+            "rgba(34,197,94,0.55)",
+            "rgba(239,68,68,0.55)"
+          ],
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 45
           }
         }
-      });
-    }
-  })();
+      }
+    });
+  }
+
+})();
 </script>
 <% } %>

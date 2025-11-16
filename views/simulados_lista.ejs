@@ -1,86 +1,130 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
 <section class="kst-section">
-  <h2>Histórico de simulados</h2>
-  <p class="kst-section-subtitle">
-    Veja seus simulados, acertos por área e o total.
-  </p>
 
-  <form method="GET" action="/simulados" class="kst-filter-bar" style="margin-bottom: 1rem;">
+  <!-- HEADER DA PÁGINA -->
+  <div class="kst-sim-header">
+    <h2 class="kst-sim-title">Histórico de Simulados</h2>
+    <p class="kst-sim-subtitle">
+      Acompanhe seus simulados, acertos por área e evolução ao longo do tempo.
+    </p>
+  </div>
+
+  <!-- FILTRO PREMIUM -->
+  <form method="GET" action="/simulados" class="kst-filter-bar" style="margin-bottom: 1.4rem;">
     <div class="kst-filter-group">
       <label for="de">De:</label>
-      <input type="date" id="de" name="de" value="<%= de || '' %>">
+      <input type="date" id="de" name="de" value="<%= de || '' %>" class="kst-input">
     </div>
+
     <div class="kst-filter-group">
       <label for="ate">Até:</label>
-      <input type="date" id="ate" name="ate" value="<%= ate || '' %>">
+      <input type="date" id="ate" name="ate" value="<%= ate || '' %>" class="kst-input">
     </div>
+
     <button type="submit" class="kst-btn kst-btn-primary">Filtrar</button>
-    <a href="/simulados" class="kst-btn">Limpar</a>
+    <a href="/simulados" class="kst-btn kst-btn-secondary">Limpar</a>
   </form>
 
+  <!-- EMPTY STATE PREMIUM -->
   <% if (!simulados || simulados.length === 0) { %>
-    <p>Nenhum simulado encontrado com esse filtro.</p>
-    <p>
-      <a href="/simulados/novo" class="kst-btn kst-btn-primary">Registrar simulado</a>
-    </p>
+
+    <div class="kst-sim-empty kst-card" style="padding: 2rem; text-align:center;">
+      <p style="margin:0 0 0.6rem; font-size:1rem; color:var(--kst-text-muted);">
+        Nenhum simulado encontrado para este período.
+      </p>
+      <a href="/simulados/novo" class="kst-btn kst-btn-primary">
+        Registrar primeiro simulado
+      </a>
+    </div>
+
   <% } else { %>
-    <div class="kst-card">
-      <table class="kst-table">
+
+    <!-- CARD DA TABELA -->
+    <div class="kst-sim-table-wrapper">
+      <table class="kst-sim-table">
         <thead>
           <tr>
             <th>Data</th>
-            <th>Tempo (min)</th>
+            <th>Tempo</th>
             <th>Linguagens</th>
             <th>Humanas</th>
             <th>Naturezas</th>
             <th>Matemática</th>
             <th>Total</th>
-            <th>Infos</th>
+            <th>Resumo</th>
             <th>Ações</th>
           </tr>
         </thead>
+
         <tbody>
           <% simulados.forEach(function(s) { %>
             <tr>
-              <td><%= s.dataFormatada %></td>
+
+              <!-- DATA -->
               <td>
+                <strong><%= s.dataFormatada %></strong>
+              </td>
+
+              <!-- TEMPO -->
+              <td style="text-align:center;">
                 <% if (s.tempo_total_minutos != null) { %>
-                  <%= s.tempo_total_minutos %>
+                  <%= s.tempo_total_minutos %> min
                 <% } else { %>
                   —
                 <% } %>
               </td>
-              <td><%= s.acertos_linguagens != null ? s.acertos_linguagens : '—' %></td>
-              <td><%= s.acertos_humanas != null ? s.acertos_humanas : '—' %></td>
-              <td><%= s.acertos_naturezas != null ? s.acertos_naturezas : '—' %></td>
-              <td><%= s.acertos_matematica != null ? s.acertos_matematica : '—' %></td>
-              <td><strong><%= s.totalAcertos %></strong></td>
+
+              <!-- ACERTOS -->
+              <td><%= s.acertos_linguagens ?? '—' %></td>
+              <td><%= s.acertos_humanas ?? '—' %></td>
+              <td><%= s.acertos_naturezas ?? '—' %></td>
+              <td><%= s.acertos_matematica ?? '—' %></td>
+
+              <!-- TOTAL -->
               <td>
+                <strong style="font-weight:700;"><%= s.totalAcertos %></strong>
+              </td>
+
+              <!-- RESUMO -->
+              <td style="max-width:220px; white-space:normal; line-height:1.35;">
                 <% if (s.area_que_mais_errou || s.principal_dificuldade) { %>
+
                   <% if (s.area_que_mais_errou) { %>
-                    Área que mais errou: <%= s.area_que_mais_errou %><br />
+                    <strong>Errou mais:</strong> <%= s.area_que_mais_errou %><br>
                   <% } %>
+
                   <% if (s.principal_dificuldade) { %>
-                    Dificuldade: <%= s.principal_dificuldade %>
+                    <strong>Dificuldade:</strong> <%= s.principal_dificuldade %>
                   <% } %>
+
                 <% } else { %>
                   —
                 <% } %>
               </td>
+
+              <!-- AÇÕES -->
               <td>
-                <a href="/simulados/<%= s.id %>" class="kst-link-inline">Ver</a> |
-                <a href="/simulados/<%= s.id %>/editar" class="kst-link-inline">Editar</a> |
-                <form action="/simulados/<%= s.id %>/excluir" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este simulado?');">
-                  <button type="submit" class="kst-link-inline kst-link-danger">Excluir</button>
-                </form>
+                <div class="kst-sim-actions">
+                  <a href="/simulados/<%= s.id %>" class="kst-link-inline">Ver</a>
+                  <a href="/simulados/<%= s.id %>/editar" class="kst-link-inline">Editar</a>
+
+                  <form action="/simulados/<%= s.id %>/excluir" method="POST"
+                    style="display:inline;"
+                    onsubmit="return confirm('Tem certeza que deseja excluir este simulado?');">
+                    <button type="submit" class="kst-link-inline kst-link-danger">Excluir</button>
+                  </form>
+                </div>
               </td>
+
             </tr>
           <% }) %>
         </tbody>
       </table>
     </div>
+
   <% } %>
+
 </section>
 
 <%- include("partials/footer") %>
