@@ -1,5 +1,3 @@
-// controllers/revisaoController.js
-
 const { Materia, EstudoMateriaDia, Dia } = require("../models");
 const {
   toISODate,
@@ -123,8 +121,7 @@ async function dashboardRevisao(req, res) {
         prioridadeClass,
         prioridadeLabel
       };
-    });  // ← ESTA CHAVE FALTAVA NO SEU CÓDIGO
-
+    });
 
     // ORDENAÇÃO
     materiasRevisao.sort((a, b) => b.prioridadeScore - a.prioridadeScore);
@@ -228,7 +225,7 @@ async function detalheMateriaRevisao(req, res) {
 
 
 // =====================================================================
-// REGISTRAR REVISÃO
+// REGISTRAR REVISÃO (compatível com ENUM do banco)
 // =====================================================================
 async function registrarRevisao(req, res) {
   try {
@@ -248,10 +245,33 @@ async function registrarRevisao(req, res) {
     let dia = await Dia.findOne({ where: { data } });
     if (!dia) dia = await Dia.create({ data });
 
-    // ACEITA CHECKBOX MÚLTIPLO
-    let tipoFinal = "REVISÃO";
-    if (Array.isArray(tipo_revisao))
-      tipoFinal = "REVISÃO - " + tipo_revisao.join(", ");
+    // ============================
+    // MAPEAMENTO PARA O ENUM
+    // ============================
+    let tipoFinal = "REVISAO"; // padrão
+
+    // tipo_revisao pode ser string ou array
+    let origem = tipo_revisao;
+
+    if (Array.isArray(origem)) {
+      const joined = origem.map(String).join(" ").toLowerCase();
+      if (joined.includes("novo")) {
+        tipoFinal = "CONTEUDO_NOVO";
+      } else if (joined.includes("erro")) {
+        tipoFinal = "REVISAO_ERRO";
+      } else {
+        tipoFinal = "REVISAO";
+      }
+    } else if (origem) {
+      const t = String(origem).toLowerCase();
+      if (t.includes("novo")) {
+        tipoFinal = "CONTEUDO_NOVO";
+      } else if (t.includes("erro")) {
+        tipoFinal = "REVISAO_ERRO";
+      } else {
+        tipoFinal = "REVISAO";
+      }
+    }
 
     await EstudoMateriaDia.create({
       dia_id: dia.id,
@@ -267,10 +287,12 @@ async function registrarRevisao(req, res) {
     return res.redirect(`/revisao/materia/${materia_id}?sucesso=1`);
 
   } catch (error) {
-    console.error("❌ Erro ao registrar revisão:", error);
+    console.error("❌ Erro ao registrar revisão:", error.message, error);
     return res.status(500).send("Erro ao registrar revisão.");
   }
 }
+
+
 
 // =====================================================================
 // CARREGAR A REVISÃO PARA EDIÇÃO
@@ -302,7 +324,7 @@ async function carregarRevisaoParaEdicao(req, res) {
 
 
 // =====================================================================
-// ATUALIZAR REVISÃO
+// ATUALIZAR REVISÃO (compatível com ENUM do banco)
 // =====================================================================
 async function atualizarRevisao(req, res) {
   try {
@@ -320,10 +342,28 @@ async function atualizarRevisao(req, res) {
     const revisao = await EstudoMateriaDia.findByPk(id);
     if (!revisao) return res.status(404).send("Revisão não encontrada.");
 
-    let tipoFinal = revisao.tipo_estudo;
+    // Tipo compatível com ENUM
+    let tipoFinal = revisao.tipo_estudo || "REVISAO";
 
-    if (Array.isArray(tipo_revisao) && tipo_revisao.length > 0) {
-      tipoFinal = "REVISÃO - " + tipo_revisao.join(", ");
+    let origem = tipo_revisao;
+    if (Array.isArray(origem)) {
+      const joined = origem.map(String).join(" ").toLowerCase();
+      if (joined.includes("novo")) {
+        tipoFinal = "CONTEUDO_NOVO";
+      } else if (joined.includes("erro")) {
+        tipoFinal = "REVISAO_ERRO";
+      } else {
+        tipoFinal = "REVISAO";
+      }
+    } else if (origem) {
+      const t = String(origem).toLowerCase();
+      if (t.includes("novo")) {
+        tipoFinal = "CONTEUDO_NOVO";
+      } else if (t.includes("erro")) {
+        tipoFinal = "REVISAO_ERRO";
+      } else {
+        tipoFinal = "REVISAO";
+      }
     }
 
     // Atualiza dia
@@ -342,7 +382,7 @@ async function atualizarRevisao(req, res) {
     return res.redirect(`/revisao/materia/${revisao.materia_id}?sucesso=1`);
 
   } catch (error) {
-    console.error("❌ Erro ao atualizar revisão:", error);
+    console.error("❌ Erro ao atualizar revisão:", error.message, error);
     res.status(500).send("Erro ao atualizar revisão.");
   }
 }
@@ -398,9 +438,6 @@ async function getRevisaoAPI(req, res) {
   }
 }
 
-
-
-
 module.exports = {
   dashboardRevisao,
   detalheMateriaRevisao,
@@ -410,5 +447,3 @@ module.exports = {
   excluirRevisao,
   getRevisaoAPI
 };
-
-

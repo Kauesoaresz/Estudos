@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true
       },
+
+      // Mantemos ENUM porque o banco já está assim
       tipo_estudo: {
         type: DataTypes.ENUM(
           "CONTEUDO_NOVO",
@@ -32,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         ),
         allowNull: true
       },
+
       questoes_feitas: {
         type: DataTypes.INTEGER,
         allowNull: true

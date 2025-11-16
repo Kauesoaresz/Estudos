@@ -1,24 +1,1251 @@
-/* BASE */
-@import url("./base/reset.css");
-@import url("./base/tokens.css");
-
-/* LAYOUT */
-@import url("./layout/global.css");
-@import url("./layout/header.css");
-@import url("./layout/footer.css");
-
-/* COMPONENTS */
-@import url("./components/nav.css");
-@import url("./components/buttons.css");
-@import url("./components/cards.css");
-@import url("./components/forms.css");
-@import url("./components/tables.css");
+/* =========================================================
+   KAUÊ STUDY TRACKER - STYLE GLOBAL
+   Estilo: Minimalista Premium
+   Paleta:
+     - Azul primário: #1C9AFF
+     - Fundo claro: #F7F7F7 / #FFFFFF
+     - Texto principal: #111827
+     - Erro: #FF3B30
+   ========================================================= */
 
 
-/* PAGES */
+/* =====================================================================
+   01 — RESET & TOKENS DE TEMA
+   ===================================================================== */
 
-@import url("./pages/revisao.css");
+/* ------------------------
+   RESET SIMPLES
+------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+/* ------------------------
+   TOKENS / THEME
+------------------------- */
+
+:root {
+  --kst-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+
+  --kst-radius-xs: 4px;
+  --kst-radius-sm: 6px;
+  --kst-radius-md: 10px;
+  --kst-radius-lg: 16px;
+  --kst-radius-xl: 22px;
+
+  --kst-shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.06);
+  --kst-shadow-subtle: 0 2px 8px rgba(15, 23, 42, 0.06);
+
+  --kst-transition-fast: 0.16s ease-out;
+  --kst-transition-med: 0.22s ease-out;
+}
+
+/* Tema claro (padrão) */
+body.theme-light,
+body:not(.theme-light):not(.theme-dark) {
+  --kst-bg-body: #f7f7f7;
+  --kst-bg-elevated: #ffffff;
+  --kst-bg-elevated-soft: #f9fafb;
+  --kst-bg-header: #ffffff;
+
+  --kst-border-subtle: #e5e7eb;
+  --kst-border-soft: #e5e7eb;
+
+  --kst-text-main: #111827;
+  --kst-text-muted: #6b7280;
+  --kst-text-soft: #9ca3af;
+  --kst-text-on-primary: #ffffff;
+
+  --kst-primary: #1c9aff;
+  --kst-primary-soft: rgba(28, 154, 255, 0.08);
+  --kst-primary-soft-strong: rgba(28, 154, 255, 0.12);
+
+  --kst-danger: #ff3b30;
+  --kst-danger-soft: rgba(255, 59, 48, 0.1);
+
+  --kst-success: #22c55e;
+  --kst-success-soft: rgba(34, 197, 94, 0.12);
+
+  --kst-scrollbar-bg: rgba(148, 163, 184, 0.25);
+  --kst-scrollbar-thumb: rgba(148, 163, 184, 0.9);
+}
+
+/* Tema escuro */
+body.theme-dark {
+  --kst-bg-body: #020617;
+  --kst-bg-elevated: #020617;
+  --kst-bg-elevated-soft: #020617;
+  --kst-bg-header: #020617;
+
+  --kst-border-subtle: #1f2937;
+  --kst-border-soft: #111827;
+
+  --kst-text-main: #e5e7eb;
+  --kst-text-muted: #9ca3af;
+  --kst-text-soft: #6b7280;
+  --kst-text-on-primary: #ffffff;
+
+  --kst-primary: #1c9aff;
+  --kst-primary-soft: rgba(28, 154, 255, 0.12);
+  --kst-primary-soft-strong: rgba(28, 154, 255, 0.2);
+
+  --kst-danger: #ff554a;
+  --kst-danger-soft: rgba(255, 85, 74, 0.25);
+
+  --kst-success: #4ade80;
+  --kst-success-soft: rgba(74, 222, 128, 0.18);
+
+  --kst-scrollbar-bg: rgba(30, 41, 59, 0.9);
+  --kst-scrollbar-thumb: rgba(148, 163, 184, 1);
+}
 
 
-/* UTILS */
-@import url("./utils/responsive.css");
+/* =====================================================================
+   02 — BASE GLOBAL & LAYOUT
+   ===================================================================== */
+
+/* ------------------------
+   BASE GLOBAL
+------------------------- */
+
+body {
+  font-family: var(--kst-font-sans);
+  background: radial-gradient(circle at top left, rgba(28, 154, 255, 0.1), transparent 55%),
+              radial-gradient(circle at bottom right, rgba(28, 154, 255, 0.08), transparent 55%),
+              var(--kst-bg-body);
+  color: var(--kst-text-main);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Suaviza rolagem */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar discreta (desktop) */
+@media (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--kst-scrollbar-thumb) var(--kst-scrollbar-bg);
+  }
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  *::-webkit-scrollbar-track {
+    background: var(--kst-scrollbar-bg);
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--kst-scrollbar-thumb);
+    border-radius: 999px;
+  }
+}
+
+/* Links */
+a {
+  color: var(--kst-primary);
+  text-decoration: none;
+  transition: color var(--kst-transition-fast), opacity var(--kst-transition-fast);
+}
+
+a:hover {
+  opacity: 0.85;
+}
+
+/* ------------------------
+   LAYOUT GERAL
+------------------------- */
+
+.kst-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--kst-border-subtle);
+}
+
+body.theme-dark .kst-header {
+  background: rgba(2, 6, 23, 0.92);
+}
+
+.kst-header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.65rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Container padrão */
+.kst-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+/* Main ocupa altura toda */
+.kst-main {
+  flex: 1;
+}
+
+/* Footer */
+.kst-footer {
+  border-top: 1px solid var(--kst-border-subtle);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  margin-top: auto;
+}
+
+body.theme-dark .kst-footer {
+  background: rgba(2, 6, 23, 0.9);
+}
+
+.kst-footer .kst-container {
+  padding: 0.9rem 1.25rem 1.1rem;
+  font-size: 0.82rem;
+  color: var(--kst-text-muted);
+  text-align: center;
+}
+
+
+/* =====================================================================
+   03 — HEADER, NAV & TOPO  (VERSÃO PREMIUM)
+   ===================================================================== */
+
+/* ------------------------
+   HEADER: BRAND + NAV
+------------------------- */
+
+.kst-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* LOGO */
+.kst-logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kst-logo-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(28,154,255,0.45);
+  padding: 1.5px;
+  background: radial-gradient(circle at top, rgba(28,154,255,0.20), transparent 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+}
+
+.kst-logo-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+/* BRAND */
+.kst-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.kst-app-name {
+  font-size: 0.80rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--kst-text-main);
+}
+
+.kst-app-subtitle {
+  font-size: 0.72rem;
+  color: var(--kst-text-muted);
+  opacity: 0.85;
+}
+
+/* NAV DESKTOP */
+.kst-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.kst-nav-group-top {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Item topo */
+.kst-nav-top-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.84rem;
+  color: var(--kst-text-muted);
+  padding: 0.25rem 0;
+}
+
+.kst-nav-top-trigger,
+.kst-nav-top-item button {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.84rem;
+  cursor: pointer;
+  color: var(--kst-text-muted);
+}
+
+.kst-nav-top-label {
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Hover */
+.kst-nav-top-item:hover .kst-nav-top-label,
+.kst-nav-top-item--has-dropdown:hover .kst-nav-top-label {
+  color: var(--kst-text-main);
+}
+
+/* Underline */
+.kst-nav-top-underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.28rem;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg,#1C9AFF,#62c3ff);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--kst-transition-med);
+  opacity: 0.7;
+}
+
+.kst-nav-top-item:hover .kst-nav-top-underline,
+.kst-nav-top-item--has-dropdown:hover .kst-nav-top-underline {
+  transform: scaleX(1);
+}
+
+/* DROPDOWN */
+.kst-nav-top-item--has-dropdown {
+  position: relative;
+}
+
+/* Drop DOWN BASE */
+.kst-nav-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  
+  min-width: 220px;
+  background: var(--kst-bg-elevated);
+  border-radius: 0.75rem;
+  border: 1px solid var(--kst-border-subtle);
+
+  padding: 0.45rem;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.09),
+    0 2px 8px rgba(0,0,0,0.04);
+
+  display: none;
+
+  /* ESSENCIAL: SEM TRANSIÇÕES DE POSIÇÃO */
+  transition: opacity .12s ease-out;
+  opacity: 0;
+
+  /* evita sumir quando o mouse sai da label */
+  pointer-events: none;
+}
+
+/* Mostrar */
+.kst-nav-top-item--has-dropdown:hover .kst-nav-dropdown {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Pequeno espaço acima para evitar "perder" o hover */
+.kst-nav-dropdown::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: transparent;
+  pointer-events: auto;
+}
+
+/* LINKS INTERNOS */
+.kst-nav-dropdown-link {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.84rem;
+  border-radius: 0.55rem;
+  color: var(--kst-text-muted);
+  transition: background .15s ease, color .15s ease;
+}
+
+/* HOVER LINKS */
+.kst-nav-dropdown-link:hover {
+  background: var(--kst-primary-soft);
+  color: var(--kst-text-main);
+}
+
+/* HEADER RIGHT */
+.kst-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* SWITCH TEMA */
+.kst-theme-switch {
+  position: relative;
+  width: 42px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated-soft);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.kst-theme-switch-knob {
+  width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,#f9fafb,#d1d5db);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.3);
+  transform: translateX(0);
+  transition: transform var(--kst-transition-med);
+}
+
+body.theme-dark .kst-theme-switch-knob {
+  transform: translateX(18px);
+}
+
+/* MOBILE MENU */
+.kst-nav-toggle {
+  display: none;
+  width: 32px;
+  height: 28px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.kst-nav-toggle span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--kst-text-main);
+  transition: transform .16s ease, opacity .16s ease;
+}
+
+/* Mobile open state */
+.kst-nav-toggle.is-open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.kst-nav-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+.kst-nav-toggle.is-open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ------------------------
+   RESPONSIVIDADE HEADER
+------------------------- */
+@media (max-width: 900px) {
+
+  .kst-header-inner {
+    padding: 0.45rem 1rem;
+  }
+
+  .kst-header-nav {
+    position: fixed;
+    inset: 60px 0 auto 0;
+    display: none;
+    background: var(--kst-bg-body);
+    padding: 0.6rem 1.25rem 1.1rem;
+    border-bottom: 1px solid var(--kst-border-subtle);
+    animation: menuSlide .20s ease-out;
+  }
+
+  @keyframes menuSlide {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .kst-header-nav.is-open {
+    display: block;
+  }
+
+  .kst-nav-group-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+
+  .kst-nav-top-item,
+  .kst-nav-top-trigger {
+    width: 100%;
+    padding: 0.4rem 0;
+    justify-content: space-between;
+  }
+
+  .kst-nav-dropdown {
+    position: static;
+    border-radius: 0.5rem;
+    margin-top: 0.35rem;
+    border: 1px solid var(--kst-border-subtle);
+    box-shadow: none;
+  }
+
+  /* dropdown abre com clique */
+  .kst-nav-top-item--has-dropdown .kst-nav-dropdown {
+    display: none;
+  }
+
+  .kst-nav-top-item--has-dropdown.is-open .kst-nav-dropdown {
+    display: block;
+  }
+
+  .kst-nav-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+
+
+/* =====================================================================
+   04 — SEÇÕES, GRID & ESTRUTURA
+   ===================================================================== */
+
+/* ------------------------
+   SEÇÕES
+------------------------- */
+
+.kst-section {
+  margin-bottom: 2.25rem;
+}
+
+.kst-section h2 {
+  font-size: 1.25rem;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.02em;
+}
+
+.kst-section-subtitle {
+  margin: 0 0 1.1rem;
+  font-size: 0.9rem;
+  color: var(--kst-text-muted);
+}
+
+/* ------------------------
+   GRID DASHBOARD / CHARTS
+------------------------- */
+
+.kst-dashboard-grid,
+.kst-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+
+/* =====================================================================
+   05 — COMPONENTES (CARDS, BOTÕES, BADGES, ALERTAS)
+   ===================================================================== */
+
+/* ------------------------
+   CARDS
+------------------------- */
+
+.kst-card {
+  border-radius: var(--kst-radius-lg);
+  background: var(--kst-bg-elevated);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: var(--kst-shadow-subtle);
+  padding: 1rem 1.1rem;
+}
+
+.kst-card-kpi {
+  padding: 1rem 1.15rem;
+}
+
+.kst-kpi-number {
+  margin: 0.3rem 0 0.2rem;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.kst-kpi-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--kst-text-muted);
+}
+
+.kst-chart-subtitle {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  color: var(--kst-text-muted);
+}
+
+/* Canvas ocupa largura total */
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* ------------------------
+   BOTÕES
+------------------------- */
+
+.kst-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: var(--kst-bg-elevated-soft);
+  color: var(--kst-text-main);
+  transition: background var(--kst-transition-fast), box-shadow var(--kst-transition-fast),
+    transform var(--kst-transition-fast), border-color var(--kst-transition-fast),
+    color var(--kst-transition-fast);
+}
+
+.kst-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-btn-primary {
+  background: linear-gradient(135deg, #1c9aff, #38bdf8);
+  color: var(--kst-text-on-primary);
+  border-color: rgba(15, 23, 42, 0.15);
+}
+
+.kst-btn-primary:hover {
+  box-shadow: 0 14px 30px rgba(28, 154, 255, 0.35);
+}
+
+.kst-btn-secondary {
+  background: transparent;
+  border-color: var(--kst-border-subtle);
+  color: var(--kst-text-main);
+}
+
+.kst-btn-danger {
+  background: var(--kst-danger);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.kst-btn-xs {
+  padding: 0.25rem 0.8rem;
+  font-size: 0.78rem;
+}
+
+/* Ações em linha (tabelas) */
+.kst-link-inline {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: var(--kst-primary);
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.kst-link-inline:hover {
+  text-decoration: underline;
+}
+
+.kst-link-danger {
+  color: var(--kst-danger);
+}
+
+/* Quick actions (home) */
+.kst-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* ------------------------
+   BADGES
+------------------------- */
+
+.kst-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.12rem 0.55rem;
+  font-size: 0.72rem;
+  border-radius: 999px;
+  background: var(--kst-primary-soft);
+  color: var(--kst-text-main);
+}
+
+/* ------------------------
+   ALERTAS
+------------------------- */
+
+.kst-alert {
+  border-radius: var(--kst-radius-md);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  border: 1px solid transparent;
+}
+
+.kst-alert-success {
+  background: var(--kst-success-soft);
+  border-color: rgba(22, 163, 74, 0.4);
+  color: var(--kst-text-main);
+}
+
+.kst-alert-error {
+  background: var(--kst-danger-soft);
+  border-color: rgba(248, 113, 113, 0.6);
+  color: var(--kst-text-main);
+}
+
+
+/* =====================================================================
+   06 — COMPONENTES (FORMULÁRIOS, TABELAS, FILTER BAR, LISTAS)
+   ===================================================================== */
+
+/* ------------------------
+   FORMULÁRIOS
+------------------------- */
+
+.kst-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.kst-form-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.kst-form-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.kst-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.kst-label {
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--kst-text-main);
+}
+
+/* Inputs base */
+.kst-input,
+.kst-select,
+.kst-textarea,
+.kst-textarea textarea {
+  width: 100%;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--kst-radius-md);
+  border: 1px solid var(--kst-border-subtle);
+  font: inherit;
+  font-size: 0.87rem;
+  color: var(--kst-text-main);
+  background: var(--kst-bg-elevated-soft);
+  outline: none;
+  transition: border-color var(--kst-transition-fast), box-shadow var(--kst-transition-fast),
+    background var(--kst-transition-fast);
+}
+
+.kst-input:focus,
+.kst-select:focus,
+.kst-textarea:focus {
+  border-color: rgba(28, 154, 255, 0.9);
+  box-shadow: 0 0 0 1px rgba(28, 154, 255, 0.4);
+  background: #ffffff;
+}
+
+.kst-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Fieldset */
+.kst-fieldset {
+  border-radius: var(--kst-radius-lg);
+  border: 1px dashed var(--kst-border-subtle);
+  padding: 0.9rem 1rem 1rem;
+  background: radial-gradient(circle at top left, rgba(28, 154, 255, 0.06), transparent 55%),
+              var(--kst-bg-elevated);
+}
+
+.kst-fieldset legend {
+  padding: 0 0.4rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+/* Ações form */
+.kst-form-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* Form inline (materias etc.) */
+.kst-form-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+/* Checkbox/Select padrão */
+.kst-select {
+  padding-right: 0.9rem;
+}
+
+/* ------------------------
+   TABELAS
+------------------------- */
+
+.kst-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.kst-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.kst-table thead {
+  background: var(--kst-bg-elevated-soft);
+}
+
+.kst-table thead th {
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--kst-text-muted);
+  border-bottom: 1px solid var(--kst-border-subtle);
+}
+
+.kst-table tbody td {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.kst-table tbody tr:hover {
+  background: rgba(28, 154, 255, 0.03);
+}
+
+/* Ações dentro da tabela (materias) */
+.kst-table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* ------------------------
+   FILTER BAR
+------------------------- */
+
+.kst-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--kst-radius-lg);
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.82rem;
+}
+
+.kst-filter-group label {
+  font-weight: 500;
+  color: var(--kst-text-main);
+}
+
+/* ------------------------
+   HOME (Painel geral)
+------------------------- */
+
+.kst-section h2 + .kst-dashboard-grid {
+  margin-top: 0.8rem;
+}
+
+/* ------------------------
+   LISTAS SIMPLES
+------------------------- */
+
+.kst-home-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0;
+}
+
+.kst-home-list li {
+  font-size: 0.86rem;
+  color: var(--kst-text-main);
+  padding: 0.25rem 0;
+}
+
+
+/* =====================================================================
+   07 — RESPONSIVIDADE GERAL
+   ===================================================================== */
+
+@media (max-width: 640px) {
+  .kst-container {
+    padding-inline: 1rem;
+  }
+
+  .kst-section {
+    margin-bottom: 1.9rem;
+  }
+}
+
+
+/* =====================================================================
+   08 — PÁGINA: REVISÃO DA MATÉRIA
+   (centralizado aqui — substitui completamente o antigo revisao_materia.css)
+   ===================================================================== */
+
+
+/* ============================
+   REVISÃO – TÍTULO E CABEÇALHO
+============================ */
+
+.kst-rev-mat-page {
+  padding: 1.5rem 0 2.5rem;
+}
+
+.kst-rev-mat-title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.kst-rev-mat-subtitle {
+  font-size: 0.95rem;
+  color: var(--kst-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+
+
+/* ============================
+   CARD DO RESUMO DA MATÉRIA
+============================ */
+
+.kst-rev-mat-card {
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1.7rem;
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-rev-mat-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.7rem;
+  font-size: 1.2rem;
+}
+
+.kst-rev-mat-list {
+  padding-left: 1rem;
+  margin: 0;
+}
+
+.kst-rev-mat-list li {
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+
+
+/* ============================
+   FORMULÁRIO DE NOVA REVISÃO
+============================ */
+
+.kst-rev-mat-form {
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 1.3rem 1.4rem;
+  margin-bottom: 1.8rem;
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-rev-mat-form h3 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+}
+
+.kst-rev-mat-form .kst-form-group {
+  margin-bottom: 0.9rem;
+}
+
+
+
+/* ============================
+   TABELA DO HISTÓRICO
+============================ */
+
+.kst-rev-mat-table-wrapper {
+  margin-top: 1.5rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated);
+  overflow: hidden;
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-rev-mat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.kst-rev-mat-table thead {
+  background: var(--kst-bg-elevated-soft);
+}
+
+.kst-rev-mat-table th,
+.kst-rev-mat-table td {
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid var(--kst-border-subtle);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.kst-rev-mat-table tbody tr:hover {
+  background: rgba(28, 154, 255, 0.06);
+}
+
+
+
+/* ============================
+   BADGES – TIPOS DE REVISÃO
+============================ */
+
+.kst-rev-badge-tipo {
+  display: inline-flex;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  border: 1px solid transparent;
+}
+
+.kst-rev-badge-tipo--rev {
+  background: var(--kst-success-soft);
+  color: var(--kst-success);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.kst-rev-badge-tipo--est {
+  background: var(--kst-primary-soft);
+  color: var(--kst-primary);
+  border-color: rgba(28, 154, 255, 0.4);
+}
+
+
+
+/* ============================
+   CHECKBOXES DO FORMULÁRIO
+============================ */
+
+.kst-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1rem;
+  margin-top: 0.3rem;
+}
+
+.kst-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.kst-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+
+
+/* ============================
+   FILTRO DO HISTÓRICO
+============================ */
+
+.kst-hist-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.kst-hist-filtros {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.kst-filtro-btn {
+  border-radius: 999px;
+  border: 1px solid var(--kst-border-subtle);
+  padding: 0.25rem 0.9rem;
+  font-size: 0.8rem;
+  background: var(--kst-bg-elevated-soft);
+  cursor: pointer;
+  transition: var(--kst-transition-fast);
+}
+
+.kst-filtro-btn--ativo {
+  background: var(--kst-primary);
+  color: white;
+  border-color: var(--kst-primary);
+}
+
+
+
+/* ============================
+   POPUP DE EDIÇÃO
+============================ */
+
+.kst-popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.kst-popup {
+  background: var(--kst-bg-elevated);
+  padding: 28px;
+  border-radius: 16px;
+  width: 420px;
+  max-width: 95%;
+  box-shadow: var(--kst-shadow-soft);
+  border: 1px solid var(--kst-border-subtle);
+  animation: popupShow .22s ease-out;
+}
+
+@keyframes popupShow {
+  from { opacity: 0; transform: scale(.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.kst-popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+
+/* ====== TOPO HISTÓRICO + FILTROS ====== */
+
+.kst-hist-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.kst-hist-filtros {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.kst-filtro-btn {
+  border-radius: 999px;
+  border: 1px solid #d0d4e4;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.8rem;
+  background: #f5f6fb;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kst-filtro-btn--ativo {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
+}

@@ -1,18 +1,21 @@
 <%- include('partials/header', { tituloPagina }) %>
 
-<link rel="stylesheet" href="/css/pages/revisao_materia.css">
-
 <div class="kst-rev-mat-page kst-container">
 
-  <!-- TÍTULO -->
+  <!-- ============================================
+       TÍTULO DA MATÉRIA
+  ============================================= -->
   <h1 class="kst-rev-mat-title">Revisão – <%= materia.nome %></h1>
-  <p class="kst-rev-mat-subtitle">Veja seu desempenho, registre revisões e acompanhe sua evolução.</p>
+  <p class="kst-rev-mat-subtitle">
+    Veja seu desempenho, registre revisões e acompanhe sua evolução.
+  </p>
 
 
-  <!-- ============================
-       CARD RESUMO
-  ============================= -->
-  <div class="kst-rev-mat-card">
+
+  <!-- ============================================
+       CARD (RESUMO DA MATÉRIA)
+  ============================================= -->
+  <div class="kst-card kst-rev-mat-card">
     <h3>Resumo da matéria</h3>
 
     <ul class="kst-rev-mat-list">
@@ -33,111 +36,107 @@
 
 
 
-  <!-- ============================
-       FORM PARA REGISTRAR NOVA REVISÃO
-  ============================= -->
-  <div class="kst-rev-mat-form">
+  <!-- ============================================
+       FORMULÁRIO PREMIUM
+  ============================================= -->
+  <form action="/revisao/registrar" method="POST" class="kst-form kst-rev-mat-form">
+
     <h3>Registrar revisão desta matéria</h3>
 
-    <form action="/revisao/registrar" method="POST">
+    <input type="hidden" name="materia_id" value="<%= materia.id %>">
 
-      <input type="hidden" name="materia_id" value="<%= materia.id %>">
+    <div class="kst-form-group">
+      <label>Data</label>
+      <input type="date" name="data" class="kst-input" required>
+    </div>
 
-      <div class="kst-form-group">
-        <label>Data</label>
-        <input type="date" name="data" required>
+    <div class="kst-form-group">
+      <label>Tipo(s) de revisão</label>
+
+      <div class="kst-checkbox-group">
+
+        <label class="kst-checkbox">
+          <input type="checkbox" name="tipo_revisao" value="Resumo">
+          <span>Resumo</span>
+        </label>
+
+        <label class="kst-checkbox">
+          <input type="checkbox" name="tipo_revisao" value="Questões">
+          <span>Questões</span>
+        </label>
+
+        <label class="kst-checkbox">
+          <input type="checkbox" name="tipo_revisao" value="Flashcards">
+          <span>Flashcards</span>
+        </label>
+
+        <label class="kst-checkbox">
+          <input type="checkbox" name="tipo_revisao" value="Releitura">
+          <span>Releitura</span>
+        </label>
+
       </div>
+    </div>
 
-      <div class="kst-form-group">
-        <label>Tipo(s) de revisão</label>
+    <div class="kst-form-group">
+      <label>Minutos revisados</label>
+      <input type="number" class="kst-input" name="minutos_estudados" min="1">
+    </div>
 
-        <div class="kst-checkbox-group">
+    <div class="kst-form-group">
+      <label>Tópicos revisados</label>
+      <textarea class="kst-textarea" name="topicos_revisados"></textarea>
+    </div>
 
-          <label class="kst-checkbox">
-            <input type="checkbox" name="tipo_revisao" value="Resumo">
-            <span>Resumo</span>
-          </label>
+    <div class="kst-form-group">
+      <label>Questões feitas</label>
+      <input type="number" class="kst-input" name="questoes_feitas" min="0">
+    </div>
 
-          <label class="kst-checkbox">
-            <input type="checkbox" name="tipo_revisao" value="Questões">
-            <span>Questões</span>
-          </label>
+    <div class="kst-form-group">
+      <label>Questões certas</label>
+      <input type="number" class="kst-input" name="questoes_certas" min="0">
+    </div>
 
-          <label class="kst-checkbox">
-            <input type="checkbox" name="tipo_revisao" value="Flashcards">
-            <span>Flashcards</span>
-          </label>
+    <div class="kst-form-footer">
+      <button type="submit" class="kst-btn kst-btn-primary">Salvar revisão</button>
+    </div>
 
-          <label class="kst-checkbox">
-            <input type="checkbox" name="tipo_revisao" value="Releitura">
-            <span>Releitura</span>
-          </label>
-
-        </div>
-      </div>
-
-      <div class="kst-form-group">
-        <label>Minutos revisados</label>
-        <input type="number" name="minutos_estudados" min="1">
-      </div>
-
-      <div class="kst-form-group">
-        <label>Tópicos revisados</label>
-        <textarea name="topicos_revisados"></textarea>
-      </div>
-
-      <div class="kst-form-group">
-        <label>Questões feitas</label>
-        <input type="number" name="questoes_feitas" min="0">
-      </div>
-
-      <div class="kst-form-group">
-        <label>Questões certas</label>
-        <input type="number" name="questoes_certas" min="0">
-      </div>
-
-      <button type="submit" class="kst-btn kst-btn-primary">
-        Salvar revisão
-      </button>
-
-    </form>
-  </div>
+  </form>
 
 
 
-  <!-- ============================
-       HISTÓRICO + FILTRO
-  ============================= -->
+  <!-- ============================================
+       FILTRO + HISTÓRICO
+  ============================================= -->
   <div class="kst-hist-header-row">
     <h3 class="kst-hist-title">Histórico de estudos e revisões</h3>
 
-    <!-- FILTROS -->
     <div class="kst-hist-filtros">
-      <button
-        type="button"
-        class="kst-filtro-btn kst-filtro-btn--ativo"
-        data-filter-hist="todos">
+
+      <button type="button" class="kst-filtro-btn kst-filtro-btn--ativo" data-filter-hist="todos">
         Todos
       </button>
 
-      <button
-        type="button"
-        class="kst-filtro-btn"
-        data-filter-hist="rev">
+      <button type="button" class="kst-filtro-btn" data-filter-hist="rev">
         Só revisões
       </button>
 
-      <button
-        type="button"
-        class="kst-filtro-btn"
-        data-filter-hist="est">
+      <button type="button" class="kst-filtro-btn" data-filter-hist="est">
         Só estudos
       </button>
+
     </div>
   </div>
 
+
+
+  <!-- ============================================
+       TABELA PREMIUM
+  ============================================= -->
   <div class="kst-rev-mat-table-wrapper">
     <table class="kst-rev-mat-table">
+
       <thead>
         <tr>
           <th>Data</th>
@@ -153,6 +152,7 @@
       <tbody>
         <% estudosDetalhados.forEach(e => { %>
         <tr data-tipo="<%= e.tipo === 'REVISÃO' ? 'rev' : 'est' %>">
+
           <td><%= e.dataLabel %></td>
 
           <td>
@@ -194,49 +194,52 @@
               </button>
             </form>
           </td>
+
         </tr>
         <% }) %>
       </tbody>
 
     </table>
   </div>
+
 </div>
 
 
 
-<!-- =====================================================
-          POPUP DE EDIÇÃO
-===================================================== -->
+
+<!-- ============================================
+     POPUP DE EDIÇÃO (PREMIUM)
+============================================ -->
 <div id="popupEditar" class="kst-popup-overlay">
   <div class="kst-popup">
 
     <h2>Editar revisão</h2>
 
-    <form id="formEditar" method="POST">
+    <form id="formEditar" method="POST" class="kst-form">
 
       <div class="kst-form-group">
         <label>Data</label>
-        <input type="date" id="edit_data" name="data" required>
+        <input type="date" id="edit_data" name="data" class="kst-input" required>
       </div>
 
       <div class="kst-form-group">
         <label>Minutos</label>
-        <input type="number" id="edit_min" name="minutos_estudados" min="1">
+        <input type="number" id="edit_min" name="minutos_estudados" class="kst-input" min="1">
       </div>
 
       <div class="kst-form-group">
         <label>Tópicos revisados</label>
-        <textarea id="edit_topicos" name="topicos_revisados"></textarea>
+        <textarea id="edit_topicos" name="topicos_revisados" class="kst-textarea"></textarea>
       </div>
 
       <div class="kst-form-group">
         <label>Questões feitas</label>
-        <input type="number" id="edit_feitas" name="questoes_feitas" min="0">
+        <input type="number" id="edit_feitas" name="questoes_feitas" class="kst-input" min="0">
       </div>
 
       <div class="kst-form-group">
         <label>Questões certas</label>
-        <input type="number" id="edit_certas" name="questoes_certas" min="0">
+        <input type="number" id="edit_certas" name="questoes_certas" class="kst-input" min="0">
       </div>
 
       <div class="kst-popup-buttons">
@@ -251,6 +254,10 @@
 
 
 
+
+<!-- ============================================
+     SCRIPTS
+============================================ -->
 <script>
   // --------- FILTRO HISTÓRICO (front-end) ----------
   (function () {
@@ -259,32 +266,25 @@
 
     botoes.forEach(btn => {
       btn.addEventListener("click", () => {
-        const filtro = btn.getAttribute("data-filter-hist"); // 'todos', 'rev', 'est'
+        const filtro = btn.getAttribute("data-filter-hist"); 
 
-        // marca botão ativo
         botoes.forEach(b => b.classList.remove("kst-filtro-btn--ativo"));
         btn.classList.add("kst-filtro-btn--ativo");
 
-        // mostra/esconde linhas
         linhas.forEach(tr => {
-          const tipo = tr.getAttribute("data-tipo"); // 'rev' ou 'est'
-          if (filtro === "todos" || filtro === tipo) {
-            tr.style.display = "";
-          } else {
-            tr.style.display = "none";
-          }
+          const tipo = tr.getAttribute("data-tipo");
+          tr.style.display = (filtro === "todos" || filtro === tipo) ? "" : "none";
         });
       });
     });
   })();
 
 
-  // --------- POPUP EDITAR ----------
+  // --------- POPUP EDITAR (CORRIGIDO) ----------
   function abrirPopupEditar(id) {
-    fetch(`/api/revisao/${id}`)
+    fetch(`/revisao/api/revisao/${id}`)
       .then(res => res.json())
       .then(dados => {
-
         document.getElementById("edit_data").value = dados.data;
         document.getElementById("edit_min").value = dados.minutos || "";
         document.getElementById("edit_topicos").value = dados.topicos || "";
@@ -294,6 +294,10 @@
         document.getElementById("formEditar").action = `/revisao/${id}/atualizar`;
 
         document.getElementById("popupEditar").style.display = "flex";
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Não foi possível carregar os dados da revisão para editar.');
       });
   }
 
@@ -301,5 +305,7 @@
     document.getElementById("popupEditar").style.display = "none";
   }
 </script>
+
+
 
 <%- include('partials/footer') %>
