@@ -1347,3 +1347,190 @@ canvas {
   white-space: nowrap;
 }
 
+/* =====================================================================
+   09 — HOME (dashboard principal)
+   ===================================================================== */
+
+/* -------------------------------
+   TÍTULO E SUBTÍTULO PRINCIPAL
+-------------------------------- */
+.kst-home-header {
+  margin-bottom: 2rem;
+}
+
+.kst-home-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.3rem;
+  color: var(--kst-text-main);
+}
+
+.kst-home-subtitle {
+  font-size: 0.95rem;
+  margin: 0;
+  color: var(--kst-text-muted);
+}
+
+
+
+/* -------------------------------
+   GRID DOS KPIs (3 cards)
+-------------------------------- */
+.kst-home-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.kst-home-kpi {
+  padding: 1.4rem 1.6rem;
+  border: 1px solid var(--kst-border-soft);
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  box-shadow: var(--kst-shadow-soft);
+}
+
+.kst-home-kpi-title {
+  margin: 0 0 0.8rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.kst-home-kpi-date {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--kst-text-muted);
+}
+
+/* número grande */
+.kst-kpi-number {
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin: 0.2rem 0 0.6rem;
+  color: var(--kst-primary);
+  letter-spacing: -0.02em;
+}
+
+.kst-kpi-text {
+  margin: 0.25rem 0;
+  font-size: 0.88rem;
+  color: var(--kst-text-muted);
+}
+
+.kst-home-btn-full {
+  margin-top: 0.8rem;
+  display: inline-block;
+}
+
+
+
+/* -------------------------------
+   GRÁFICOS
+-------------------------------- */
+.kst-home-charts-title {
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin: 1.5rem 0 1rem;
+}
+
+.kst-home-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.kst-chart-card {
+  padding: 1.3rem 1.4rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-soft);
+  background: var(--kst-bg-elevated);
+  box-shadow: var(--kst-shadow-soft);
+}
+
+.kst-chart-card h3 {
+  font-size: 1.05rem;
+  margin: 0 0 1rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+/* Caso vazio */
+.kst-home-charts-empty {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.kst-home-charts-empty .kst-btn {
+  flex-shrink: 0;
+}
+
+
+
+/* -------------------------------
+   AÇÕES RÁPIDAS
+-------------------------------- */
+.kst-home-actions {
+  margin-top: 2.5rem;
+}
+
+.kst-home-actions-title {
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.kst-home-actions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.kst-home-actions-grid .kst-btn {
+  padding: 0.65rem 1.2rem;
+}
+
+/* ============================
+   HOME — SELECTOR DOS GRÁFICOS
+============================ */
+
+.kst-chart-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.kst-chart-select {
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--kst-radius-sm);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+
+/* -------------------------------
+   RESPONSIVIDADE EXTRA
+-------------------------------- */
+@media (max-width: 500px) {
+  .kst-home-title {
+    font-size: 1.6rem;
+  }
+
+  .kst-kpi-number {
+    font-size: 1.8rem;
+  }
+
+  .kst-home-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}

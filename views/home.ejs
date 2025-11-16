@@ -1,149 +1,190 @@
 <%- include("partials/header", { tituloPagina: tituloPagina }) %>
 
-<section class="kst-section">
-  <h2>Painel geral</h2>
-  <p class="kst-section-subtitle">
-    Visão rápida do que você está fazendo hoje, na semana e no mês.
-  </p>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <div class="kst-dashboard-grid">
+
+<section class="kst-home-section kst-container">
+
+  <!-- ======================================
+       BLOCO 1: PAINEL GERAL
+  ======================================= -->
+  <header class="kst-home-header">
+    <h1 class="kst-home-title">Painel geral</h1>
+    <p class="kst-home-subtitle">
+      Visão rápida do seu dia, semana e mês.
+    </p>
+  </header>
+
+
+  <!-- ======================================
+       BLOCO 2: KPI CARDS (Hoje, 7 dias, 30 dias)
+  ======================================= -->
+  <div class="kst-home-kpi-grid">
+
     <!-- HOJE -->
-    <div class="kst-card kst-card-kpi">
-      <h3>
+    <div class="kst-card kst-home-kpi">
+      <h3 class="kst-home-kpi-title">
         Hoje
         <% if (resumoHoje.existe && resumoHoje.dataLabel) { %>
-          (<%= resumoHoje.dataLabel %>)
+          <span class="kst-home-kpi-date">(<%= resumoHoje.dataLabel %>)</span>
         <% } %>
       </h3>
 
       <% if (!resumoHoje.existe) { %>
-        <p class="kst-kpi-text">Nenhum dia registrado hoje ainda.</p>
-        <p>
-          <a href="/dia/novo" class="kst-btn kst-btn-primary">
-            Registrar dia de hoje
-          </a>
-        </p>
+
+        <p class="kst-kpi-text">Nenhum dia registrado hoje.</p>
+        <a href="/dia/novo" class="kst-btn kst-btn-primary kst-home-btn-full">
+          Registrar dia de hoje
+        </a>
+
       <% } else { %>
-        <p class="kst-kpi-number">
-          <%= resumoHoje.horasEstudo.toFixed(2) %> h
-        </p>
+
+        <p class="kst-kpi-number"><%= resumoHoje.horasEstudo.toFixed(2) %> h</p>
+
         <p class="kst-kpi-text">
-          <strong><%= resumoHoje.questoes %></strong> questões resolvidas.
+          Questões: <strong><%= resumoHoje.questoes %></strong>
         </p>
+
         <p class="kst-kpi-text">
           Sono:
           <% if (resumoHoje.horasSono != null) { %>
-            <%= resumoHoje.horasSono.toFixed(1) %> h
+            <%= resumoHoje.horasSono.toFixed(1) %>h
           <% } else { %>
             —
           <% } %>
-          <br />
-          Foco: <%= resumoHoje.foco != null ? resumoHoje.foco : "—" %> |
-          Energia: <%= resumoHoje.energia != null ? resumoHoje.energia : "—" %><br />
-          Humor:
-          <%= resumoHoje.humor ? resumoHoje.humor.toLowerCase() : "—" %>
         </p>
-        <p>
-          <a href="/dias" class="kst-link-inline">Ver histórico de dias</a>
+
+        <p class="kst-kpi-text">
+          Foco: <%= resumoHoje.foco ?? "—" %> |
+          Energia: <%= resumoHoje.energia ?? "—" %><br>
+          Humor: <%= resumoHoje.humor ? resumoHoje.humor.toLowerCase() : "—" %>
         </p>
+
+        <a href="/dias" class="kst-link-inline">Ver histórico de dias</a>
+
       <% } %>
     </div>
+
 
     <!-- ÚLTIMOS 7 DIAS -->
-    <div class="kst-card kst-card-kpi">
-      <h3>Últimos 7 dias</h3>
+    <div class="kst-card kst-home-kpi">
+      <h3 class="kst-home-kpi-title">Últimos 7 dias</h3>
 
       <% if (!resumo7 || resumo7.totalDias === 0) { %>
+
         <p class="kst-kpi-text">Nenhum registro nos últimos 7 dias.</p>
+
       <% } else { %>
+
         <p class="kst-kpi-text">
-          Dias registrados:
-          <strong><%= resumo7.totalDias %></strong><br />
-          Dias com estudo:
-          <strong><%= resumo7.diasComEstudo %></strong>
+          Dias registrados: <strong><%= resumo7.totalDias %></strong><br>
+          Dias com estudo: <strong><%= resumo7.diasComEstudo %></strong>
         </p>
+
         <p class="kst-kpi-text">
-          Horas totais:
-          <strong><%= resumo7.somaHoras.toFixed(2) %> h</strong><br />
-          Média (só dias com estudo):
-          <strong><%= resumo7.mediaHoras.toFixed(2) %> h/dia</strong>
+          Horas totais: <strong><%= resumo7.somaHoras.toFixed(2) %>h</strong><br>
+          Média: <strong><%= resumo7.mediaHoras.toFixed(2) %>h/dia</strong>
         </p>
+
         <p class="kst-kpi-text">
-          Questões totais:
-          <strong><%= resumo7.somaQuestoes %></strong><br />
-          Média (só dias com estudo):
-          <strong><%= resumo7.mediaQuestoes.toFixed(1) %></strong>
+          Questões totais: <strong><%= resumo7.somaQuestoes %></strong><br>
+          Média: <strong><%= resumo7.mediaQuestoes.toFixed(1) %></strong>
         </p>
+
       <% } %>
     </div>
+
 
     <!-- ÚLTIMOS 30 DIAS -->
-    <div class="kst-card kst-card-kpi">
-      <h3>Últimos 30 dias</h3>
+    <div class="kst-card kst-home-kpi">
+      <h3 class="kst-home-kpi-title">Últimos 30 dias</h3>
 
       <% if (!resumo30 || resumo30.totalDias === 0) { %>
+
         <p class="kst-kpi-text">Nenhum registro nos últimos 30 dias.</p>
+
       <% } else { %>
+
         <p class="kst-kpi-text">
-          Dias registrados:
-          <strong><%= resumo30.totalDias %></strong><br />
-          Dias com estudo:
-          <strong><%= resumo30.diasComEstudo %></strong>
+          Dias registrados: <strong><%= resumo30.totalDias %></strong><br>
+          Dias com estudo: <strong><%= resumo30.diasComEstudo %></strong>
         </p>
+
         <p class="kst-kpi-text">
-          Horas totais:
-          <strong><%= resumo30.somaHoras.toFixed(2) %> h</strong><br />
-          Média (só dias com estudo):
-          <strong><%= resumo30.mediaHoras.toFixed(2) %> h/dia</strong>
+          Horas totais: <strong><%= resumo30.somaHoras.toFixed(2) %>h</strong><br>
+          Média: <strong><%= resumo30.mediaHoras.toFixed(2) %>h/dia</strong>
         </p>
+
         <p class="kst-kpi-text">
-          Questões totais:
-          <strong><%= resumo30.somaQuestoes %></strong><br />
-          Média (só dias com estudo):
-          <strong><%= resumo30.mediaQuestoes.toFixed(1) %></strong>
+          Questões totais: <strong><%= resumo30.somaQuestoes %></strong><br>
+          Média: <strong><%= resumo30.mediaQuestoes.toFixed(1) %></strong>
         </p>
+
       <% } %>
     </div>
+
   </div>
 
-  <!-- Gráficos últimos 30 dias -->
-  <div class="kst-section" style="margin-top: 2rem;">
-    <h2>Evolução diária (últimos 30 dias)</h2>
+
+
+  <!-- ======================================
+       BLOCO 3: GRÁFICOS 30 DIAS
+  ======================================= -->
+  <section class="kst-home-charts">
+
+    <h2 class="kst-home-charts-title">Evolução diária (últimos 30 dias)</h2>
 
     <% if (!labels30 || labels30.length === 0) { %>
-      <p>Você ainda não tem dados suficientes. Comece registrando seus dias de estudo.</p>
-      <p>
+
+      <p>Você ainda não possui dados suficientes.</p>
+
+      <div class="kst-home-charts-empty">
         <a href="/dia/novo" class="kst-btn kst-btn-primary">Registrar dia</a>
-        <a href="/estudos/novo" class="kst-btn">Registrar estudo por matéria</a>
-      </p>
+        <a href="/estudos/novo" class="kst-btn">Registrar estudo</a>
+      </div>
+
     <% } else { %>
-      <div class="kst-charts-grid">
-        <div class="kst-card">
+
+      <div class="kst-home-charts-grid">
+
+        <div class="kst-card kst-chart-card">
           <h3>Horas estudadas</h3>
           <canvas id="chartHorasHome"></canvas>
         </div>
-        <div class="kst-card">
+
+        <div class="kst-card kst-chart-card">
           <h3>Questões resolvidas</h3>
           <canvas id="chartQuestoesHome"></canvas>
         </div>
-      </div>
-    <% } %>
-  </div>
 
-  <!-- Ações rápidas -->
-  <div class="kst-section" style="margin-top: 2rem;">
-    <h2>Ações rápidas</h2>
-    <div class="kst-quick-actions">
+      </div>
+
+    <% } %>
+
+  </section>
+
+
+
+  <!-- ======================================
+       BLOCO 4: AÇÕES RÁPIDAS
+  ======================================= -->
+  <section class="kst-home-actions">
+    <h2 class="kst-home-actions-title">Ações rápidas</h2>
+
+    <div class="kst-home-actions-grid">
       <a href="/dia/novo" class="kst-btn kst-btn-primary">Registrar dia</a>
       <a href="/estudos/novo" class="kst-btn">Registrar estudo por matéria</a>
       <a href="/simulados/novo" class="kst-btn">Registrar simulado</a>
       <a href="/estatisticas/dias" class="kst-btn">Ver estatísticas gerais</a>
     </div>
-  </div>
+  </section>
+
 </section>
 
-<%- include("partials/footer") %>
 
+<!-- ======================================
+     SCRIPTS – Gráficos
+====================================== -->
 <% if (labels30 && labels30.length > 0) { %>
 <script>
   (function () {
@@ -151,51 +192,39 @@
     const horas = <%- JSON.stringify(horas30) %>;
     const questoes = <%- JSON.stringify(questoes30) %>;
 
-    const ctxHoras = document.getElementById("chartHorasHome");
-    if (ctxHoras) {
-      new Chart(ctxHoras, {
-        type: "line",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: "Horas de estudo",
-            data: horas,
-            fill: false,
-            tension: 0.2
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    }
 
-    const ctxQuestoes = document.getElementById("chartQuestoesHome");
-    if (ctxQuestoes) {
-      new Chart(ctxQuestoes, {
-        type: "bar",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: "Questões resolvidas",
-            data: questoes
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    }
+    // Horas
+    new Chart(document.getElementById("chartHorasHome"), {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Horas de estudo",
+          data: horas,
+          borderWidth: 2,
+          tension: 0.25
+        }]
+      },
+      options: { responsive: true }
+    });
+
+
+    // Questões
+    new Chart(document.getElementById("chartQuestoesHome"), {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Questões resolvidas",
+          data: questoes,
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true }
+    });
+
   })();
 </script>
 <% } %>
+
+<%- include("partials/footer") %>
