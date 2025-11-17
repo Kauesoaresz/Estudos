@@ -13,6 +13,7 @@ const estudoRoutes = require("./routes/estudoRoutes");
 const simuladoRoutes = require("./routes/simuladoRoutes");
 const estatisticasRoutes = require("./routes/estatisticasRoutes");
 const revisaoRoutes = require("./routes/revisaoRoutes");
+const metasRoutes = require("./routes/metasRoutes");
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use("/estudos", estudoRoutes);
 app.use("/simulados", simuladoRoutes);
 app.use("/estatisticas", estatisticasRoutes);
 app.use("/revisao", revisaoRoutes);
+app.use(metasRoutes);
 
 // ---------------------
 // SERVIDOR
