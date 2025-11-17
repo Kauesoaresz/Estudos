@@ -1,20 +1,22 @@
 // controllers/simuladoController.js
 //
 // Controla tudo relacionado aos SIMULADOS:
-// - Form novo simulado
+// - Form criar simulado
 // - Criar simulado
-// - Listar simulados + filtro por período
-// - Detalhar simulado
-// - Editar simulado
-// - Atualizar simulado
-// - Excluir simulado
+// - Listar simulados + filtro
+// - Detalhar
+// - Editar
+// - Atualizar
+// - Excluir
+// - Sistema automático de medalhas
 
 const { Simulado, Dia } = require("../models");
 const { toISODate, formatarDDMMYYYY } = require("../utils/datas");
+const { verificarMedalhas } = require("../services/medalhasService");
 
-// ---------------------
-// FORM: NOVO SIMULADO
-// ---------------------
+// ===================================================================
+// FORM: Novo Simulado
+// ===================================================================
 function novoSimuladoForm(req, res) {
   const sucesso = req.query.sucesso === "1";
   const erro = req.query.erro === "1";
@@ -26,9 +28,9 @@ function novoSimuladoForm(req, res) {
   });
 }
 
-// ---------------------
+// ===================================================================
 // CRIAR SIMULADO
-// ---------------------
+// ===================================================================
 async function criarSimulado(req, res) {
   try {
     const {
@@ -49,56 +51,45 @@ async function criarSimulado(req, res) {
 
     // Garante que o dia existe
     let dia = await Dia.findOne({ where: { data } });
-    if (!dia) {
-      dia = await Dia.create({ data });
-    }
+    if (!dia) dia = await Dia.create({ data });
 
     await Simulado.create({
       dia_id: dia.id,
-      tempo_total_minutos: tempo_total_minutos
-        ? Number(tempo_total_minutos)
-        : null,
+      tempo_total_minutos: tempo_total_minutos ? Number(tempo_total_minutos) : null,
       resultado_resumo: resultado_resumo || null,
       area_que_mais_errou: area_que_mais_errou || null,
       principal_dificuldade: principal_dificuldade || null,
-      acertos_linguagens: acertos_linguagens
-        ? Number(acertos_linguagens)
-        : null,
-      acertos_humanas: acertos_humanas
-        ? Number(acertos_humanas)
-        : null,
-      acertos_naturezas: acertos_naturezas
-        ? Number(acertos_naturezas)
-        : null,
-      acertos_matematica: acertos_matematica
-        ? Number(acertos_matematica)
-        : null
+
+      acertos_linguagens: acertos_linguagens !== "" ? Number(acertos_linguagens) : null,
+      acertos_humanas: acertos_humanas !== "" ? Number(acertos_humanas) : null,
+      acertos_naturezas: acertos_naturezas !== "" ? Number(acertos_naturezas) : null,
+      acertos_matematica: acertos_matematica !== "" ? Number(acertos_matematica) : null
     });
+
+    // ===============================
+    // CHECK AUTOMÁTICO DE MEDALHAS
+    // ===============================
+    const novasMedalhas = await verificarMedalhas();
+    if (novasMedalhas.length > 0) {
+      return res.render("medalha_nova", { novasMedalhas });
+    }
 
     return res.redirect("/simulados/novo?sucesso=1");
   } catch (error) {
     console.error("❌ Erro ao salvar simulado:", error);
-    return res
-      .status(500)
-      .send("Erro ao salvar simulado. Veja o console.");
+    return res.status(500).send("Erro ao salvar simulado. Veja o console.");
   }
 }
 
-// ---------------------
-// LISTAR SIMULADOS + FILTRO
-// ---------------------
+// ===================================================================
+// LISTAR SIMULADOS COM FILTRO
+// ===================================================================
 async function listarSimulados(req, res) {
   const { de, ate } = req.query;
 
   try {
     const simuladosBrutos = await Simulado.findAll({
-      include: [
-        {
-          model: Dia,
-          as: "dia",
-          attributes: ["data"]
-        }
-      ],
+      include: [{ model: Dia, as: "dia", attributes: ["data"] }],
       order: [["id", "DESC"]]
     });
 
@@ -106,21 +97,19 @@ async function listarSimulados(req, res) {
       const sim = s.get({ plain: true });
 
       let dataISO = sim.dia?.data;
-      if (dataISO instanceof Date) {
-        dataISO = toISODate(dataISO);
-      }
+      if (dataISO instanceof Date) dataISO = toISODate(dataISO);
 
       const dataFormatada = dataISO ? formatarDDMMYYYY(dataISO) : null;
 
-      const acertosL = sim.acertos_linguagens || 0;
-      const acertosH = sim.acertos_humanas || 0;
-      const acertosN = sim.acertos_naturezas || 0;
-      const acertosM = sim.acertos_matematica || 0;
-      const totalAcertos = acertosL + acertosH + acertosN + acertosM;
+      const totalAcertos =
+        (sim.acertos_linguagens || 0) +
+        (sim.acertos_humanas || 0) +
+        (sim.acertos_naturezas || 0) +
+        (sim.acertos_matematica || 0);
 
       return {
         id: sim.id,
-        dataISO: dataISO || null,
+        dataISO,
         dataFormatada,
         tempo_total_minutos: sim.tempo_total_minutos,
         resultado_resumo: sim.resultado_resumo,
@@ -136,16 +125,8 @@ async function listarSimulados(req, res) {
 
     let simulados = simuladosProcessados;
 
-    if (de) {
-      simulados = simulados.filter(
-        (s) => s.dataISO && s.dataISO >= de
-      );
-    }
-    if (ate) {
-      simulados = simulados.filter(
-        (s) => s.dataISO && s.dataISO <= ate
-      );
-    }
+    if (de) simulados = simulados.filter((s) => s.dataISO && s.dataISO >= de);
+    if (ate) simulados = simulados.filter((s) => s.dataISO && s.dataISO <= ate);
 
     res.render("simulados_lista", {
       tituloPagina: "Histórico de simulados",
@@ -155,74 +136,59 @@ async function listarSimulados(req, res) {
     });
   } catch (error) {
     console.error("❌ Erro ao listar simulados:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar simulados. Veja o console.");
+    return res.status(500).send("Erro ao carregar simulados.");
   }
 }
 
-// ---------------------
-// DETALHE DE UM SIMULADO
-// ---------------------
+// ===================================================================
+// DETALHAR SIMULADO
+// ===================================================================
 async function detalheSimulado(req, res) {
-  const id = req.params.id;
   try {
-    const simulado = await Simulado.findByPk(id, {
+    const simulado = await Simulado.findByPk(req.params.id, {
       include: [{ model: Dia, as: "dia", attributes: ["data"] }]
     });
 
-    if (!simulado) {
-      return res.status(404).send("Simulado não encontrado.");
-    }
-
-    const sim = simulado.get({ plain: true });
+    if (!simulado) return res.status(404).send("Simulado não encontrado.");
 
     res.render("simulado_detalhe", {
       tituloPagina: "Detalhes do simulado",
-      simulado: sim
+      simulado: simulado.get({ plain: true })
     });
   } catch (error) {
     console.error("❌ Erro ao carregar detalhes do simulado:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar detalhes do simulado. Veja o console.");
+    return res.status(500).send("Erro ao carregar detalhes do simulado.");
   }
 }
 
-// ---------------------
-// EDITAR SIMULADO (FORM)
-// ---------------------
+// ===================================================================
+// EDITAR FORM
+// ===================================================================
 async function editarSimuladoForm(req, res) {
-  const id = req.params.id;
   try {
-    const simulado = await Simulado.findByPk(id, {
+    const simulado = await Simulado.findByPk(req.params.id, {
       include: [{ model: Dia, as: "dia", attributes: ["data"] }]
     });
 
-    if (!simulado) {
-      return res.status(404).send("Simulado não encontrado.");
-    }
-
-    const sim = simulado.get({ plain: true });
+    if (!simulado) return res.status(404).send("Simulado não encontrado.");
 
     res.render("simulado_editar", {
       tituloPagina: "Editar simulado",
-      simulado: sim
+      simulado: simulado.get({ plain: true })
     });
   } catch (error) {
     console.error("❌ Erro ao carregar simulado para edição:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar simulado para edição. Veja o console.");
+    return res.status(500).send("Erro ao carregar simulado para edição.");
   }
 }
 
-// ---------------------
+// ===================================================================
 // ATUALIZAR SIMULADO
-// ---------------------
+// ===================================================================
 async function atualizarSimulado(req, res) {
-  const id = req.params.id;
   try {
+    const id = req.params.id;
+
     const {
       data,
       tempo_total_minutos,
@@ -235,36 +201,22 @@ async function atualizarSimulado(req, res) {
       acertos_matematica
     } = req.body;
 
-    if (!data) {
-      return res.redirect(`/simulados/${id}/editar`);
-    }
+    if (!data) return res.redirect(`/simulados/${id}/editar`);
 
     let dia = await Dia.findOne({ where: { data } });
-    if (!dia) {
-      dia = await Dia.create({ data });
-    }
+    if (!dia) dia = await Dia.create({ data });
 
     await Simulado.update(
       {
         dia_id: dia.id,
-        tempo_total_minutos: tempo_total_minutos
-          ? Number(tempo_total_minutos)
-          : null,
+        tempo_total_minutos: tempo_total_minutos ? Number(tempo_total_minutos) : null,
         resultado_resumo: resultado_resumo || null,
         area_que_mais_errou: area_que_mais_errou || null,
         principal_dificuldade: principal_dificuldade || null,
-        acertos_linguagens: acertos_linguagens
-          ? Number(acertos_linguagens)
-          : null,
-        acertos_humanas: acertos_humanas
-          ? Number(acertos_humanas)
-          : null,
-        acertos_naturezas: acertos_naturezas
-          ? Number(acertos_naturezas)
-          : null,
-        acertos_matematica: acertos_matematica
-          ? Number(acertos_matematica)
-          : null
+        acertos_linguagens: acertos_linguagens !== "" ? Number(acertos_linguagens) : null,
+        acertos_humanas: acertos_humanas !== "" ? Number(acertos_humanas) : null,
+        acertos_naturezas: acertos_naturezas !== "" ? Number(acertos_naturezas) : null,
+        acertos_matematica: acertos_matematica !== "" ? Number(acertos_matematica) : null
       },
       { where: { id } }
     );
@@ -272,28 +224,26 @@ async function atualizarSimulado(req, res) {
     return res.redirect("/simulados");
   } catch (error) {
     console.error("❌ Erro ao atualizar simulado:", error);
-    return res
-      .status(500)
-      .send("Erro ao atualizar simulado. Veja o console.");
+    return res.status(500).send("Erro ao atualizar simulado.");
   }
 }
 
-// ---------------------
+// ===================================================================
 // EXCLUIR SIMULADO
-// ---------------------
+// ===================================================================
 async function excluirSimulado(req, res) {
-  const id = req.params.id;
   try {
-    await Simulado.destroy({ where: { id } });
+    await Simulado.destroy({ where: { id: req.params.id } });
     return res.redirect("/simulados");
   } catch (error) {
     console.error("❌ Erro ao excluir simulado:", error);
-    return res
-      .status(500)
-      .send("Erro ao excluir simulado. Veja o console.");
+    return res.status(500).send("Erro ao excluir simulado.");
   }
 }
 
+// ===================================================================
+// EXPORTAR CONTROLLER COMPLETO
+// ===================================================================
 module.exports = {
   novoSimuladoForm,
   criarSimulado,

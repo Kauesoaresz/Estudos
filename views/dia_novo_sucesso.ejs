@@ -1,0 +1,13 @@
+<%- include("partials/medalha_popup") %>
+
+<script>
+  const medalhas = <%- JSON.stringify(novasMedalhas || []) %>;
+
+  if (medalhas.length > 0) {
+    mostrarVariasMedalhas(medalhas);
+  }
+
+  setTimeout(() => {
+    window.location.href = "/dia/novo?sucesso=1";
+  }, 3000 + (medalhas.length * 4500));
+</script>

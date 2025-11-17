@@ -1,0 +1,58 @@
+<%- include("partials/header", { tituloPagina }) %>
+
+<div class="kst-container medalhas-page">
+
+  <h1 class="titulo-pagina">🏆 Medalhas Conquistadas</h1>
+
+  <% if (conquistadas.length === 0) { %>
+    <p class="nenhuma-medalha">
+      Você ainda não conquistou nenhuma medalha... mas vai conquistar muitas!
+    </p>
+  <% } %>
+
+  <div class="medalhas-grid">
+    <% conquistadas.forEach(registro => { %>
+
+      <article class="medalha-card ativa">
+
+        <div class="medalha-status medalha-status--ativa">
+          <span>DESBLOQUEADA</span>
+        </div>
+
+        <div class="medalha-raridade badge-raridade badge-raridade-<%= registro.medalha.raridade || 'comum' %>">
+          <% if (registro.medalha.raridade === "raro") { %>
+            RARO
+          <% } else if (registro.medalha.raridade === "epico") { %>
+            ÉPICO
+          <% } else if (registro.medalha.raridade === "lendario") { %>
+            LENDÁRIO
+          <% } else { %>
+            COMUM
+          <% } %>
+        </div>
+
+        <div class="medalha-icon-wrapper">
+          <span class="medalha-icon"><%= registro.medalha.icone %></span>
+        </div>
+
+        <h3 class="medalha-nome"><%= registro.medalha.nome %></h3>
+
+        <p class="medalha-desc"><%= registro.medalha.descricao %></p>
+
+        <span class="medalha-categoria">
+          <%= registro.medalha.categoria %>
+        </span>
+
+        <div class="medalha-data">
+          Conquistada em
+          <strong><%= new Date(registro.data_conquista).toLocaleDateString("pt-BR") %></strong>
+        </div>
+
+      </article>
+
+    <% }) %>
+  </div>
+
+</div>
+
+<%- include("partials/footer") %>

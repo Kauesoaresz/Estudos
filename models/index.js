@@ -9,12 +9,18 @@ const DiaModel = require("./Dia");
 const MateriaModel = require("./Materia");
 const EstudoMateriaDiaModel = require("./EstudoMateriaDia");
 const SimuladoModel = require("./Simulado");
+const MedalhaModel = require("./Medalha");
+const MedalhaUsuarioModel = require("./MedalhaUsuario");
+
 
 // INIT MODELS
 const Dia = DiaModel(sequelize, DataTypes);
 const Materia = MateriaModel(sequelize, DataTypes);
 const EstudoMateriaDia = EstudoMateriaDiaModel(sequelize, DataTypes);
 const Simulado = SimuladoModel(sequelize, DataTypes);
+const Medalha = MedalhaModel(sequelize, DataTypes);
+const MedalhaUsuario = MedalhaUsuarioModel(sequelize, DataTypes);
+
 
 // ===============================
 // ASSOCIAÇÕES
@@ -50,13 +56,26 @@ Simulado.belongsTo(Dia, {
   as: "dia"
 });
 
+// 1 Medalha pode ser conquistada muitas vezes por usuários (futuro multiusuário)
+Medalha.hasMany(MedalhaUsuario, {
+  foreignKey: "medalha_id",
+  as: "conquistas"
+});
+MedalhaUsuario.belongsTo(Medalha, {
+  foreignKey: "medalha_id",
+  as: "medalha"
+});
+
 // EXPORT FINAL
 const db = {
   sequelize,
   Dia,
   Materia,
   EstudoMateriaDia,
-  Simulado
+  Simulado,
+  Medalha,
+  MedalhaUsuario
 };
+
 
 module.exports = db;

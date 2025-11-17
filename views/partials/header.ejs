@@ -9,119 +9,146 @@
 
 <body>
   <header class="kst-header">
-  <div class="kst-container kst-header-inner">
+    <div class="kst-container kst-header-inner">
 
-    <!-- ESQUERDA -->
-    <div class="kst-header-left">
-      <a href="/" class="kst-logo-link">
-        <div class="kst-logo-circle">
-          <img src="/img/perfil.jpg" alt="Kauê" class="kst-logo-avatar">
+      <!-- ESQUERDA -->
+      <div class="kst-header-left">
+        <a href="/" class="kst-logo-link">
+          <div class="kst-logo-circle">
+            <img src="/img/perfil.jpg" alt="Kauê" class="kst-logo-avatar">
+          </div>
+        </a>
+
+        <div class="kst-brand">
+          <div class="kst-app-name">KAUÊ · ESTUDOS</div>
+          <div class="kst-app-subtitle">Painel de estudos para Medicina</div>
         </div>
-      </a>
-
-      <div class="kst-brand">
-        <div class="kst-app-name">KAUÊ · ESTUDOS</div>
-        <div class="kst-app-subtitle">Painel de estudos para Medicina</div>
       </div>
-    </div>
 
-    <!-- CENTRO -->
-    <nav class="kst-header-nav">
-      <div class="kst-nav-group-top">
+      <!-- CENTRO -->
+      <nav class="kst-header-nav">
+        <div class="kst-nav-group-top">
 
-        <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
-          <button type="button" class="kst-nav-top-trigger">
-            <span class="kst-nav-top-label">Dias</span>
-            <span class="kst-nav-top-underline"></span>
-          </button>
-          <div class="kst-nav-dropdown">
-            <a href="/dia/novo" class="kst-nav-dropdown-link">Registrar dia</a>
-            <a href="/dias" class="kst-nav-dropdown-link">Histórico de dias</a>
-            <a href="/estatisticas/dias" class="kst-nav-dropdown-link">Estatísticas dos dias</a>
+          <!-- DIAS -->
+          <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+            <button type="button" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Dias</span>
+              <span class="kst-nav-top-underline"></span>
+            </button>
+            <div class="kst-nav-dropdown">
+              <a href="/dia/novo" class="kst-nav-dropdown-link">Registrar dia</a>
+              <a href="/dias" class="kst-nav-dropdown-link">Histórico de dias</a>
+              <a href="/estatisticas/dias" class="kst-nav-dropdown-link">Estatísticas dos dias</a>
+            </div>
           </div>
-        </div>
 
-        <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
-          <button type="button" class="kst-nav-top-trigger">
-            <span class="kst-nav-top-label">Estudos</span>
-            <span class="kst-nav-top-underline"></span>
-          </button>
-          <div class="kst-nav-dropdown">
-            <a href="/estudos/novo" class="kst-nav-dropdown-link">Registrar estudo por matéria</a>
-            <a href="/estudos" class="kst-nav-dropdown-link">Histórico de estudos</a>
-            <a href="/materias" class="kst-nav-dropdown-link">Gerenciar matérias</a>
-            <a href="/estatisticas/materias" class="kst-nav-dropdown-link">Estatísticas por matéria</a>
+          <!-- ESTUDOS -->
+          <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+            <button type="button" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Estudos</span>
+              <span class="kst-nav-top-underline"></span>
+            </button>
+            <div class="kst-nav-dropdown">
+              <a href="/estudos/novo" class="kst-nav-dropdown-link">Registrar estudo por matéria</a>
+              <a href="/estudos" class="kst-nav-dropdown-link">Histórico de estudos</a>
+              <a href="/materias" class="kst-nav-dropdown-link">Gerenciar matérias</a>
+              <a href="/estatisticas/materias" class="kst-nav-dropdown-link">Estatísticas por matéria</a>
+            </div>
           </div>
-        </div>
 
-        <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
-          <button type="button" class="kst-nav-top-trigger">
-            <span class="kst-nav-top-label">Simulados</span>
-            <span class="kst-nav-top-underline"></span>
-          </button>
-          <div class="kst-nav-dropdown">
-            <a href="/simulados/novo" class="kst-nav-dropdown-link">Registrar simulado</a>
-            <a href="/simulados" class="kst-nav-dropdown-link">Histórico de simulados</a>
-            <a href="/estatisticas/simulados" class="kst-nav-dropdown-link">Estatísticas de simulados</a>
+          <!-- SIMULADOS -->
+          <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+            <button type="button" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Simulados</span>
+              <span class="kst-nav-top-underline"></span>
+            </button>
+            <div class="kst-nav-dropdown">
+              <a href="/simulados/novo" class="kst-nav-dropdown-link">Registrar simulado</a>
+              <a href="/simulados" class="kst-nav-dropdown-link">Histórico de simulados</a>
+              <a href="/estatisticas/simulados" class="kst-nav-dropdown-link">Estatísticas de simulados</a>
+            </div>
           </div>
-        </div>
 
-        <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
-          <button type="button" class="kst-nav-top-trigger">
-            <span class="kst-nav-top-label">Revisão</span>
-            <span class="kst-nav-top-underline"></span>
-          </button>
-          <div class="kst-nav-dropdown">
-            <a href="/revisao" class="kst-nav-dropdown-link">Painel de revisão</a>
-            <a href="/estatisticas/materias" class="kst-nav-dropdown-link">Ver estatísticas</a>
-            <a href="/estudos" class="kst-nav-dropdown-link">Histórico de estudos</a>
+          <!-- REVISÃO -->
+          <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+            <button type="button" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Revisão</span>
+              <span class="kst-nav-top-underline"></span>
+            </button>
+            <div class="kst-nav-dropdown">
+              <a href="/revisao" class="kst-nav-dropdown-link">Painel de revisão</a>
+              <a href="/estatisticas/materias" class="kst-nav-dropdown-link">Ver estatísticas</a>
+              <a href="/estudos" class="kst-nav-dropdown-link">Histórico de estudos</a>
+            </div>
           </div>
-        </div>
 
-
+          <!-- RECORDES -->
           <div class="kst-nav-top-item">
-            <a href="/recordes" class="kst-nav-top-trigger">Recordes</a>
+            <a href="/recordes" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Recordes</span>
+              <span class="kst-nav-top-underline"></span>
+            </a>
           </div>
 
+          <!-- CALENDÁRIO -->
           <div class="kst-nav-top-item">
-            <a href="/calendario" class="kst-nav-top-trigger">Calendário</a>
+            <a href="/calendario" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Calendário</span>
+              <span class="kst-nav-top-underline"></span>
+            </a>
           </div>
 
+          <!-- METAS -->
           <div class="kst-nav-top-item">
-            <a href="/metas" class="kst-nav-top-trigger">Metas</a>
+            <a href="/metas" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Metas</span>
+              <span class="kst-nav-top-underline"></span>
+            </a>
           </div>
 
+          <!-- MEDALHAS -->
+          <div class="kst-nav-top-item">
+            <a href="/medalhas" class="kst-nav-top-trigger">
+              <span class="kst-nav-top-label">Medalhas</span>
+              <span class="kst-nav-top-underline"></span>
+            </a>
+          </div>
 
+        </div>
+      </nav>
 
+      <!-- DIREITA -->
+      <div class="kst-header-right">
 
+        <!-- BOTÃO DO MODO FOCO -->
+        <button class="kst-btn kst-btn-secondary kst-focus-toggle" id="kstFocusToggle">
+          Foco
+        </button>
+
+        <!-- SWITCH DE TEMA -->
+        <button class="kst-theme-switch" type="button" aria-label="Alternar tema claro/escuro">
+          <span class="kst-theme-switch-knob"></span>
+        </button>
+
+        <!-- MOBILE MENU -->
+        <button class="kst-nav-toggle" type="button" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-    </nav>
 
-    <!-- DIREITA -->
-    <div class="kst-header-right">
-
-      <!-- BOTÃO DO MODO FOCO -->
-      <button class="kst-btn kst-btn-secondary kst-focus-toggle" id="kstFocusToggle">
-        Foco
-      </button>
-
-      <!-- SWITCH DE TEMA -->
-      <button class="kst-theme-switch" type="button" aria-label="Alternar tema claro/escuro">
-        <span class="kst-theme-switch-knob"></span>
-      </button>
-
-      <!-- MOBILE MENU -->
-      <button class="kst-nav-toggle" type="button" aria-label="Abrir menu">
-        <span></span><span></span><span></span>
-      </button>
     </div>
+  </header>
 
-  </div>
-</header>
+  <!-- POPUP GLOBAL DE MEDALHAS -->
+  <%- include("../partials/medalha_popup") %>
+  <script src="/js/medalhas.js"></script>
+  <script>
+    window.novasMedalhas = <%- JSON.stringify(
+      typeof novasMedalhas !== "undefined" ? novasMedalhas : []
+    ) %>;
+  </script>
 
-<script src="/js/focus.js"></script>
-
-
+  <script src="/js/focus.js"></script>
 
   <!-- SCRIPT -->
   <script>
@@ -165,13 +192,11 @@
 
       // Preencher automaticamente todos os inputs type="date" com a data de hoje
       document.addEventListener("DOMContentLoaded", () => {
-      const hoje = new Date().toISOString().split("T")[0];
-      document.querySelectorAll('input[type="date"]').forEach(campo => {
-       if (!campo.value) campo.value = hoje;
+        const hoje = new Date().toISOString().split("T")[0];
+        document.querySelectorAll('input[type="date"]').forEach(campo => {
+          if (!campo.value) campo.value = hoje;
+        });
       });
-      });
-
-
     })();
   </script>
 

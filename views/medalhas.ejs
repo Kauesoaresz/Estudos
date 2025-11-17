@@ -1,0 +1,126 @@
+<%- include("partials/header", { tituloPagina }) %>
+
+<div class="medalhas-page">
+
+  <!-- HERO / RESUMO GERAL -->
+  <section class="medalhas-hero">
+    <div class="medalhas-hero-left">
+      <div class="medalhas-hero-icon">🏅</div>
+      <div>
+        <h1 class="medalhas-title">Medalhas & Conquistas</h1>
+        <p class="medalhas-subtitle">
+          Cada hora estudada vira um título. Continua batendo que tudo isso aqui vai ficar dourado.
+        </p>
+      </div>
+    </div>
+
+    <div class="medalhas-hero-right">
+      <div class="medalhas-hero-numbers">
+        <div class="medalhas-hero-number">
+          <%= totalConquistadas %>
+        </div>
+        <div class="medalhas-hero-label">
+          desbloqueadas de <strong><%= totalMedalhas %></strong>
+        </div>
+      </div>
+
+      <div class="medalhas-hero-progress-wrapper">
+        <div class="medalhas-hero-progress">
+          <div class="medalhas-hero-progress-bar" style="width:<%= progressoGeral %>%"></div>
+        </div>
+        <span class="medalhas-hero-percent"><%= progressoGeral %>%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABAS / FILTROS -->
+  <div class="medalhas-tabs">
+    <button class="medalhas-tab is-active" data-tab="todas">
+      Todas
+    </button>
+
+    <button class="medalhas-tab" data-tab="conquistadas">
+      Conquistadas
+    </button>
+
+    <button class="medalhas-tab" data-tab="pendentes">
+      Não conquistadas
+    </button>
+
+    <button class="medalhas-tab" data-tab="raras">
+      Épicas & Lendárias
+    </button>
+  </div>
+
+  <!-- GRID DE MEDALHAS -->
+  <section class="medalhas-section">
+    <h2 class="medalhas-section-title">Todas as medalhas</h2>
+
+    <div class="medalhas-grid">
+      <% medalhas.forEach(m => { %>
+        <article
+          class="medalha-card <%= m.conquistada ? 'ativa' : 'bloqueada' %>"
+          data-medalha-id="<%= m.id %>"
+          data-conquistada="<%= m.conquistada ? '1' : '0' %>"
+          data-raridade="<%= m.raridade %>"
+        >
+
+          <div class="medalha-status <%= m.conquistada ? 'medalha-status--ativa' : 'medalha-status--bloqueada' %>">
+            <span><%= m.conquistada ? "DESBLOQUEADA" : "EM PROGRESSO" %></span>
+          </div>
+
+          <!-- SELINHO DE RARIDADE -->
+          <div class="medalha-raridade badge-raridade badge-raridade-<%= m.raridade %>">
+            <% if (m.raridade === "comum") { %>
+              COMUM
+            <% } else if (m.raridade === "raro") { %>
+              RARO
+            <% } else if (m.raridade === "epico") { %>
+              ÉPICO
+            <% } else if (m.raridade === "lendario") { %>
+              LENDÁRIO
+            <% } %>
+          </div>
+
+          <!-- ÍCONE POR CATEGORIA + LOCK SE BLOQUEADA -->
+          <div class="medalha-icon-wrapper">
+            <span class="medalha-icon"><%= m.icone %></span>
+
+            <% if (!m.conquistada) { %>
+              <span class="medalha-lock">🔒</span>
+            <% } %>
+          </div>
+
+          <h3 class="medalha-nome"><%= m.nome %></h3>
+
+          <p class="medalha-desc"><%= m.descricao %></p>
+
+          <span class="medalha-categoria"><%= m.categoria %></span>
+
+          <% if (m.conquistada) { %>
+            <div class="medalha-data">
+              Conquistada em
+              <strong><%= new Date(m.data_conquista).toLocaleDateString("pt-BR") %></strong>
+            </div>
+          <% } else { %>
+            <div class="medalha-progress">
+              <div class="medalha-progress-bar" style="width:<%= m.progresso %>%"></div>
+            </div>
+
+            <div class="medalha-progress-text">
+              <span><%= m.atual %> / <%= m.valor_trigger %></span>
+              <% if (m.faltam > 0) { %>
+                <span class="medalha-progress-faltam">
+                  Faltam <%= m.faltam %> para desbloquear
+                </span>
+              <% } %>
+            </div>
+          <% } %>
+
+        </article>
+      <% }) %>
+    </div>
+  </section>
+</div>
+
+<%- include("partials/footer") %>

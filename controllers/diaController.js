@@ -11,6 +11,7 @@ const {
   formatarDDMMYYYY
 } = require("../utils/datas");
 const { Op } = require("sequelize");
+const verificarMedalhas = require("../utils/verificarMedalhas");
 
 // ---------------------
 // Helpers internos
@@ -370,6 +371,7 @@ function novoDiaForm(req, res) {
 }
 
 // Salvar novo dia
+
 async function criarDia(req, res) {
   try {
     const {
@@ -401,25 +403,17 @@ async function criarDia(req, res) {
     await Dia.create({
       data,
       hora_acordou: hora_acordou || null,
-      hora_dormiu: hora_dormiu || null,
+      hora_dormmiu: hora_dormiu || null,
       horas_sono_total: horas_sono_total ? Number(horas_sono_total) : null,
-      qualidade_sono_nota: qualidade_sono_nota
-        ? Number(qualidade_sono_nota)
-        : null,
+      qualidade_sono_nota: qualidade_sono_nota ? Number(qualidade_sono_nota) : null,
       tirou_soneca:
         tirou_soneca === "" || tirou_soneca === undefined
           ? null
           : tirou_soneca === "SIM",
       minutos_soneca: minutos_soneca ? Number(minutos_soneca) : null,
-      horas_estudo_liquidas: horas_estudo_liquidas
-        ? Number(horas_estudo_liquidas)
-        : null,
-      questoes_feitas_total: questoes_feitas_total
-        ? Number(questoes_feitas_total)
-        : null,
-      questoes_acertos_total: questoes_acertos_total
-        ? Number(questoes_acertos_total)
-        : null,
+      horas_estudo_liquidas: horas_estudo_liquidas ? Number(horas_estudo_liquidas) : null,
+      questoes_feitas_total: questoes_feitas_total ? Number(questoes_feitas_total) : null,
+      questoes_acertos_total: questoes_acertos_total ? Number(questoes_acertos_total) : null,
       erros_do_dia: erros_do_dia || null,
       melhorar_amanha: melhorar_amanha || null,
       ponto_alto_dia: ponto_alto_dia || null,
@@ -431,14 +425,23 @@ async function criarDia(req, res) {
       humor: humor || null
     });
 
-    return res.redirect("/dia/novo?sucesso=1");
+
+
+    const { verificarMedalhas } = require("../services/medalhasService");
+const novasMedalhas = await verificarMedalhas();
+
+if (novasMedalhas.length > 0) {
+  return res.render("medalha_nova", { novasMedalhas });
+}
+
+
+
   } catch (error) {
     console.error("❌ Erro ao salvar dia:", error);
-    return res
-      .status(500)
-      .send("Erro ao salvar o dia. Veja o console para mais detalhes.");
+    return res.status(500).send("Erro ao salvar o dia.");
   }
 }
+
 
 // Histórico de dias (resumo) + filtro
 async function listarDias(req, res) {

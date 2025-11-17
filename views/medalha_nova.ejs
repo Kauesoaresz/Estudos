@@ -1,0 +1,13 @@
+<%- include("partials/header", { tituloPagina: "Nova Medalha!" }) %>
+
+<script>
+  const lista = <%- JSON.stringify(novasMedalhas || []) %>;
+  mostrarVariasMedalhas(lista);
+
+  // depois volta automaticamente
+  setTimeout(() => {
+    window.history.back();
+  }, 4000 * (lista.length || 1));
+</script>
+
+<%- include("partials/footer") %>
