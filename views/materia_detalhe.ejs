@@ -64,6 +64,49 @@
 
   </div> <!-- fim grid -->
 
+  <!-- LISTA DE TÓPICOS AGRUPADOS -->
+  <% if (topicos && topicos.length > 0) { %>
+    <div class="kst-card kst-card-block" style="margin-top: 2rem;">
+      <h3 class="kst-block-title">Tópicos estudados</h3>
+
+      <ul class="kst-topicos-list">
+        <% topicos.forEach(function(t) { %>
+          <li class="kst-topico-item">
+
+            <div class="kst-topico-header">
+              <div class="kst-topico-titulo">
+                <span class="kst-topico-nome"><%= t.texto %></span>
+
+                <% if (t.vezes > 1) { %>
+                  <span class="kst-topico-vezes"><%= t.vezes %>x</span>
+                <% } %>
+              </div>
+
+              <span class="kst-topico-minutos"><%= t.minutosTotal %> min</span>
+            </div>
+
+            <% if (t.primeiraData || t.ultimaData) { %>
+              <div class="kst-topico-datas">
+                <% if (t.primeiraData && t.ultimaData && t.primeiraData.toString() !== t.ultimaData.toString()) { %>
+                  <span>
+                    De <%= new Date(t.primeiraData).toLocaleDateString("pt-BR") %>
+                    até <%= new Date(t.ultimaData).toLocaleDateString("pt-BR") %>
+                  </span>
+                <% } else { %>
+                  <span>
+                    Em <%= new Date(t.primeiraData || t.ultimaData).toLocaleDateString("pt-BR") %>
+                  </span>
+                <% } %>
+              </div>
+            <% } %>
+
+          </li>
+        <% }) %>
+      </ul>
+
+    </div>
+  <% } %>
+
   <!-- AÇÕES -->
   <div class="kst-actions-row" style="margin-top: 1.5rem;">
     <a href="/materias" class="kst-btn kst-btn-secondary">Voltar</a>

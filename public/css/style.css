@@ -1451,9 +1451,10 @@ canvas {
   padding: 3rem 1.5rem 4rem;
 }
 
+/* Cabeçalho da página */
 .kst-page-header {
   text-align: center;
-  margin-bottom: 2.6rem;
+  margin-bottom: 2.4rem;
 }
 
 .kst-page-title {
@@ -1465,132 +1466,187 @@ canvas {
 }
 
 .kst-page-subtitle {
-  font-size: 1rem;
+  font-size: 0.98rem;
   color: var(--kst-text-muted);
-  max-width: 580px;
-  margin: 0.25rem auto 0;
+  max-width: 560px;
+  margin: 0.3rem auto 0;
   line-height: 1.45;
 }
 
-/* Card formulário dia */
-.kst-dia-card {
+/* Card principal do formulário */
+.kst-section-form .kst-card-form {
   background: var(--kst-bg-elevated);
   border-radius: var(--kst-radius-lg);
   border: 1px solid var(--kst-border-subtle);
-  padding: 2.2rem 2.2rem 2.6rem;
+  padding: 2.1rem 2.0rem 2.4rem;
   box-shadow: var(--kst-shadow-subtle);
   display: flex;
   flex-direction: column;
-  gap: 2.4rem;
+  gap: 1.7rem;
 }
 
-/* Fieldset dia */
-.kst-dia-fieldset {
-  background: var(--kst-bg-elevated-soft);
-  border: 1px solid var(--kst-border-subtle);
+/* Espaço do alerta de erro/sucesso */
+#erro-dia {
+  margin-bottom: 1.1rem;
+}
+
+/* ========================================
+   BLOCO RECOLHÍVEL (details)
+   ======================================== */
+
+.kst-details {
   border-radius: var(--kst-radius-lg);
-  padding: 1.7rem 1.4rem 1.9rem;
-  transition: background 0.18s ease;
-}
-
-.kst-dia-fieldset:hover {
-  background: rgba(148, 163, 184, 0.1);
-}
-
-.kst-dia-legend {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-bottom: 1.4rem;
-  color: var(--kst-text-main);
-  letter-spacing: -0.01em;
-}
-
-/* Rows e groups */
-.kst-dia-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.4rem;
-  margin-bottom: 1rem;
-}
-
-.kst-dia-group {
-  flex: 1;
-  min-width: 230px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.kst-dia-label {
-  font-size: 0.89rem;
-  font-weight: 600;
-  color: var(--kst-text-main);
-  opacity: 0.88;
-  line-height: 1.2;
-}
-
-/* Inputs dia */
-.kst-dia-input,
-.kst-dia-select,
-.kst-dia-textarea {
-  width: 100%;
-  padding: 0.7rem 0.85rem;
-  font-size: 0.92rem;
-  border-radius: var(--kst-radius-md);
   border: 1px solid var(--kst-border-subtle);
-  background: var(--kst-bg-elevated);
-  color: var(--kst-text-main);
+  background: var(--kst-bg-elevated-soft);
+  padding: 0.9rem 1rem 0.4rem;
+  margin-bottom: 1rem;
   transition:
-    border-color 0.16s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.kst-details[open] {
+  background: var(--kst-bg-elevated);
+  box-shadow: var(--kst-shadow-subtle);
+  border-color: rgba(148, 163, 184, 0.6);
+}
+
+/* Esconde marcador padrão */
+.kst-details > summary {
+  list-style: none;
+}
+
+.kst-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Header do bloco (summary) */
+.kst-details-title {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+  padding: 0.3rem 0;
+}
+
+/* Setinha do acordeão */
+.kst-details-title::after {
+  content: "▾";
+  font-size: 0.85rem;
+  color: var(--kst-text-soft);
+  transition: transform 0.18s ease;
+}
+
+/* Girar setinha quando aberto */
+.kst-details[open] .kst-details-title::after {
+  transform: rotate(180deg);
+}
+
+/* Conteúdo interno do bloco (depois do summary) */
+.kst-details > *:not(summary) {
+  margin-top: 0.9rem;
+}
+
+/* Deixa os grids dentro dos blocos mais “respiráveis” */
+.kst-details .kst-form-row {
+  margin-bottom: 0.6rem;
+}
+
+/* ========================================
+   INPUT RÁPIDO DE HORAS (BOTÕES + INPUT)
+   ======================================== */
+
+.kst-input-quick {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.kst-input-quick .kst-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Botão rápido genérico */
+.kst-quick-btn {
+  border-radius: 999px;
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-elevated-soft);
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--kst-text-main);
+  white-space: nowrap;
+  transition:
     background 0.16s ease,
-    box-shadow 0.16s ease;
+    border-color 0.16s ease,
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
 }
 
-.kst-dia-input:focus,
-.kst-dia-select:focus,
-.kst-dia-textarea:focus {
-  border-color: var(--kst-primary);
+.kst-quick-btn:hover {
   background: #ffffff;
-  box-shadow: 0 0 0 2px rgba(28, 154, 255, 0.25);
-  outline: none;
+  border-color: var(--kst-primary);
+  box-shadow: var(--kst-shadow-subtle);
+  transform: translateY(-1px);
 }
 
-.kst-dia-textarea {
-  min-height: 80px;
-  resize: vertical;
-  line-height: 1.45;
+/* Botão “Zerar” com cara de secundário/perigo leve */
+.kst-quick-btn-clear {
+  background: var(--kst-danger-soft);
+  border-color: transparent;
+  color: var(--kst-danger);
 }
 
-/* Ações */
-.kst-dia-actions {
+.kst-quick-btn-clear:hover {
+  background: #fee2e2;
+}
+
+/* ========================================
+   AÇÕES DO FORMULÁRIO
+   ======================================== */
+
+.kst-form-actions {
+  margin-top: 1.4rem;
   display: flex;
   justify-content: flex-end;
+  gap: 0.6rem;
 }
 
-.kst-dia-btn-lg {
-  padding: 0.95rem 1.8rem;
-  font-size: 1.05rem;
-  font-weight: 600;
+.kst-form-actions .kst-btn-lg {
+  min-width: 190px;
 }
 
-/* Erro */
-#erro-dia {
-  margin-bottom: 1.2rem;
-}
+/* ========================================
+   RESPONSIVO
+   ======================================== */
 
-/* Responsivo registrar dia */
 @media (max-width: 650px) {
-  .kst-dia-card {
-    padding: 1.6rem 1.2rem 2rem;
+  .kst-section-form {
+    padding: 2.2rem 1.1rem 3rem;
   }
 
-  .kst-dia-fieldset {
-    padding: 1.2rem 1rem 1.5rem;
+  .kst-section-form .kst-card-form {
+    padding: 1.6rem 1.1rem 2rem;
+    gap: 1.4rem;
   }
 
-  .kst-dia-row {
-    flex-direction: column;
-    gap: 1rem;
+  .kst-page-title {
+    font-size: 1.7rem;
+  }
+
+  .kst-input-quick {
+    flex-wrap: wrap;
+  }
+
+  .kst-input-quick .kst-input {
+    width: 100%;
   }
 }
 
@@ -1928,47 +1984,159 @@ canvas {
 
 
 /* =====================================================================
-   15 — ESTUDO POR MATÉRIA (NOVO / EDITAR)
+   11 — PÁGINA: REGISTRAR ESTUDO
+   (Tela /estudos/novo – versão fluída e otimizada)
    ===================================================================== */
 
-/* reaproveita .kst-section-form, .kst-page-header etc. */
+.kst-section-form {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
 
+/* Cabeçalho */
+.kst-page-header {
+  text-align: center;
+  margin-bottom: 2.4rem;
+}
+
+.kst-page-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--kst-text-main);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+}
+
+.kst-page-subtitle {
+  font-size: 1rem;
+  opacity: 0.85;
+  max-width: 560px;
+  margin: 0.3rem auto 0;
+}
+
+/* Card principal */
 .kst-card-form {
   background: var(--kst-bg-elevated);
-  padding: 2.3rem 2rem;
   border-radius: var(--kst-radius-lg);
-  border: 1px solid var(--kst-border-soft);
-  box-shadow: var(--kst-shadow-soft);
+  padding: 2rem 2.2rem;
+  border: 1px solid var(--kst-border-subtle);
+  box-shadow: var(--kst-shadow-subtle);
   display: flex;
   flex-direction: column;
-  gap: 2.1rem;
+  gap: 1.8rem;
 }
 
-/* já temos .kst-fieldset, .kst-form-row, .kst-form-group, .kst-label, .kst-input etc. */
+/* Fieldsets */
+.kst-fieldset {
+  background: var(--kst-bg-elevated-soft);
+  border: 1px solid var(--kst-border-subtle);
+  border-radius: var(--kst-radius-lg);
+  padding: 1.5rem 1.4rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  transition: background 0.15s ease;
+}
 
+.kst-fieldset:hover {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.kst-fieldset-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.2rem;
+}
+
+/* Linhas e grupos */
+.kst-form-row {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.kst-form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 230px;
+}
+
+.kst-label {
+  font-size: 0.89rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+  opacity: 0.9;
+}
+
+/* Inputs */
+.kst-input,
+.kst-select,
+.kst-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--kst-radius-md);
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  color: var(--kst-text-main);
+  font-size: 0.93rem;
+  transition: border 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kst-input:focus,
+.kst-select:focus,
+.kst-textarea:focus {
+  border-color: var(--kst-primary);
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(28, 154, 255, 0.22);
+  outline: none;
+}
+
+/* Textarea */
+.kst-textarea {
+  resize: vertical;
+  min-height: 70px;
+  line-height: 1.45;
+}
+
+/* Ações */
+.kst-form-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kst-btn-lg {
+  padding: 0.9rem 1.7rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* Alertas */
 #erro-estudo {
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.2rem;
 }
 
-/* Responsivo estudo matéria */
-@media (max-width: 620px) {
-  .kst-card-form {
-    padding: 1.5rem 1.2rem;
+/* Responsividade geral */
+@media (max-width: 650px) {
+  .kst-page-title {
+    font-size: 1.6rem;
   }
 
-  .kst-fieldset {
-    padding: 1.2rem 1rem;
+  .kst-card-form {
+    padding: 1.5rem 1.3rem;
   }
 
   .kst-form-row {
     flex-direction: column;
     gap: 1rem;
   }
-
-  .kst-page-title {
-    font-size: 1.65rem;
-  }
 }
+
 
 
 /* =====================================================================
@@ -2418,6 +2586,7 @@ canvas {
   }
 }
 
+
 /* =========================================================
    MODO FOCO – PREMIUM
    ========================================================= */
@@ -2585,31 +2754,35 @@ body.theme-dark .kst-recordes-item {
 
 
 /* ============================================
-   MAPA DE CALOR — VERSÃO PREMIUM
+   MAPA DE CALOR — CALENDÁRIO DE ESTUDOS
 ============================================ */
 
+/* Card principal do calendário */
 .kst-calendar-card {
-  background: var(--kst-color-bg-elevated);
+  background: var(--kst-bg-elevated);
   padding: 2rem;
   border-radius: 18px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.06);
   margin-bottom: 2rem;
 }
 
+/* Título (se usar em algum lugar) */
 .kst-calendar-title {
   text-align: center;
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
+  color: var(--kst-text-main);
 }
 
+/* Grid 7 colunas (dias da semana) */
 .kst-calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 10px;
 }
 
-/* Quadrados */
+/* Quadrados de dia */
 .kst-cal-day {
   position: relative;
   aspect-ratio: 1/1;
@@ -2619,12 +2792,14 @@ body.theme-dark .kst-recordes-item {
   justify-content: center;
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--kst-color-text-strong);
-  transition: transform .2s ease;
+  color: var(--kst-text-main);
+  transition: transform .2s ease, box-shadow .2s ease;
+  background: #f5f5f5; /* fallback pra caso não entre nenhuma classe de cor */
 }
 
 .kst-cal-day:hover {
   transform: scale(1.07);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* Badge para dias 8h+ */
@@ -2637,9 +2812,13 @@ body.theme-dark .kst-recordes-item {
 
 /* ============================================
    ESCALA DE CORES (0h até 8h+)
+   classes usadas: kst-cal-<cor> (zero, h1...h8)
 ============================================ */
 
-.kst-cal-zero { background: #f0f0f0; color:#333; }
+.kst-cal-zero { 
+  background: #f0f0f0; 
+  color:#333; 
+}
 
 .kst-cal-h1  { background: #ffb3b3; color:#fff; }
 .kst-cal-h2  { background: #ff8080; color:#fff; }
@@ -2676,7 +2855,7 @@ body.theme-dark .kst-cal-zero {
   align-items: center;
   gap: .45rem;
   font-size: 1rem;
-  color: var(--kst-color-text);
+  color: var(--kst-text-main);
 }
 
 /* Quadradinhos da legenda */
@@ -2687,25 +2866,25 @@ body.theme-dark .kst-cal-zero {
   display: inline-block;
 }
 
-/* Mesmas cores */
+/* Mesmas cores do mapa */
 .l.zero { background: #ededed; }
-.l.h1 { background: #ffb3b3; }
-.l.h2 { background: #ff8080; }
-.l.h3 { background: #ff6666; }
+.l.h1   { background: #ffb3b3; }
+.l.h2   { background: #ff8080; }
+.l.h3   { background: #ff6666; }
 
-.l.h4 { background: #ffd24d; }
-.l.h5 { background: #c6ff4d; }
-.l.h6 { background: #7dff4d; }
+.l.h4   { background: #ffd24d; }
+.l.h5   { background: #c6ff4d; }
+.l.h6   { background: #7dff4d; }
 
-.l.h7 { background: #2ecc71; }
-.l.h8 { background: #006400; }
+.l.h7   { background: #2ecc71; }
+.l.h8   { background: #006400; }
 
 body.theme-dark .l.zero {
   background: #3a3a3a;
 }
 
 /* ============================================
-   NAVIGAÇÃO DO CALENDÁRIO — PREMIUM
+   NAVIGAÇÃO DO CALENDÁRIO
 ============================================ */
 
 .kst-calendar-nav {
@@ -2718,35 +2897,35 @@ body.theme-dark .l.zero {
   margin-top: 1rem;
 }
 
+.kst-calendar-nav-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
 .kst-cal-nav-btn {
-  background: var(--kst-color-bg-elevated);
+  background: var(--kst-bg-elevated);
   padding: .6rem 1rem;
   border-radius: 10px;
   font-size: .95rem;
   font-weight: 500;
-  color: var(--kst-color-text-strong);
+  color: var(--kst-text-main);
   border: 1px solid rgba(0,0,0,0.08);
   cursor: pointer;
   transition: .2s ease;
 }
 
 .kst-cal-nav-btn:hover {
-  background: var(--kst-color-primary-soft, #e9f5ff);
+  background: rgba(28, 154, 255, 0.08);
   transform: translateY(-2px);
 }
 
-.kst-calendar-nav strong {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--kst-color-text-strong);
-}
-
 /* ============================================
-   RESUMO DO MÊS — PREMIUM
+   RESUMO DO MÊS
 ============================================ */
 
 .kst-month-summary {
-  background: var(--kst-color-bg-elevated);
+  background: var(--kst-bg-elevated);
   padding: 2rem 2.2rem;
   border-radius: 18px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.06);
@@ -2764,7 +2943,7 @@ body.theme-dark .l.zero {
   font-size: 1.35rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: var(--kst-color-text-strong);
+  color: var(--kst-text-main);
 }
 
 .kst-month-summary-grid {
@@ -2776,7 +2955,7 @@ body.theme-dark .l.zero {
 .kst-month-summary-item {
   display: flex;
   flex-direction: column;
-  background: var(--kst-color-bg);
+  background: var(--kst-bg-elevated-soft, #0b1120);
   padding: 1.2rem 1.4rem;
   border-radius: 14px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.05);
@@ -2784,14 +2963,14 @@ body.theme-dark .l.zero {
 
 .kst-month-summary-label {
   font-size: 0.95rem;
-  color: var(--kst-color-text);
+  color: var(--kst-text-muted);
   margin-bottom: 4px;
 }
 
 .kst-month-summary-value {
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--kst-color-text-strong);
+  color: var(--kst-text-main);
 }
 
 /* MODO ESCURO */
@@ -2804,8 +2983,9 @@ body.theme-dark .kst-month-summary:hover {
 }
 
 body.theme-dark .kst-month-summary-item {
-  background: var(--kst-color-bg-elevated);
+  background: var(--kst-bg-elevated);
 }
+
 
 /* ============================================
    MEDALHAS — PÁGINA PREMIUM (DARK + LIGHT)
@@ -3909,4 +4089,72 @@ body.theme-dark .kst-logout-btn:hover {
     width: 32px;
     height: 32px;
     padding: 1px;
+}
+
+/* LISTA DE TÓPICOS AGRUPADOS */
+.kst-topicos-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.2rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.kst-topico-item {
+  background: var(--kst-bg-elevated-soft);
+  border: 1px solid var(--kst-border-subtle);
+  border-radius: var(--kst-radius-lg);
+  padding: 1rem 1.2rem;
+  box-shadow: var(--kst-shadow-subtle);
+}
+
+.kst-topico-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.kst-topico-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kst-topico-nome {
+  font-weight: 600;
+  color: var(--kst-text-main);
+  font-size: 0.95rem;
+}
+
+.kst-topico-vezes {
+  background: rgba(148, 163, 184, 0.16);
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--kst-text-muted);
+}
+
+.kst-topico-minutos {
+  background: rgba(28,154,255,0.12);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--kst-primary);
+}
+
+.kst-topico-datas {
+  font-size: 0.8rem;
+  color: var(--kst-text-muted);
+  margin-top: 0.25rem;
+}
+
+.kst-topico-texto {
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--kst-text-main);
+  white-space: pre-wrap;
 }

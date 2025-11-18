@@ -91,7 +91,7 @@ async function detalheMateria(req, res) {
 
     const mat = materia.get({ plain: true });
 
-    // ----- CALCULAR RESUMO -----
+    // ----- CALCULAR RESUMO GERAL -----
     let totalMinutos = 0;
     let totalQuestoes = 0;
     let totalCertas = 0;
@@ -114,6 +114,51 @@ async function detalheMateria(req, res) {
         ? Math.round((totalCertas / totalQuestoes) * 100)
         : null;
 
+    // ============================================================
+    // AGRUPAR TÓPICOS: mesmo nome = linha única somando minutos
+    // ============================================================
+    const mapaTopicos = {}; // key: texto normalizado
+
+    (mat.estudos || []).forEach((est) => {
+      if (!est.topicos_estudados || !est.topicos_estudados.trim()) return;
+
+      const textoOriginal = est.topicos_estudados.trim();
+      const minutos = est.minutos_estudados ? Number(est.minutos_estudados) : 0;
+      const data = est.dia?.data || null;
+
+      // normaliza pra agrupar (pode ajustar se quiser case-sensitive)
+      const chave = textoOriginal.toLowerCase();
+
+      if (!mapaTopicos[chave]) {
+        mapaTopicos[chave] = {
+          texto: textoOriginal,
+          minutosTotal: 0,
+          vezes: 0,
+          primeiraData: data,
+          ultimaData: data
+        };
+      }
+
+      const registro = mapaTopicos[chave];
+      registro.minutosTotal += minutos;
+      registro.vezes += 1;
+
+      if (data) {
+        const d = new Date(data);
+        if (!registro.primeiraData || d < new Date(registro.primeiraData)) {
+          registro.primeiraData = data;
+        }
+        if (!registro.ultimaData || d > new Date(registro.ultimaData)) {
+          registro.ultimaData = data;
+        }
+      }
+    });
+
+    // transforma em array e ordena por minutos desc
+    const topicosAgrupados = Object.values(mapaTopicos).sort(
+      (a, b) => b.minutosTotal - a.minutosTotal
+    );
+
     res.render("materia_detalhe", {
       tituloPagina: "Detalhes da matéria",
       materia: mat,
@@ -124,7 +169,8 @@ async function detalheMateria(req, res) {
         totalQuestoes,
         totalCertas,
         taxaAcerto
-      }
+      },
+      topicos: topicosAgrupados
     });
   } catch (error) {
     console.error("❌ Erro ao detalhar matéria:", error);
@@ -187,14 +233,12 @@ async function atualizarMateria(req, res) {
 
 // ---------------------
 // EXCLUIR MATÉRIA
-// (somente se tiver 0 estudos dela)
 // ---------------------
 async function excluirMateria(req, res) {
   const usuarioId = req.session.usuario.id;
   const id = req.params.id;
 
   try {
-    // Só conta estudos do usuário
     const count = await EstudoMateriaDia.count({
       where: { materia_id: id },
       include: [

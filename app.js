@@ -30,7 +30,6 @@ const estudoRoutes = require("./routes/estudoRoutes");
 const simuladoRoutes = require("./routes/simuladoRoutes");
 const estatisticasRoutes = require("./routes/estatisticasRoutes");
 const revisaoRoutes = require("./routes/revisaoRoutes");
-const metasRoutes = require("./routes/metasRoutes");
 const medalhaRoutes = require("./routes/medalhaRoutes");
 
 // Rota nova – PERFIL
@@ -108,7 +107,6 @@ app.use("/estudos", ensureAuth, estudoRoutes);
 app.use("/simulados", ensureAuth, simuladoRoutes);
 app.use("/estatisticas", ensureAuth, estatisticasRoutes);
 app.use("/revisao", ensureAuth, revisaoRoutes);
-app.use("/metas", ensureAuth, metasRoutes);
 app.use("/medalhas", ensureAuth, medalhaRoutes);
 app.use("/perfil", ensureAuth, perfilRoutes);
 

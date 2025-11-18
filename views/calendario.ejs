@@ -10,13 +10,13 @@
 
   <!-- Navegação -->
   <div class="kst-calendar-nav">
-    <a href="/calendario?ano=<%= anoAnterior %>&mes=<%= mesAnterior %>" class="kst-btn kst-btn-secondary">
+    <a href="/dias/calendario?ano=<%= anoAnterior %>&mes=<%= mesAnterior %>" class="kst-btn kst-btn-secondary">
       ⬅ Mês anterior
     </a>
 
     <span class="kst-calendar-nav-title"><%= mesLabel %></span>
 
-    <a href="/calendario?ano=<%= anoProximo %>&mes=<%= mesProximo %>" class="kst-btn kst-btn-secondary">
+    <a href="/dias/calendario?ano=<%= anoProximo %>&mes=<%= mesProximo %>" class="kst-btn kst-btn-secondary">
       Próximo mês ➜
     </a>
   </div>
@@ -31,8 +31,6 @@
 
     <!-- CALENDÁRIO -->
     <div class="kst-calendar-card">
-
-      
 
       <div class="kst-calendar-grid">
 
@@ -70,31 +68,30 @@
     </div>
 
     <!-- RESUMO DO MÊS -->
-<div class="kst-month-summary">
+    <div class="kst-month-summary">
 
-  <h3 class="kst-month-summary-title">Resumo do mês</h3>
+      <h3 class="kst-month-summary-title">Resumo do mês</h3>
 
-  <div class="kst-month-summary-grid">
+      <div class="kst-month-summary-grid">
 
-    <div class="kst-month-summary-item">
-      <span class="kst-month-summary-label">Total de horas estudadas</span>
-      <span class="kst-month-summary-value"><%= totalHorasMes %> h</span>
+        <div class="kst-month-summary-item">
+          <span class="kst-month-summary-label">Total de horas estudadas</span>
+          <span class="kst-month-summary-value"><%= totalHorasMes %> h</span>
+        </div>
+
+        <div class="kst-month-summary-item">
+          <span class="kst-month-summary-label">Dias estudados</span>
+          <span class="kst-month-summary-value"><%= diasEstudados %></span>
+        </div>
+
+        <div class="kst-month-summary-item">
+          <span class="kst-month-summary-label">Média por dia estudado</span>
+          <span class="kst-month-summary-value"><%= mediaDiaria %> h</span>
+        </div>
+
+      </div>
+
     </div>
-
-    <div class="kst-month-summary-item">
-      <span class="kst-month-summary-label">Dias estudados</span>
-      <span class="kst-month-summary-value"><%= diasEstudados %></span>
-    </div>
-
-    <div class="kst-month-summary-item">
-      <span class="kst-month-summary-label">Média por dia estudado</span>
-      <span class="kst-month-summary-value"><%= mediaDiaria %> h</span>
-    </div>
-
-  </div>
-
-</div>
-
 
   <% } %>
 
