@@ -8,16 +8,6 @@
 </head>
 
 <body>
-  <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8" />
-  <title><%= tituloPagina %> | Kauê - Estudos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
-
-<body>
 <header class="kst-header">
   <div class="kst-container kst-header-inner">
 
@@ -44,17 +34,14 @@
     <nav class="kst-header-nav">
       <div class="kst-nav-group-top">
 
-        <!-- HOME (painel) -->
+        <!-- HOME -->
         <div class="kst-nav-top-item">
           <a href="/dias" class="kst-nav-top-trigger">Início</a>
         </div>
 
         <!-- DIAS -->
         <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
-          <button type="button" class="kst-nav-top-trigger">
-            Dias
-          </button>
-
+          <button type="button" class="kst-nav-top-trigger">Dias</button>
           <div class="kst-nav-dropdown">
             <a href="/dias/novo" class="kst-nav-dropdown-link">Registrar dia</a>
             <a href="/dias/historico" class="kst-nav-dropdown-link">Histórico de dias</a>
@@ -83,6 +70,15 @@
           </div>
         </div>
 
+        <!-- REVISÃO (NOVO MENU) -->
+        <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
+          <button type="button" class="kst-nav-top-trigger">Revisão</button>
+          <div class="kst-nav-dropdown">
+            <a href="/revisao" class="kst-nav-dropdown-link">Painel de revisão</a>
+            
+          </div>
+        </div>
+
         <!-- OUTROS -->
         <div class="kst-nav-top-item kst-nav-top-item--has-dropdown">
           <button type="button" class="kst-nav-top-trigger">Outros</button>
@@ -93,29 +89,22 @@
             <a href="/medalhas" class="kst-nav-dropdown-link">Medalhas</a>
           </div>
         </div>
-
       </div>
     </nav>
 
     <!-- DIREITA -->
     <div class="kst-header-right">
 
-      <!-- FOCO -->
-      <button class="kst-btn kst-btn-secondary kst-focus-toggle" id="kstFocusToggle">
-        Foco
-      </button>
+      <button class="kst-btn kst-btn-secondary kst-focus-toggle" id="kstFocusToggle">Foco</button>
 
-      <!-- TEMA -->
       <button class="kst-theme-switch" type="button">
         <span class="kst-theme-switch-knob"></span>
       </button>
 
-      <!-- MENU MOBILE -->
       <button class="kst-nav-toggle" type="button">
         <span></span><span></span><span></span>
       </button>
 
-      <!-- LOGOUT -->
       <% if (usuarioLogado) { %>
         <a href="/logout" class="kst-logout-btn">Sair</a>
       <% } %>
@@ -124,66 +113,61 @@
   </div>
 </header>
 
-  <!-- POPUP GLOBAL DE MEDALHAS -->
-  <%- include("../partials/medalha_popup") %>
-  <script src="/js/medalhas.js"></script>
-  <script>
-    window.novasMedalhas = <%- JSON.stringify(
-      typeof novasMedalhas !== "undefined" ? novasMedalhas : []
-    ) %>;
-  </script>
+<!-- POPUP MEDALHAS -->
+<%- include("../partials/medalha_popup") %>
+<script src="/js/medalhas.js"></script>
+<script>
+  window.novasMedalhas = <%- JSON.stringify(typeof novasMedalhas !== "undefined" ? novasMedalhas : []) %>;
+</script>
 
-  <script src="/js/focus.js"></script>
+<script src="/js/focus.js"></script>
 
-  <!-- SCRIPT -->
-  <script>
-    (function () {
-      const body = document.body;
-      const themeSwitch = document.querySelector(".kst-theme-switch");
+<script>
+(function () {
+  const body = document.body;
+  const themeSwitch = document.querySelector(".kst-theme-switch");
 
-      const KEY = "kst-theme";
-      const saved = localStorage.getItem(KEY);
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const KEY = "kst-theme";
+  const saved = localStorage.getItem(KEY);
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-      const initial = saved || (prefersDark ? "theme-dark" : "theme-light");
-      body.classList.add(initial);
+  const initial = saved || (prefersDark ? "theme-dark" : "theme-light");
+  body.classList.add(initial);
 
-      themeSwitch.addEventListener("click", () => {
-        const isLight = body.classList.contains("theme-light");
-        const newTheme = isLight ? "theme-dark" : "theme-light";
+  themeSwitch.addEventListener("click", () => {
+    const isLight = body.classList.contains("theme-light");
+    const newTheme = isLight ? "theme-dark" : "theme-light";
 
-        body.classList.remove("theme-dark", "theme-light");
-        body.classList.add(newTheme);
-        localStorage.setItem(KEY, newTheme);
-      });
+    body.classList.remove("theme-dark", "theme-light");
+    body.classList.add(newTheme);
+    localStorage.setItem(KEY, newTheme);
+  });
 
-      const navToggle = document.querySelector(".kst-nav-toggle");
-      const nav = document.querySelector(".kst-header-nav");
+  const navToggle = document.querySelector(".kst-nav-toggle");
+  const nav = document.querySelector(".kst-header-nav");
 
-      navToggle.addEventListener("click", () => {
-        navToggle.classList.toggle("is-open");
-        nav.classList.toggle("is-open");
-      });
+  navToggle.addEventListener("click", () => {
+    navToggle.classList.toggle("is-open");
+    nav.classList.toggle("is-open");
+  });
 
-      document.querySelectorAll(".kst-nav-top-item--has-dropdown").forEach(item => {
-        const trigger = item.querySelector(".kst-nav-top-trigger");
+  document.querySelectorAll(".kst-nav-top-item--has-dropdown").forEach(item => {
+    const trigger = item.querySelector(".kst-nav-top-trigger");
+    trigger.addEventListener("click", (ev) => {
+      if (window.innerWidth > 900) return;
+      ev.preventDefault();
+      item.classList.toggle("is-open");
+    });
+  });
 
-        trigger.addEventListener("click", (ev) => {
-          if (window.innerWidth > 900) return;
-          ev.preventDefault();
-          item.classList.toggle("is-open");
-        });
-      });
+  document.addEventListener("DOMContentLoaded", () => {
+    const hoje = new Date().toISOString().split("T")[0];
+    document.querySelectorAll('input[type="date"]').forEach(campo => {
+      if (!campo.value) campo.value = hoje;
+    });
+  });
+})();
+</script>
 
-      // Preencher automaticamente todos os inputs type="date" com a data de hoje
-      document.addEventListener("DOMContentLoaded", () => {
-        const hoje = new Date().toISOString().split("T")[0];
-        document.querySelectorAll('input[type="date"]').forEach(campo => {
-          if (!campo.value) campo.value = hoje;
-        });
-      });
-    })();
-  </script>
-
-  <main class="kst-main">
-    <div class="kst-container">
+<main class="kst-main">
+  <div class="kst-container">
