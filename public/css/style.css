@@ -2447,6 +2447,168 @@ body.theme-dark .kst-alert-error {
   }
 }
 
+/* ============================================================
+   AJUSTES — ESTATÍSTICAS POR MATÉRIA (TEMA DARK E LIGHT)
+   ============================================================ */
+
+/* ----- CARD VAZIO / EMPTY STATE ----- */
+body.theme-dark .kst-empty-state {
+  background: #0b1120;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #cbd5e1;
+}
+
+body.theme-light .kst-empty-state {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* ----- BARRA DE FILTROS ----- */
+body.theme-dark .kst-filter-bar {
+  background: #0d1324;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+body.theme-light .kst-filter-bar {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Botões de filtro */
+body.theme-dark .kst-btn-filter {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #e2e8f0;
+}
+
+body.theme-light .kst-btn-filter {
+  background: #f4f7fb;
+  color: #0f172a;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+body.theme-dark .kst-btn-filter.active {
+  background: #1c9aff;
+  color: white;
+  border-color: #1c9aff;
+}
+
+body.theme-light .kst-btn-filter.active {
+  background: #1c9aff;
+  color: white;
+}
+
+/* Hover */
+body.theme-dark .kst-btn-filter:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: #1c9aff;
+}
+
+body.theme-light .kst-btn-filter:hover {
+  background: #e7f4ff;
+  border-color: #1c9aff;
+}
+
+/* ----- KPIs ----- */
+body.theme-dark .kst-kpi-box {
+  background: #0b1120;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #e2e8f0;
+}
+
+body.theme-light .kst-kpi-box {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Títulos */
+body.theme-dark .kst-kpi-box h3 {
+  color: #f1f5f9;
+}
+
+body.theme-light .kst-kpi-box h3 {
+  color: #0f172a;
+}
+
+/* ----- CARDS DOS GRÁFICOS ----- */
+body.theme-dark .kst-chart-card {
+  background: #0b1120;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #e2e8f0;
+  box-shadow: 0 8px 24px rgba(255,255,255,0.05);
+}
+
+body.theme-light .kst-chart-card {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Header do gráfico */
+body.theme-dark .kst-card-header h3 {
+  color: #f1f5f9;
+}
+body.theme-light .kst-card-header h3 {
+  color: #0f172a;
+}
+
+body.theme-dark .kst-card-header p {
+  color: #94a3b8;
+}
+body.theme-light .kst-card-header p {
+  color: #555;
+}
+
+/* ----- TABELA ----- */
+body.theme-dark .kst-mstats-table {
+  background: #0b1120;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+body.theme-light .kst-mstats-table {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+body.theme-dark .kst-table th {
+  background: #0d1324;
+  color: #e2e8f0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+body.theme-light .kst-table th {
+  background: #f4f7fb;
+  color: #0f172a;
+}
+
+body.theme-dark .kst-table td {
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+body.theme-light .kst-table td {
+  color: #0f172a;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Hover na tabela */
+body.theme-dark .kst-table tbody tr:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+body.theme-light .kst-table tbody tr:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+/* ----- TEXTO GERAL ----- */
+body.theme-dark .kst-mstats * {
+  color: #e2e8f0;
+}
+
+body.theme-light .kst-mstats * {
+  color: #0f172a;
+}
+
+
 
 /* =====================================================================
    16 — SIMULADOS (NOVO / LISTA / DETALHES)
