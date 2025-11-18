@@ -38,5 +38,9 @@ router.get("/:id/editar", diaController.editarDiaForm);
 router.post("/:id/atualizar", diaController.atualizarDia);
 router.post("/:id/excluir", diaController.excluirDia);
 
+// RECORDES
+router.get("/recordes", diaController.recordesPessoais);
+router.get("/recordes/pessoais", diaController.recordesPessoais);
+
 
 module.exports = router;

@@ -1650,6 +1650,105 @@ canvas {
   }
 }
 
+/* ============================================
+   FIX — REGISTRAR DIA (tema claro/escuro)
+   ============================================ */
+
+/* Card principal */
+body.theme-dark .kst-section-form .kst-card-form {
+  background: #0b1120;
+  border-color: rgba(255,255,255,0.08);
+}
+
+/* Texto dentro do card */
+body.theme-dark .kst-section-form .kst-card-form,
+body.theme-dark .kst-section-form .kst-card-form * {
+  color: #e5e7eb;
+}
+
+/* Fieldsets */
+body.theme-dark .kst-details {
+  background: #0d1324;
+  border-color: rgba(255,255,255,0.08);
+}
+
+body.theme-dark .kst-details[open] {
+  background: #141b2f;
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* Título do bloco (summary) */
+body.theme-dark .kst-details-title {
+  color: #f1f5f9;
+}
+
+body.theme-dark .kst-details-title::after {
+  color: #94a3b8;
+}
+
+/* Inputs */
+body.theme-dark .kst-input,
+body.theme-dark .kst-select,
+body.theme-dark .kst-textarea {
+  background: #0b1120;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #e5e7eb;
+}
+
+body.theme-dark .kst-input:focus,
+body.theme-dark .kst-select:focus,
+body.theme-dark .kst-textarea:focus {
+  background: #111827;
+  border-color: #1c9aff;
+  box-shadow: 0 0 0 2px rgba(28,154,255,0.35);
+}
+
+/* Botões rápidos */
+body.theme-dark .kst-quick-btn {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+  color: #e5e7eb;
+}
+
+body.theme-dark .kst-quick-btn:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: #1c9aff;
+}
+
+body.theme-dark .kst-quick-btn-clear {
+  background: rgba(239,68,68,0.18);
+  color: #fca5a5;
+}
+
+body.theme-dark .kst-quick-btn-clear:hover {
+  background: rgba(239,68,68,0.28);
+}
+
+/* Botão principal */
+body.theme-dark .kst-btn-primary {
+  color: #fff !important;
+  background: linear-gradient(135deg, #1c9aff, #38bdf8);
+  border-color: rgba(255,255,255,0.15);
+}
+
+body.theme-dark .kst-btn-primary:hover {
+  box-shadow: 0 12px 28px rgba(28,154,255,0.45);
+}
+
+/* Card de erro/sucesso */
+body.theme-dark .kst-alert-success {
+  background: rgba(34,197,94,0.12);
+  color: #4ade80;
+  border-color: rgba(34,197,94,0.35);
+}
+
+body.theme-dark .kst-alert-error {
+  background: rgba(239,68,68,0.12);
+  color: #fca5a5;
+  border-color: rgba(239,68,68,0.3);
+}
+
+
 
 /* =====================================================================
    11 — HISTÓRICO DE DIAS
@@ -2754,35 +2853,31 @@ body.theme-dark .kst-recordes-item {
 
 
 /* ============================================
-   MAPA DE CALOR — CALENDÁRIO DE ESTUDOS
+   MAPA DE CALOR — VERSÃO PREMIUM
 ============================================ */
 
-/* Card principal do calendário */
 .kst-calendar-card {
-  background: var(--kst-bg-elevated);
+  background: var(--kst-color-bg-elevated);
   padding: 2rem;
   border-radius: 18px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.06);
   margin-bottom: 2rem;
 }
 
-/* Título (se usar em algum lugar) */
 .kst-calendar-title {
   text-align: center;
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: var(--kst-text-main);
 }
 
-/* Grid 7 colunas (dias da semana) */
 .kst-calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 10px;
 }
 
-/* Quadrados de dia */
+/* Quadrados */
 .kst-cal-day {
   position: relative;
   aspect-ratio: 1/1;
@@ -2792,14 +2887,12 @@ body.theme-dark .kst-recordes-item {
   justify-content: center;
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--kst-text-main);
-  transition: transform .2s ease, box-shadow .2s ease;
-  background: #f5f5f5; /* fallback pra caso não entre nenhuma classe de cor */
+  color: var(--kst-color-text-strong);
+  transition: transform .2s ease;
 }
 
 .kst-cal-day:hover {
   transform: scale(1.07);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* Badge para dias 8h+ */
@@ -2812,13 +2905,9 @@ body.theme-dark .kst-recordes-item {
 
 /* ============================================
    ESCALA DE CORES (0h até 8h+)
-   classes usadas: kst-cal-<cor> (zero, h1...h8)
 ============================================ */
 
-.kst-cal-zero { 
-  background: #f0f0f0; 
-  color:#333; 
-}
+.kst-cal-zero { background: #f0f0f0; color:#333; }
 
 .kst-cal-h1  { background: #ffb3b3; color:#fff; }
 .kst-cal-h2  { background: #ff8080; color:#fff; }
@@ -2855,7 +2944,7 @@ body.theme-dark .kst-cal-zero {
   align-items: center;
   gap: .45rem;
   font-size: 1rem;
-  color: var(--kst-text-main);
+  color: var(--kst-color-text);
 }
 
 /* Quadradinhos da legenda */
@@ -2866,25 +2955,25 @@ body.theme-dark .kst-cal-zero {
   display: inline-block;
 }
 
-/* Mesmas cores do mapa */
+/* Mesmas cores */
 .l.zero { background: #ededed; }
-.l.h1   { background: #ffb3b3; }
-.l.h2   { background: #ff8080; }
-.l.h3   { background: #ff6666; }
+.l.h1 { background: #ffb3b3; }
+.l.h2 { background: #ff8080; }
+.l.h3 { background: #ff6666; }
 
-.l.h4   { background: #ffd24d; }
-.l.h5   { background: #c6ff4d; }
-.l.h6   { background: #7dff4d; }
+.l.h4 { background: #ffd24d; }
+.l.h5 { background: #c6ff4d; }
+.l.h6 { background: #7dff4d; }
 
-.l.h7   { background: #2ecc71; }
-.l.h8   { background: #006400; }
+.l.h7 { background: #2ecc71; }
+.l.h8 { background: #006400; }
 
 body.theme-dark .l.zero {
   background: #3a3a3a;
 }
 
 /* ============================================
-   NAVIGAÇÃO DO CALENDÁRIO
+   NAVIGAÇÃO DO CALENDÁRIO — PREMIUM
 ============================================ */
 
 .kst-calendar-nav {
@@ -2897,35 +2986,35 @@ body.theme-dark .l.zero {
   margin-top: 1rem;
 }
 
-.kst-calendar-nav-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--kst-text-main);
-}
-
 .kst-cal-nav-btn {
-  background: var(--kst-bg-elevated);
+  background: var(--kst-color-bg-elevated);
   padding: .6rem 1rem;
   border-radius: 10px;
   font-size: .95rem;
   font-weight: 500;
-  color: var(--kst-text-main);
+  color: var(--kst-color-text-strong);
   border: 1px solid rgba(0,0,0,0.08);
   cursor: pointer;
   transition: .2s ease;
 }
 
 .kst-cal-nav-btn:hover {
-  background: rgba(28, 154, 255, 0.08);
+  background: var(--kst-color-primary-soft, #e9f5ff);
   transform: translateY(-2px);
 }
 
+.kst-calendar-nav strong {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--kst-color-text-strong);
+}
+
 /* ============================================
-   RESUMO DO MÊS
+   RESUMO DO MÊS — PREMIUM
 ============================================ */
 
 .kst-month-summary {
-  background: var(--kst-bg-elevated);
+  background: var(--kst-color-bg-elevated);
   padding: 2rem 2.2rem;
   border-radius: 18px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.06);
@@ -2943,7 +3032,7 @@ body.theme-dark .l.zero {
   font-size: 1.35rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: var(--kst-text-main);
+  color: var(--kst-color-text-strong);
 }
 
 .kst-month-summary-grid {
@@ -2955,7 +3044,7 @@ body.theme-dark .l.zero {
 .kst-month-summary-item {
   display: flex;
   flex-direction: column;
-  background: var(--kst-bg-elevated-soft, #0b1120);
+  background: var(--kst-color-bg);
   padding: 1.2rem 1.4rem;
   border-radius: 14px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.05);
@@ -2963,14 +3052,14 @@ body.theme-dark .l.zero {
 
 .kst-month-summary-label {
   font-size: 0.95rem;
-  color: var(--kst-text-muted);
+  color: var(--kst-color-text);
   margin-bottom: 4px;
 }
 
 .kst-month-summary-value {
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--kst-text-main);
+  color: var(--kst-color-text-strong);
 }
 
 /* MODO ESCURO */
@@ -2983,9 +3072,8 @@ body.theme-dark .kst-month-summary:hover {
 }
 
 body.theme-dark .kst-month-summary-item {
-  background: var(--kst-bg-elevated);
+  background: var(--kst-color-bg-elevated);
 }
-
 
 /* ============================================
    MEDALHAS — PÁGINA PREMIUM (DARK + LIGHT)
