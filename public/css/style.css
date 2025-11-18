@@ -3640,3 +3640,273 @@ body.modal-open {
   color: var(--kst-primary);
   font-weight: 600;
 }
+
+/* ----------------------------- */
+/*      PERFIL – BASE            */
+/* ----------------------------- */
+
+.perfil-wrapper {
+    background: var(--kst-bg-gradient);
+    padding: 40px;
+    border-radius: 20px;
+    margin: 40px auto;
+    max-width: 900px;
+    box-shadow: rgba(0,0,0,0.06) 0 4px 20px;
+    transition: 0.3s ease;
+}
+
+.perfil-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: var(--kst-text-title);
+}
+
+.perfil-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 25px;
+}
+
+.perfil-photo-box {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 4px solid var(--kst-primary);
+    overflow: hidden;
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(8px);
+    transition: 0.3s ease;
+}
+
+.perfil-photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.perfil-user-text h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--kst-text-title);
+}
+
+.perfil-user-text p {
+    color: var(--kst-text-subtle);
+    font-size: 15px;
+}
+
+/* ------------------------------ */
+/*        BOTÕES DO PERFIL        */
+/* ------------------------------ */
+
+.perfil-form {
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.perfil-btn {
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    font-weight: 500;
+    border: none;
+    font-size: 15px;
+}
+
+/* Botão principal azul */
+.perfil-btn-primary {
+    background: #1C9AFF;
+    color: #fff;
+}
+
+.perfil-btn-primary:hover {
+    background: #007ce0;
+}
+
+/* Botão neutro */
+.perfil-btn-neutral {
+    background: #f1f1f1;
+    color: #333;
+    border: 1px solid #dcdcdc;
+}
+
+.perfil-btn-neutral:hover {
+    background: #e7e7e7;
+}
+
+/* Botão voltar */
+.perfil-back {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 25px;
+    background: #333;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: 0.25s ease;
+    font-weight: 500;
+}
+
+.perfil-back:hover {
+    background: #000;
+}
+
+
+
+/* ========================================================= */
+/*                TEMA ESCURO – PERFIL                       */
+/* ========================================================= */
+
+body.theme-dark .perfil-wrapper {
+    background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+    box-shadow: rgba(255,255,255,0.05) 0 0 25px;
+}
+
+body.theme-dark .perfil-title {
+    color: #fff;
+}
+
+body.theme-dark .perfil-user-text h2 {
+    color: #fff;
+}
+
+body.theme-dark .perfil-user-text p {
+    color: #bbb;
+}
+
+body.theme-dark .perfil-photo-box {
+    background: rgba(255,255,255,0.05);
+    border-color: #1C9AFF;
+}
+
+body.theme-dark .perfil-btn-neutral {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #eee;
+}
+body.theme-dark .perfil-btn-neutral:hover {
+    background: #3a3a3a;
+}
+
+body.theme-dark .perfil-back {
+    background: #111;
+    color: #fff !important;
+}
+body.theme-dark .perfil-back:hover {
+    background: #000;
+}
+
+/* =============================== */
+/*   BOTÃO LOGOUT – DISCRETO       */
+/* =============================== */
+
+.kst-logout-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #666;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.25s ease;
+    margin-left: 10px;
+    opacity: 0.6;
+}
+
+/* Hover bem leve */
+.kst-logout-btn:hover {
+    opacity: 1;
+    border-color: #ccc;
+}
+
+/* Dark mode */
+body.theme-dark .kst-logout-btn {
+    color: #bbb;
+}
+
+body.theme-dark .kst-logout-btn:hover {
+    border-color: #444;
+    color: #fff;
+    opacity: 1;
+}
+
+/* ============================================
+   HEADER FINO, ORGANIZADO E PREMIUM
+============================================ */
+
+.kst-header-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0.35rem 1.25rem; /* HEADER MAIS FINO */
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* ESQUERDA | CENTRO | DIREITA */
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ESQUERDA */
+.kst-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem; /* MAIS FECHADO E BONITO */
+}
+
+/* NOME + SUBTÍTULO */
+.kst-brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.kst-app-name {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.kst-app-subtitle {
+    font-size: 0.68rem;
+    opacity: 0.75;
+}
+
+/* CENTRO */
+.kst-header-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1.3rem;
+}
+
+/* DIREITA */
+.kst-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+/* BOTÃO SAIR DISCRETO */
+.kst-logout-btn {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    opacity: 0.6;
+    transition: 0.2s ease;
+}
+
+.kst-logout-btn:hover {
+    opacity: 1;
+    border-color: var(--kst-border-subtle);
+}
+
+/* Avatar no header reduzido */
+.kst-logo-circle {
+    width: 32px;
+    height: 32px;
+    padding: 1px;
+}

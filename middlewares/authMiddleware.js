@@ -1,7 +1,5 @@
 module.exports = {
-
   ensureAuth(req, res, next) {
-    // NOVO: sessão correta
     if (req.session && req.session.usuario) {
       return next();
     }
@@ -9,9 +7,12 @@ module.exports = {
   },
 
   injectUser(req, res, next) {
-    // NOVO: popula usuarioLogado para o header
-    res.locals.usuarioLogado = req.session.usuario || null;
+    res.locals.usuarioLogado = null;
+
+    if (req.session && req.session.usuario) {
+      res.locals.usuarioLogado = req.session.usuario;  
+    }
+
     next();
   }
-
 };

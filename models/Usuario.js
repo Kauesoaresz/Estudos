@@ -22,10 +22,19 @@ module.exports = (sequelize, DataTypes) => {
       senha_hash: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+
+      foto: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null
       }
     },
     {
-      tableName: "usuarios"
+      tableName: "usuarios",
+      timestamps: true,
+      createdAt: "criado_em",
+      updatedAt: "atualizado_em"
     }
   );
 

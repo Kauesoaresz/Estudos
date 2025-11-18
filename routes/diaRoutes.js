@@ -1,6 +1,4 @@
 // routes/diaRoutes.js
-//
-// Rotas do módulo DIA (home, registro diário, histórico, detalhes, edição, exclusão)
 
 const express = require("express");
 const router = express.Router();
@@ -9,35 +7,42 @@ const diaController = require("../controllers/diaController");
 
 // ---------------------
 // HOME / DASHBOARD
+// /dias/
 // ---------------------
 router.get("/", diaController.home);
 
 // ---------------------
-// REGISTRO DIÁRIO
+// REGISTRO DE NOVO DIA
+// /dias/novo
 // ---------------------
-router.get("/dia/novo", diaController.novoDiaForm);
-router.post("/dia", diaController.criarDia);
+router.get("/novo", diaController.novoDiaForm);
+router.post("/", diaController.criarDia);
 
 // ---------------------
 // HISTÓRICO DE DIAS
+// /dias/historico
 // ---------------------
-router.get("/dias", diaController.listarDias);
+router.get("/historico", diaController.listarDias);
 
 // ---------------------
-// DETALHE, EDIÇÃO E EXCLUSÃO
+// DETALHE / EDIÇÃO / EXCLUSÃO
+// /dias/:id
 // ---------------------
-router.get("/dias/:id", diaController.detalhesDia);
-router.get("/dias/:id/editar", diaController.editarDiaForm);
-router.post("/dias/:id/atualizar", diaController.atualizarDia);
-router.post("/dias/:id/excluir", diaController.excluirDia);
+router.get("/:id", diaController.detalhesDia);
+router.get("/:id/editar", diaController.editarDiaForm);
+router.post("/:id/atualizar", diaController.atualizarDia);
+router.post("/:id/excluir", diaController.excluirDia);
 
-/*Recordes*/ 
+// ---------------------
+// RECORDES
+// /dias/recordes
+// ---------------------
+router.get("/recordes/pessoais", diaController.recordesPessoais);
 
-router.get("/recordes", diaController.recordesPessoais);
-
-// Calendário
+// ---------------------
+// CALENDÁRIO
+// /dias/calendario
+// ---------------------
 router.get("/calendario/:ano?/:mes?", diaController.calendarioEstudos);
-
-
 
 module.exports = router;

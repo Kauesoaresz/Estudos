@@ -125,7 +125,8 @@ async function logar(req, res) {
       id: usuario.id,
       nome: usuario.nome,
       email: usuario.email,
-      foto: null
+      foto: usuario.foto
+
     };
 
     return res.redirect("/");
