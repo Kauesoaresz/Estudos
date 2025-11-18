@@ -1,11 +1,11 @@
 // controllers/estatisticasController.js
 //
-// Módulo de ESTATÍSTICAS:
+// Módulo de ESTATÍSTICAS (VERSÃO MULTIUSUÁRIO):
 // - Por matéria (últimos 7d, 30d ou todos os tempos)
 // - De simulados (últimos 7d, 30d ou todos os tempos)
 // - Dos dias (hábitos, estudo, sono, humor)
 //
-// Este controller consolida tudo o que originalmente estava espalhado no app.js
+// Tudo sempre filtrando pelo usuario_id da sessão. 👍
 
 const { Dia, Materia, EstudoMateriaDia, Simulado } = require("../models");
 const { toISODate, diffDias, formatarDDMMYYYY } = require("../utils/datas");
@@ -18,10 +18,25 @@ async function estatisticasMaterias(req, res) {
   const periodo = req.query.periodo || "30d"; // "7d", "30d" ou "todos"
 
   try {
+    const userId = req.session.usuario.id;
+
     const estudosBrutos = await EstudoMateriaDia.findAll({
+      where: { usuario_id: userId },
       include: [
-        { model: Materia, as: "materia", attributes: ["id", "nome"] },
-        { model: Dia, as: "dia", attributes: ["data"] }
+        {
+          model: Materia,
+          as: "materia",
+          attributes: ["id", "nome"],
+          where: { usuario_id: userId },
+          required: true
+        },
+        {
+          model: Dia,
+          as: "dia",
+          attributes: ["data"],
+          where: { usuario_id: userId },
+          required: true
+        }
       ]
     });
 
@@ -71,9 +86,12 @@ async function estatisticasMaterias(req, res) {
 
       const item = mapa.get(mat.id);
 
-      if (est.minutos_estudados) item.totalMinutos += Number(est.minutos_estudados);
-      if (est.questoes_feitas) item.totalQuestoes += Number(est.questoes_feitas);
-      if (est.questoes_certas) item.totalCertas += Number(est.questoes_certas);
+      if (est.minutos_estudados)
+        item.totalMinutos += Number(est.minutos_estudados);
+      if (est.questoes_feitas)
+        item.totalQuestoes += Number(est.questoes_feitas);
+      if (est.questoes_certas)
+        item.totalCertas += Number(est.questoes_certas);
 
       if (est.dia && est.dia.data) {
         const iso = toISODate(est.dia.data);
@@ -103,7 +121,9 @@ async function estatisticasMaterias(req, res) {
     materiasStats.sort((a, b) => b.horasTotais - a.horasTotais);
 
     const labels = materiasStats.map((m) => m.materiaNome);
-    const horasDataset = materiasStats.map((m) => Number(m.horasTotais.toFixed(2)));
+    const horasDataset = materiasStats.map((m) =>
+      Number(m.horasTotais.toFixed(2))
+    );
     const questoesDataset = materiasStats.map((m) => m.totalQuestoes);
 
     res.render("estatisticas_materias", {
@@ -128,8 +148,19 @@ async function estatisticasSimulados(req, res) {
   const periodo = req.query.periodo || "30d";
 
   try {
+    const userId = req.session.usuario.id;
+
     const simuladosBrutos = await Simulado.findAll({
-      include: [{ model: Dia, as: "dia", attributes: ["data"] }],
+      where: { usuario_id: userId },
+      include: [
+        {
+          model: Dia,
+          as: "dia",
+          attributes: ["data"],
+          where: { usuario_id: userId },
+          required: true
+        }
+      ],
       order: [[{ model: Dia, as: "dia" }, "data", "ASC"]]
     });
 
@@ -162,7 +193,12 @@ async function estatisticasSimulados(req, res) {
         piorTotal: null,
         labelsJSON: JSON.stringify([]),
         totalDatasetJSON: JSON.stringify([]),
-        mediasPorAreaLabelsJSON: JSON.stringify(["Linguagens", "Humanas", "Naturezas", "Matemática"]),
+        mediasPorAreaLabelsJSON: JSON.stringify([
+          "Linguagens",
+          "Humanas",
+          "Naturezas",
+          "Matemática"
+        ]),
         mediasPorAreaValoresJSON: JSON.stringify([0, 0, 0, 0]),
         periodo
       });
@@ -170,7 +206,10 @@ async function estatisticasSimulados(req, res) {
 
     const labels = [];
     const totalDataset = [];
-    let somaL = 0, somaH = 0, somaN = 0, somaM = 0;
+    let somaL = 0,
+      somaH = 0,
+      somaN = 0,
+      somaM = 0;
 
     let melhorTotal = null;
     let piorTotal = null;
@@ -189,7 +228,10 @@ async function estatisticasSimulados(req, res) {
       labels.push(dataLabel);
       totalDataset.push(total);
 
-      somaL += L; somaH += H; somaN += N; somaM += M;
+      somaL += L;
+      somaH += H;
+      somaN += N;
+      somaM += M;
 
       if (melhorTotal === null || total > melhorTotal) melhorTotal = total;
       if (piorTotal === null || total < piorTotal) piorTotal = total;
@@ -215,7 +257,12 @@ async function estatisticasSimulados(req, res) {
       piorTotal,
       labelsJSON: JSON.stringify(labels),
       totalDatasetJSON: JSON.stringify(totalDataset),
-      mediasPorAreaLabelsJSON: JSON.stringify(["Linguagens", "Humanas", "Naturezas", "Matemática"]),
+      mediasPorAreaLabelsJSON: JSON.stringify([
+        "Linguagens",
+        "Humanas",
+        "Naturezas",
+        "Matemática"
+      ]),
       mediasPorAreaValoresJSON: JSON.stringify(medias),
       periodo
     });
@@ -233,7 +280,13 @@ async function estatisticasDias(req, res) {
   const periodo = req.query.periodo || "30d";
 
   try {
-    const dias = await Dia.findAll({ order: [["data", "ASC"]], raw: true });
+    const userId = req.session.usuario.id;
+
+    const dias = await Dia.findAll({
+      where: { usuario_id: userId },
+      order: [["data", "ASC"]],
+      raw: true
+    });
 
     const hoje = new Date();
     const filtrados = dias.filter((d) => {
@@ -305,8 +358,12 @@ async function estatisticasDias(req, res) {
 
       labels.push(label);
 
-      const horas = d.horas_estudo_liquidas ? Number(d.horas_estudo_liquidas) : 0;
-      const quest = d.questoes_feitas_total ? Number(d.questoes_feitas_total) : 0;
+      const horas = d.horas_estudo_liquidas
+        ? Number(d.horas_estudo_liquidas)
+        : 0;
+      const quest = d.questoes_feitas_total
+        ? Number(d.questoes_feitas_total)
+        : 0;
 
       horasDataset.push(horas);
       questoesDataset.push(quest);
@@ -331,21 +388,31 @@ async function estatisticasDias(req, res) {
 
       const foco = d.nivel_foco != null ? Number(d.nivel_foco) : null;
       focoDataset.push(foco);
-      if (foco != null) { somaFoco += foco; contaFoco++; }
+      if (foco != null) {
+        somaFoco += foco;
+        contaFoco++;
+      }
 
       const energia = d.nivel_energia != null ? Number(d.nivel_energia) : null;
       energiaDataset.push(energia);
-      if (energia != null) { somaEnergia += energia; contaEnergia++; }
+      if (energia != null) {
+        somaEnergia += energia;
+        contaEnergia++;
+      }
 
       if (d.humor === "BOM") countBom++;
       else if (d.humor === "OK") countOk++;
       else if (d.humor === "RUIM") countRuim++;
     });
 
-    const mediaHorasEstudo = diasComEstudo ? somaHorasEstudo / diasComEstudo : 0;
+    const mediaHorasEstudo = diasComEstudo
+      ? somaHorasEstudo / diasComEstudo
+      : 0;
     const mediaQuestoes = diasComEstudo ? somaQuestoes / diasComEstudo : 0;
     const mediaSono = contaSono ? somaSono / contaSono : 0;
-    const mediaQualidade = contaQualidade ? somaQualidadeSono / contaQualidade : 0;
+    const mediaQualidade = contaQualidade
+      ? somaQualidadeSono / contaQualidade
+      : 0;
     const mediaFocoTotal = contaFoco ? somaFoco / contaFoco : 0;
     const mediaEnergiaTotal = contaEnergia ? somaEnergia / contaEnergia : 0;
 

@@ -7,55 +7,37 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
+
+      usuario_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+      },
+
       dia_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
       },
 
-      // Resultado geral em texto (TRI, nota, resumo etc.)
-      resultado_resumo: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
+      resultado_resumo: DataTypes.TEXT,
+      tempo_total_minutos: DataTypes.INTEGER,
 
-      // Tempo total de prova (em minutos)
-      tempo_total_minutos: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
+      acertos_linguagens: DataTypes.INTEGER,
+      acertos_humanas: DataTypes.INTEGER,
+      acertos_naturezas: DataTypes.INTEGER,
+      acertos_matematica: DataTypes.INTEGER,
 
-      // Acertos por área do ENEM
-      acertos_linguagens: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      acertos_humanas: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      acertos_naturezas: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      acertos_matematica: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-
-      // Anotações qualitativas
-      area_que_mais_errou: {
-        type: DataTypes.STRING(100),
-        allowNull: true
-      },
-      principal_dificuldade: {
-        type: DataTypes.STRING(100),
-        allowNull: true
-      }
+      area_que_mais_errou: DataTypes.STRING(100),
+      principal_dificuldade: DataTypes.STRING(100)
     },
     {
       tableName: "simulados"
     }
   );
+
+  Simulado.associate = (models) => {
+    Simulado.belongsTo(models.Usuario, { foreignKey: "usuario_id", as: "usuario" });
+    Simulado.belongsTo(models.Dia, { foreignKey: "dia_id", as: "dia" });
+  };
 
   return Simulado;
 };

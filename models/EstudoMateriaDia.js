@@ -7,51 +7,40 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
+
+      usuario_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+      },
+
       dia_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
       },
+
       materia_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
       },
 
-      minutos_estudados: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      topicos_estudados: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
+      minutos_estudados: DataTypes.INTEGER,
+      topicos_estudados: DataTypes.TEXT,
+      tipo_estudo: DataTypes.ENUM("CONTEUDO_NOVO", "REVISAO", "REVISAO_ERRO"),
 
-      // Mantemos ENUM porque o banco já está assim
-      tipo_estudo: {
-        type: DataTypes.ENUM(
-          "CONTEUDO_NOVO",
-          "REVISAO",
-          "REVISAO_ERRO"
-        ),
-        allowNull: true
-      },
-
-      questoes_feitas: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      questoes_certas: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      questoes_marcadas_revisao: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      }
+      questoes_feitas: DataTypes.INTEGER,
+      questoes_certas: DataTypes.INTEGER,
+      questoes_marcadas_revisao: DataTypes.INTEGER
     },
     {
       tableName: "estudos_materia_dia"
     }
   );
+
+  EstudoMateriaDia.associate = (models) => {
+    EstudoMateriaDia.belongsTo(models.Usuario, { foreignKey: "usuario_id", as: "usuario" });
+    EstudoMateriaDia.belongsTo(models.Dia, { foreignKey: "dia_id", as: "dia" });
+    EstudoMateriaDia.belongsTo(models.Materia, { foreignKey: "materia_id", as: "materia" });
+  };
 
   return EstudoMateriaDia;
 };

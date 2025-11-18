@@ -155,50 +155,84 @@ const MEDALHAS_BASE = [
 // =====================================================
 
 async function inicializarMedalhasBase() {
-  console.log("Rodando inicialização de medalhas! Total no JSON:", MEDALHAS_BASE.length);
+  console.log("🔧 Inicializando medalhas base...");
 
   for (const medalha of MEDALHAS_BASE) {
-    const existe = await Medalha.findOne({
-      where: { nome: medalha.nome }
-    });
-
-    if (!existe) {
-      await Medalha.create(medalha);
-    }
+    const existe = await Medalha.findOne({ where: { nome: medalha.nome } });
+    if (!existe) await Medalha.create(medalha);
   }
 
-  console.log("🏅 Medalhas base carregadas");
+  console.log("🏅 Medalhas iniciais garantidas.");
 }
 
-
-// =====================================================
-// FUNÇÃO PRINCIPAL — VERIFICAR MEDALHAS
-// =====================================================
-
-async function verificarMedalhas() {
+// ======================================================================
+// FUNÇÃO PRINCIPAL — VERIFICA MEDALHAS PARA UM USUÁRIO
+// ======================================================================
+//
+// 👉 antes era: verificarMedalhas()
+// 👉 agora é: verificarMedalhas(userId)
+//
+// Ela retorna quais medalhas foram ganhas AGORA (para mostrar a animação)
+//
+async function verificarMedalhas(usuario_id) {
   try {
-    const dias = await Dia.findAll();
-    const estudos = await EstudoMateriaDia.findAll();
-    const simulados = await Simulado.findAll();
+    // ============================================================
+    // 1) Carregar SOMENTE dados do usuário logado
+    // ============================================================
+
+    const dias = await Dia.findAll({
+      where: { usuario_id },
+      order: [["data", "ASC"]]
+    });
+
+    const estudos = await EstudoMateriaDia.findAll({
+      where: { usuario_id }
+    });
+
+    const simulados = await Simulado.findAll({
+      where: { usuario_id }
+    });
+
     const medalhas = await Medalha.findAll();
-    const jaTem = await MedalhaUsuario.findAll();
 
-    const idsJaTem = jaTem.map(m => m.medalha_id);
+    const jaTem = await MedalhaUsuario.findAll({
+      where: { usuario_id },
+      raw: true
+    });
 
-    // Progresso total
-    const totalHoras = dias.reduce((acc, d) => acc + (d.horas_estudo_liquidas || 0), 0);
-    const totalQuestoes = dias.reduce((acc, d) => acc + (d.questoes_feitas_total || 0), 0);
-    const totalAcertos = dias.reduce((acc, d) => acc + (d.questoes_acertos_total || 0), 0);
+    const idsJaTem = new Set(jaTem.map(m => m.medalha_id));
+
+    // ============================================================
+    // 2) Cálculos gerais do usuário
+    // ============================================================
+
+    const totalHoras = dias.reduce(
+      (acc, d) => acc + (d.horas_estudo_liquidas || 0),
+      0
+    );
+
+    const totalQuestoes = dias.reduce(
+      (acc, d) => acc + (d.questoes_feitas_total || 0),
+      0
+    );
+
+    const totalAcertos = dias.reduce(
+      (acc, d) => acc + (d.questoes_acertos_total || 0),
+      0
+    );
+
     const totalSimulados = simulados.length;
 
+    // ------------------------------------------------------------
     // Dias seguidos
+    // ------------------------------------------------------------
     let sequencia = 0;
     let maiorSequencia = 0;
-    const diasOrdenados = dias.sort((a, b) => a.data.localeCompare(b.data));
 
-    for (let d of diasOrdenados) {
+    for (const d of dias) {
       const h = d.horas_estudo_liquidas || 0;
       const q = d.questoes_feitas_total || 0;
+
       if (h > 0 || q > 0) {
         sequencia++;
         maiorSequencia = Math.max(maiorSequencia, sequencia);
@@ -207,15 +241,40 @@ async function verificarMedalhas() {
       }
     }
 
+    const ultimoDia = dias[dias.length - 1] || null;
+
+    // ------------------------------------------------------------
+    // Metas diárias — contar total acumulado do usuário
+    // ------------------------------------------------------------
+    const metasConcluidas = dias.filter(d => d.status_meta === "CONCLUIDA").length;
+
+    // ------------------------------------------------------------
+    // Revisões — contar pelo modelo de estudos
+    // ------------------------------------------------------------
+    const totalRevisoes = estudos.reduce(
+      (acc, e) => acc + (e.revisoes || 0),
+      0
+    );
+
+    // ======================================================================
+    // 3) Verificar medalhas
+    // ======================================================================
+
     const novasMedalhas = [];
 
     for (const medalha of medalhas) {
-      if (idsJaTem.includes(medalha.id)) continue;
+
+      // Usuário já tem? pula
+      if (idsJaTem.has(medalha.id)) continue;
 
       const tipo = medalha.tipo_trigger;
       const valor = medalha.valor_trigger;
 
       let conquistou = false;
+
+      // -----------------------------------------
+      // ACUMULATIVAS
+      // -----------------------------------------
 
       if (tipo === "HORAS_ACUM" && totalHoras >= valor) conquistou = true;
       if (tipo === "QUESTOES" && totalQuestoes >= valor) conquistou = true;
@@ -223,8 +282,13 @@ async function verificarMedalhas() {
       if (tipo === "SIMULADOS_FEITOS" && totalSimulados >= valor) conquistou = true;
       if (tipo === "DIAS_SEGUIDOS" && maiorSequencia >= valor) conquistou = true;
 
-      // Medalhas por um dia apenas
-      const ultimoDia = diasOrdenados[diasOrdenados.length - 1];
+      if (tipo === "REVISOES" && totalRevisoes >= valor) conquistou = true;
+
+      if (tipo === "META" && metasConcluidas >= valor) conquistou = true;
+
+      // -----------------------------------------
+      // Medalhas que dependem do ÚLTIMO DIA
+      // -----------------------------------------
 
       if (ultimoDia) {
         if (tipo === "HORAS_DIA" && ultimoDia.horas_estudo_liquidas >= valor)
@@ -241,16 +305,18 @@ async function verificarMedalhas() {
 
         if (tipo === "FOCO" && ultimoDia.nivel_foco >= valor)
           conquistou = true;
-
-        if (tipo === "META" && ultimoDia.status_meta === "CONCLUIDA" && valor === 1)
-          conquistou = true;
       }
 
+      // ==================================================================
+      // Registrar medalha conquistada
+      // ==================================================================
       if (conquistou) {
         await MedalhaUsuario.create({
+          usuario_id,
           medalha_id: medalha.id,
           data_conquista: new Date()
         });
+
         novasMedalhas.push(medalha);
       }
     }
@@ -258,15 +324,14 @@ async function verificarMedalhas() {
     return novasMedalhas;
 
   } catch (err) {
-    console.error("❌ Erro ao verificar medalhas:", err);
+    console.error("❌ Erro em verificarMedalhas (multiusuário):", err);
     return [];
   }
 }
 
-// =====================================================
+// ======================================================================
 // EXPORT
-// =====================================================
-
+// ======================================================================
 module.exports = {
   inicializarMedalhasBase,
   verificarMedalhas,

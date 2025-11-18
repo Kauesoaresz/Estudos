@@ -1,14 +1,7 @@
 // controllers/estudoController.js
 //
-// Controla tudo referente aos ESTUDOS POR MATÉRIA:
-// - Form criar
-// - Criar estudo
-// - Listar estudos + filtros
-// - Detalhar estudo
-// - Editar
-// - Atualizar
-// - Excluir
-// - Sistema automático de medalhas
+// Agora 100% multiusuário! Cada usuário só vê os próprios estudos.
+//
 
 const { EstudoMateriaDia, Materia, Dia } = require("../models");
 const { toISODate, formatarDDMMYYYY } = require("../utils/datas");
@@ -19,10 +12,13 @@ const { verificarMedalhas } = require("../services/medalhasService");
 // ===================================================================
 async function novoEstudoForm(req, res) {
   try {
+    const usuarioId = req.session.usuario.id;
+
     const sucesso = req.query.sucesso === "1";
     const erro = req.query.erro === "1";
 
     const materias = await Materia.findAll({
+      where: { usuario_id: usuarioId },
       order: [["nome", "ASC"]],
       raw: true
     });
@@ -44,6 +40,8 @@ async function novoEstudoForm(req, res) {
 // ===================================================================
 async function criarEstudo(req, res) {
   try {
+    const usuarioId = req.session.usuario.id;
+
     const {
       data,
       materia_id,
@@ -59,11 +57,13 @@ async function criarEstudo(req, res) {
       return res.redirect("/estudos/novo?erro=1");
     }
 
-    // Garante que o dia existe
-    let dia = await Dia.findOne({ where: { data } });
-    if (!dia) dia = await Dia.create({ data });
+    // Garante que o dia existe para o usuário
+    let dia = await Dia.findOne({ where: { data, usuario_id: usuarioId } });
+    if (!dia)
+      dia = await Dia.create({ data, usuario_id: usuarioId });
 
     await EstudoMateriaDia.create({
+      usuario_id: usuarioId,
       dia_id: dia.id,
       materia_id: Number(materia_id),
       minutos_estudados: minutos_estudados ? Number(minutos_estudados) : null,
@@ -76,10 +76,8 @@ async function criarEstudo(req, res) {
         : null
     });
 
-    // ===============================
-    // CHECK AUTOMÁTICO DE MEDALHAS
-    // ===============================
-    const novasMedalhas = await verificarMedalhas();
+    // CHECK DE MEDALHAS (por usuário)
+    const novasMedalhas = await verificarMedalhas(usuarioId);
     if (novasMedalhas.length > 0) {
       return res.render("medalha_nova", { novasMedalhas });
     }
@@ -95,30 +93,41 @@ async function criarEstudo(req, res) {
 // LISTAR ESTUDOS + FILTROS
 // ===================================================================
 async function listarEstudos(req, res) {
+  const usuarioId = req.session.usuario.id;
   const { de, ate, materia_id } = req.query;
 
   try {
     const estudosBrutos = await EstudoMateriaDia.findAll({
+      where: { usuario_id: usuarioId },
       include: [
-        { model: Materia, as: "materia", attributes: ["id", "nome"] },
-        { model: Dia, as: "dia", attributes: ["data"] }
+        {
+          model: Materia,
+          as: "materia",
+          attributes: ["id", "nome"],
+          where: { usuario_id: usuarioId }
+        },
+        {
+          model: Dia,
+          as: "dia",
+          attributes: ["data"],
+          where: { usuario_id: usuarioId }
+        }
       ],
       order: [["id", "DESC"]]
     });
 
     const materias = await Materia.findAll({
+      where: { usuario_id: usuarioId },
       order: [["nome", "ASC"]],
       raw: true
     });
 
-    // Processar dados
     const estudosProcessados = estudosBrutos.map((e) => {
       const est = e.get({ plain: true });
 
-      let dataISO = est.dia?.data;
-      if (dataISO instanceof Date) dataISO = toISODate(est.dia.data);
-
-      let dataFormatada = dataISO ? formatarDDMMYYYY(dataISO) : null;
+      const dataISO = typeof est.dia.data === "string"
+        ? est.dia.data
+        : toISODate(est.dia.data);
 
       let taxaAcerto = null;
       if (est.questoes_feitas > 0 && est.questoes_certas != null) {
@@ -128,9 +137,9 @@ async function listarEstudos(req, res) {
       return {
         id: est.id,
         dataISO,
-        dataFormatada,
-        materiaId: est.materia?.id || null,
-        materiaNome: est.materia?.nome || "—",
+        dataFormatada: formatarDDMMYYYY(dataISO),
+        materiaId: est.materia.id,
+        materiaNome: est.materia.nome,
         minutos_estudados: est.minutos_estudados,
         tipo_estudo: est.tipo_estudo,
         questoes_feitas: est.questoes_feitas,
@@ -141,13 +150,14 @@ async function listarEstudos(req, res) {
       };
     });
 
-    // Aplicar filtros
     let estudos = estudosProcessados;
 
     if (de) estudos = estudos.filter((e) => e.dataISO >= de);
     if (ate) estudos = estudos.filter((e) => e.dataISO <= ate);
     if (materia_id)
-      estudos = estudos.filter((e) => e.materiaId && String(e.materiaId) === String(materia_id));
+      estudos = estudos.filter(
+        (e) => String(e.materiaId) === String(materia_id)
+      );
 
     res.render("estudos_lista", {
       tituloPagina: "Histórico de estudos por matéria",
@@ -167,8 +177,14 @@ async function listarEstudos(req, res) {
 // DETALHAR UM ESTUDO
 // ===================================================================
 async function detalheEstudo(req, res) {
+  const usuarioId = req.session.usuario.id;
+
   try {
-    const estudo = await EstudoMateriaDia.findByPk(req.params.id, {
+    const estudo = await EstudoMateriaDia.findOne({
+      where: {
+        id: req.params.id,
+        usuario_id: usuarioId
+      },
       include: [
         { model: Materia, as: "materia", attributes: ["nome"] },
         { model: Dia, as: "dia", attributes: ["data"] }
@@ -191,23 +207,27 @@ async function detalheEstudo(req, res) {
 // EDITAR FORM
 // ===================================================================
 async function editarEstudoForm(req, res) {
+  const usuarioId = req.session.usuario.id;
+
   try {
-    const estudo = await EstudoMateriaDia.findByPk(req.params.id, {
-      include: [{ model: Materia, as: "materia", attributes: ["id", "nome"] }]
+    const estudo = await EstudoMateriaDia.findOne({
+      where: { id: req.params.id, usuario_id: usuarioId },
+      include: [
+        { model: Materia, as: "materia", attributes: ["id", "nome"] }
+      ]
     });
 
     if (!estudo) return res.status(404).send("Estudo não encontrado.");
 
-    const estudoPlain = estudo.get({ plain: true });
-
     const materias = await Materia.findAll({
+      where: { usuario_id: usuarioId },
       order: [["nome", "ASC"]],
       raw: true
     });
 
     res.render("estudo_materia_editar", {
       tituloPagina: "Editar estudo",
-      estudo: estudoPlain,
+      estudo: estudo.get({ plain: true }),
       materias
     });
   } catch (err) {
@@ -220,6 +240,8 @@ async function editarEstudoForm(req, res) {
 // ATUALIZAR ESTUDO
 // ===================================================================
 async function atualizarEstudo(req, res) {
+  const usuarioId = req.session.usuario.id;
+
   try {
     const {
       data,
@@ -236,8 +258,9 @@ async function atualizarEstudo(req, res) {
       return res.redirect(`/estudos/${req.params.id}/editar`);
     }
 
-    let dia = await Dia.findOne({ where: { data } });
-    if (!dia) dia = await Dia.create({ data });
+    let dia = await Dia.findOne({ where: { data, usuario_id: usuarioId } });
+    if (!dia)
+      dia = await Dia.create({ data, usuario_id: usuarioId });
 
     await EstudoMateriaDia.update(
       {
@@ -245,14 +268,19 @@ async function atualizarEstudo(req, res) {
         materia_id: Number(materia_id),
         minutos_estudados: minutos_estudados ? Number(minutos_estudados) : null,
         tipo_estudo: tipo_estudo || null,
-        topicos_estudados: topicos_estudados || null,
+        topicos_estudados,
         questoes_feitas: questoes_feitas ? Number(questoes_feitas) : null,
         questoes_certas: questoes_certas ? Number(questoes_certas) : null,
         questoes_marcadas_revisao: questoes_marcadas_revisao
           ? Number(questoes_marcadas_revisao)
           : null
       },
-      { where: { id: req.params.id } }
+      {
+        where: {
+          id: req.params.id,
+          usuario_id: usuarioId
+        }
+      }
     );
 
     return res.redirect("/estudos");
@@ -266,8 +294,16 @@ async function atualizarEstudo(req, res) {
 // EXCLUIR ESTUDO
 // ===================================================================
 async function excluirEstudo(req, res) {
+  const usuarioId = req.session.usuario.id;
+
   try {
-    await EstudoMateriaDia.destroy({ where: { id: req.params.id } });
+    await EstudoMateriaDia.destroy({
+      where: {
+        id: req.params.id,
+        usuario_id: usuarioId
+      }
+    });
+
     res.redirect("/estudos");
   } catch (err) {
     console.error("❌ Erro ao excluir estudo:", err);

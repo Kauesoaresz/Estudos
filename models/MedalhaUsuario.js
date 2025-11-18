@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true
       },
 
+      usuario_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+      },
+
       medalha_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
@@ -26,8 +31,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  // 🔥 ASSOCIAÇÃO OBRIGATÓRIA
   MedalhaUsuario.associate = models => {
+    MedalhaUsuario.belongsTo(models.Usuario, {
+      foreignKey: "usuario_id",
+      as: "usuario"
+    });
+
     MedalhaUsuario.belongsTo(models.Medalha, {
       foreignKey: "medalha_id",
       as: "medalha"

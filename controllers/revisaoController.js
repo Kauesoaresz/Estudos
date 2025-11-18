@@ -1,3 +1,8 @@
+// controllers/revisaoController.js
+//
+// VERSÃO MULTI-USUÁRIO COMPLETA
+//
+
 const { Materia, EstudoMateriaDia, Dia } = require("../models");
 const {
   toISODate,
@@ -5,16 +10,24 @@ const {
   formatarDDMMYYYY
 } = require("../utils/datas");
 
-
 // =====================================================================
-// DASHBOARD DE REVISÃO
+// DASHBOARD DE REVISÃO (multiusuário)
 // =====================================================================
 async function dashboardRevisao(req, res) {
   try {
+    const userId = req.session.usuario.id;
+
+    // Apenas estudos do usuário
     const estudosBrutos = await EstudoMateriaDia.findAll({
+      where: { usuario_id: userId },
       include: [
         { model: Materia, as: "materia", attributes: ["id", "nome"] },
-        { model: Dia, as: "dia", attributes: ["data"] }
+        { 
+          model: Dia, 
+          as: "dia", 
+          attributes: ["data"],
+          where: { usuario_id: userId }
+        }
       ]
     });
 
@@ -75,7 +88,6 @@ async function dashboardRevisao(req, res) {
       let prioridadeClass = "baixa";
       let prioridadeLabel = "Prioridade baixa";
 
-      // CASO ESPECIAL: redação ou matérias sem questões
       if (taxaAcerto === null) {
         if (diasSemVer >= 7) {
           prioridadeClass = "alta";
@@ -85,7 +97,7 @@ async function dashboardRevisao(req, res) {
           prioridadeLabel = "Prioridade média";
         }
       } else {
-        const dificuldade = 100 - taxaAcerto;  
+        const dificuldade = 100 - taxaAcerto;
         const diasPeso = Math.min(diasSemVer, 60);
         const marcadasPeso = Math.min(m.totalMarcadasRevisao, 50);
 
@@ -123,7 +135,7 @@ async function dashboardRevisao(req, res) {
       };
     });
 
-    // ORDENAÇÃO
+    // Ordenar por prioridade
     materiasRevisao.sort((a, b) => b.prioridadeScore - a.prioridadeScore);
 
     const sugestoesHoje = materiasRevisao.slice(0, 5);
@@ -141,21 +153,32 @@ async function dashboardRevisao(req, res) {
 }
 
 
-
 // =====================================================================
-// DETALHE DA MATÉRIA
+// DETALHE DE UMA MATÉRIA – MULTI-USUÁRIO
 // =====================================================================
 async function detalheMateriaRevisao(req, res) {
   try {
+    const userId = req.session.usuario.id;
     const id = req.params.id;
 
-    const materia = await Materia.findByPk(id, { raw: true });
+    const materia = await Materia.findOne({
+      where: { id, usuario_id: userId },
+      raw: true
+    });
+
     if (!materia)
       return res.status(404).send("Matéria não encontrada.");
 
     const estudosBrutos = await EstudoMateriaDia.findAll({
-      where: { materia_id: id },
-      include: [{ model: Dia, as: "dia", attributes: ["data"] }],
+      where: { materia_id: id, usuario_id: userId },
+      include: [
+        {
+          model: Dia,
+          as: "dia",
+          attributes: ["data"],
+          where: { usuario_id: userId }
+        }
+      ],
       order: [["id", "DESC"]]
     });
 
@@ -223,12 +246,13 @@ async function detalheMateriaRevisao(req, res) {
 }
 
 
-
 // =====================================================================
-// REGISTRAR REVISÃO (compatível com ENUM do banco)
+// REGISTRAR REVISÃO – MULTI-USUÁRIO
 // =====================================================================
 async function registrarRevisao(req, res) {
   try {
+    const userId = req.session.usuario.id;
+
     const {
       data,
       materia_id,
@@ -242,38 +266,25 @@ async function registrarRevisao(req, res) {
     if (!materia_id || !data)
       return res.redirect(`/revisao/materia/${materia_id}?erro=1`);
 
-    let dia = await Dia.findOne({ where: { data } });
-    if (!dia) dia = await Dia.create({ data });
+    let dia = await Dia.findOne({ where: { data, usuario_id: userId } });
+    if (!dia) dia = await Dia.create({ data, usuario_id: userId });
 
-    // ============================
-    // MAPEAMENTO PARA O ENUM
-    // ============================
-    let tipoFinal = "REVISAO"; // padrão
-
-    // tipo_revisao pode ser string ou array
+    // Tipo compatível com ENUM
+    let tipoFinal = "REVISAO";
     let origem = tipo_revisao;
 
     if (Array.isArray(origem)) {
-      const joined = origem.map(String).join(" ").toLowerCase();
-      if (joined.includes("novo")) {
-        tipoFinal = "CONTEUDO_NOVO";
-      } else if (joined.includes("erro")) {
-        tipoFinal = "REVISAO_ERRO";
-      } else {
-        tipoFinal = "REVISAO";
-      }
+      const joined = origem.join(" ").toLowerCase();
+      if (joined.includes("novo")) tipoFinal = "CONTEUDO_NOVO";
+      else if (joined.includes("erro")) tipoFinal = "REVISAO_ERRO";
     } else if (origem) {
-      const t = String(origem).toLowerCase();
-      if (t.includes("novo")) {
-        tipoFinal = "CONTEUDO_NOVO";
-      } else if (t.includes("erro")) {
-        tipoFinal = "REVISAO_ERRO";
-      } else {
-        tipoFinal = "REVISAO";
-      }
+      const t = origem.toLowerCase();
+      if (t.includes("novo")) tipoFinal = "CONTEUDO_NOVO";
+      else if (t.includes("erro")) tipoFinal = "REVISAO_ERRO";
     }
 
     await EstudoMateriaDia.create({
+      usuario_id: userId,
       dia_id: dia.id,
       materia_id: Number(materia_id),
       minutos_estudados: minutos_estudados ? Number(minutos_estudados) : null,
@@ -287,27 +298,31 @@ async function registrarRevisao(req, res) {
     return res.redirect(`/revisao/materia/${materia_id}?sucesso=1`);
 
   } catch (error) {
-    console.error("❌ Erro ao registrar revisão:", error.message, error);
+    console.error("❌ Erro ao registrar revisão:", error);
     return res.status(500).send("Erro ao registrar revisão.");
   }
 }
 
 
-
 // =====================================================================
-// CARREGAR A REVISÃO PARA EDIÇÃO
+// CARREGAR REVISÃO PARA EDIÇÃO – MULTI-USUÁRIO
 // =====================================================================
 async function carregarRevisaoParaEdicao(req, res) {
   try {
+    const userId = req.session.usuario.id;
     const id = req.params.id;
 
-    const revisao = await EstudoMateriaDia.findByPk(id, {
+    const revisao = await EstudoMateriaDia.findOne({
+      where: { id, usuario_id: userId },
       include: [{ model: Dia, as: "dia", attributes: ["data"] }]
     });
 
     if (!revisao) return res.status(404).send("Revisão não encontrada.");
 
-    const materia = await Materia.findByPk(revisao.materia_id, { raw: true });
+    const materia = await Materia.findOne({
+      where: { id: revisao.materia_id, usuario_id: userId },
+      raw: true
+    });
 
     res.render("revisao_editar", {
       tituloPagina: "Editar revisão",
@@ -317,17 +332,17 @@ async function carregarRevisaoParaEdicao(req, res) {
 
   } catch (error) {
     console.error("❌ Erro ao carregar edição:", error);
-    res.status(500).send("Erro ao carregar revisão para edição.");
+    return res.status(500).send("Erro ao carregar revisão para edição.");
   }
 }
 
 
-
 // =====================================================================
-// ATUALIZAR REVISÃO (compatível com ENUM do banco)
+// ATUALIZAR REVISÃO – MULTI-USUÁRIO
 // =====================================================================
 async function atualizarRevisao(req, res) {
   try {
+    const userId = req.session.usuario.id;
     const id = req.params.id;
 
     const {
@@ -339,36 +354,29 @@ async function atualizarRevisao(req, res) {
       tipo_revisao
     } = req.body;
 
-    const revisao = await EstudoMateriaDia.findByPk(id);
+    const revisao = await EstudoMateriaDia.findOne({
+      where: { id, usuario_id: userId }
+    });
+
     if (!revisao) return res.status(404).send("Revisão não encontrada.");
 
-    // Tipo compatível com ENUM
-    let tipoFinal = revisao.tipo_estudo || "REVISAO";
-
+    let tipoFinal = revisao.tipo_estudo;
     let origem = tipo_revisao;
+
     if (Array.isArray(origem)) {
-      const joined = origem.map(String).join(" ").toLowerCase();
-      if (joined.includes("novo")) {
-        tipoFinal = "CONTEUDO_NOVO";
-      } else if (joined.includes("erro")) {
-        tipoFinal = "REVISAO_ERRO";
-      } else {
-        tipoFinal = "REVISAO";
-      }
+      const joined = origem.join(" ").toLowerCase();
+      if (joined.includes("novo")) tipoFinal = "CONTEUDO_NOVO";
+      else if (joined.includes("erro")) tipoFinal = "REVISAO_ERRO";
+      else tipoFinal = "REVISAO";
     } else if (origem) {
-      const t = String(origem).toLowerCase();
-      if (t.includes("novo")) {
-        tipoFinal = "CONTEUDO_NOVO";
-      } else if (t.includes("erro")) {
-        tipoFinal = "REVISAO_ERRO";
-      } else {
-        tipoFinal = "REVISAO";
-      }
+      const t = origem.toLowerCase();
+      if (t.includes("novo")) tipoFinal = "CONTEUDO_NOVO";
+      else if (t.includes("erro")) tipoFinal = "REVISAO_ERRO";
+      else tipoFinal = "REVISAO";
     }
 
-    // Atualiza dia
-    let dia = await Dia.findOne({ where: { data } });
-    if (!dia) dia = await Dia.create({ data });
+    let dia = await Dia.findOne({ where: { data, usuario_id: userId } });
+    if (!dia) dia = await Dia.create({ data, usuario_id: userId });
 
     await revisao.update({
       dia_id: dia.id,
@@ -382,21 +390,24 @@ async function atualizarRevisao(req, res) {
     return res.redirect(`/revisao/materia/${revisao.materia_id}?sucesso=1`);
 
   } catch (error) {
-    console.error("❌ Erro ao atualizar revisão:", error.message, error);
-    res.status(500).send("Erro ao atualizar revisão.");
+    console.error("❌ Erro ao atualizar revisão:", error);
+    return res.status(500).send("Erro ao atualizar revisão.");
   }
 }
 
 
-
 // =====================================================================
-// EXCLUIR REVISÃO
+// EXCLUIR REVISÃO – MULTI-USUÁRIO
 // =====================================================================
 async function excluirRevisao(req, res) {
   try {
+    const userId = req.session.usuario.id;
     const id = req.params.id;
 
-    const revisao = await EstudoMateriaDia.findByPk(id);
+    const revisao = await EstudoMateriaDia.findOne({
+      where: { id, usuario_id: userId }
+    });
+
     if (!revisao) return res.status(404).send("Revisão não encontrada.");
 
     const materiaId = revisao.materia_id;
@@ -407,18 +418,21 @@ async function excluirRevisao(req, res) {
 
   } catch (error) {
     console.error("❌ Erro ao excluir revisão:", error);
-    res.status(500).send("Erro ao excluir revisão.");
+    return res.status(500).send("Erro ao excluir revisão.");
   }
 }
 
-// =====================================================
-// API para buscar uma revisão específica (para o popup)
-// =====================================================
+
+// =====================================================================
+// API GET – MULTI-USUÁRIO
+// =====================================================================
 async function getRevisaoAPI(req, res) {
   try {
+    const userId = req.session.usuario.id;
     const id = req.params.id;
 
-    const r = await EstudoMateriaDia.findByPk(id, {
+    const r = await EstudoMateriaDia.findOne({
+      where: { id, usuario_id: userId },
       include: [{ model: Dia, as: "dia" }]
     });
 
@@ -438,6 +452,10 @@ async function getRevisaoAPI(req, res) {
   }
 }
 
+
+// =====================================================================
+// EXPORTAÇÃO
+// =====================================================================
 module.exports = {
   dashboardRevisao,
   detalheMateriaRevisao,

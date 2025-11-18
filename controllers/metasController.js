@@ -1,4 +1,8 @@
 // controllers/metasController.js
+//
+// VERSÃO 100% MULTI-USUÁRIO
+// Todos os dados filtrados por usuario_id
+//
 
 const { Dia, EstudoMateriaDia, Simulado, Materia } = require("../models");
 const { Op } = require("sequelize");
@@ -30,9 +34,7 @@ const METAS_CONFIG = {
   redacoesAno: 48
 };
 
-// ------------------------------
-// Helpers internos
-// ------------------------------
+// Helpers
 function porcentagem(parte, total) {
   if (!total || total <= 0) return 0;
   return Math.min(100, Math.round((parte / total) * 100));
@@ -40,26 +42,28 @@ function porcentagem(parte, total) {
 
 function classificarSimulado(minutos) {
   if (!minutos || minutos <= 0) return "desconhecido";
-
   if (minutos <= 60) return "curto";
   if (minutos <= 180) return "medio";
   return "completo";
 }
 
-// ------------------------------
-// Controller principal do painel
-// ------------------------------
+// ==============================
+// CONTROLLER PRINCIPAL
+// ==============================
 async function painelMetas(req, res) {
   try {
+    const usuarioId = req.session.usuario.id;
+
     const ano = Number(req.query.ano) || METAS_CONFIG.anoPadrao;
     const inicioAno = `${ano}-01-01`;
     const fimAno = `${ano}-12-31`;
 
     // ==============================
-    // 1) DIAS DO ANO
+    // DIAS DO ANO (somente do usuário)
     // ==============================
     const diasAno = await Dia.findAll({
       where: {
+        usuario_id: usuarioId,
         data: {
           [Op.between]: [inicioAno, fimAno]
         }
@@ -76,27 +80,19 @@ async function painelMetas(req, res) {
 
     let somaSono = 0;
     let diasComSono = 0;
-    let diasSonoAdequado = 0; // 7–9h
+    let diasSonoAdequado = 0;
 
     let somaEnergia = 0;
     let diasComEnergia = 0;
 
     diasAno.forEach((d) => {
-      const horas =
-        d.horas_estudo_liquidas != null
-          ? Number(d.horas_estudo_liquidas)
-          : 0;
-      const questoes =
-        d.questoes_feitas_total != null
-          ? Number(d.questoes_feitas_total)
-          : 0;
+      const horas = d.horas_estudo_liquidas ? Number(d.horas_estudo_liquidas) : 0;
+      const questoes = d.questoes_feitas_total ? Number(d.questoes_feitas_total) : 0;
 
       somaHorasAno += horas;
       somaQuestoesAno += questoes;
 
-      if (horas > 0 || questoes > 0) {
-        diasEstudadosAno++;
-      }
+      if (horas > 0 || questoes > 0) diasEstudadosAno++;
 
       // Sono
       if (d.horas_sono_total != null) {
@@ -104,9 +100,7 @@ async function painelMetas(req, res) {
         somaSono += sono;
         diasComSono++;
 
-        if (sono >= 7 && sono <= 9) {
-          diasSonoAdequado++;
-        }
+        if (sono >= 7 && sono <= 9) diasSonoAdequado++;
       }
 
       // Energia
@@ -122,25 +116,24 @@ async function painelMetas(req, res) {
     const mediaHorasDiaNoAno =
       totalDiasAno > 0 ? somaHorasAno / totalDiasAno : 0;
 
-    const mediaSono =
-      diasComSono > 0 ? somaSono / diasComSono : null;
-
-    const mediaEnergia =
-      diasComEnergia > 0 ? somaEnergia / diasComEnergia : null;
+    const mediaSono = diasComSono > 0 ? somaSono / diasComSono : null;
+    const mediaEnergia = diasComEnergia > 0 ? somaEnergia / diasComEnergia : null;
 
     const percSonoAdequado =
       totalDiasAno > 0 ? Math.round((diasSonoAdequado / totalDiasAno) * 100) : 0;
 
     // ==============================
-    // 2) SIMULADOS DO ANO
+    // SIMULADOS (somente usuário)
     // ==============================
     const simuladosAno = await Simulado.findAll({
+      where: { usuario_id: usuarioId },
       include: [
         {
           model: Dia,
           as: "dia",
           attributes: ["data"],
           where: {
+            usuario_id: usuarioId,
             data: {
               [Op.between]: [inicioAno, fimAno]
             }
@@ -157,14 +150,12 @@ async function painelMetas(req, res) {
 
     simuladosAno.forEach((s) => {
       const sim = s.get({ plain: true });
-      const minutos = sim.tempo_total_minutos || 0;
+      const tipo = classificarSimulado(sim.tempo_total_minutos || 0);
 
-      const tipo = classificarSimulado(minutos);
       if (tipo === "curto") qtdCurtos++;
       else if (tipo === "medio") qtdMedios++;
       else if (tipo === "completo") qtdCompletos++;
 
-      // Heurística simples: considera "oficial" se o resumo mencionar ENEM ou OFICIAL
       const resumo = (sim.resultado_resumo || "").toLowerCase();
       if (resumo.includes("enem") || resumo.includes("oficial")) {
         qtdOficiais++;
@@ -172,15 +163,17 @@ async function painelMetas(req, res) {
     });
 
     // ==============================
-    // 3) REDAÇÕES (via matéria Redação)
+    // REDAÇÕES (somente usuário)
     // ==============================
     const estudosRedacao = await EstudoMateriaDia.findAll({
+      where: { usuario_id: usuarioId },
       include: [
         {
           model: Dia,
           as: "dia",
           attributes: ["data"],
           where: {
+            usuario_id: usuarioId,
             data: {
               [Op.between]: [inicioAno, fimAno]
             }
@@ -198,16 +191,13 @@ async function painelMetas(req, res) {
 
     estudosRedacao.forEach((e) => {
       const est = e.get({ plain: true });
-      const nomeMateria = (est.materia?.nome || "").toLowerCase();
+      const nome = (est.materia?.nome || "").toLowerCase();
 
-      // Conta qualquer estudo em matéria que tenha "redação" no nome
-      if (nomeMateria.includes("redação")) {
-        totalRedacoesAno++;
-      }
+      if (nome.includes("redação")) totalRedacoesAno++;
     });
 
     // ==============================
-    // 4) MONTAR OBJETOS DE PROGRESSO
+    // JUNTAR TUDO PARA O TEMPLATE
     // ==============================
     const progressoTempo = {
       metaHorasAno: METAS_CONFIG.horasAno,
@@ -231,10 +221,7 @@ async function painelMetas(req, res) {
     const progressoQuestoes = {
       metaQuestoesAno: METAS_CONFIG.questoesAno,
       totalQuestoesAno: somaQuestoesAno,
-      percQuestoesAno: porcentagem(
-        somaQuestoesAno,
-        METAS_CONFIG.questoesAno
-      )
+      percQuestoesAno: porcentagem(somaQuestoesAno, METAS_CONFIG.questoesAno)
     };
 
     const progressoSimulados = {
@@ -250,14 +237,8 @@ async function painelMetas(req, res) {
 
       percCurtos: porcentagem(qtdCurtos, METAS_CONFIG.simulados.curtos),
       percMedios: porcentagem(qtdMedios, METAS_CONFIG.simulados.medios),
-      percCompletos: porcentagem(
-        qtdCompletos,
-        METAS_CONFIG.simulados.completos
-      ),
-      percOficiais: porcentagem(
-        qtdOficiais,
-        METAS_CONFIG.simulados.oficiais
-      )
+      percCompletos: porcentagem(qtdCompletos, METAS_CONFIG.simulados.completos),
+      percOficiais: porcentagem(qtdOficiais, METAS_CONFIG.simulados.oficiais)
     };
 
     const progressoRedacoes = {
@@ -277,9 +258,6 @@ async function painelMetas(req, res) {
       mediaEnergia: mediaEnergia != null ? Number(mediaEnergia.toFixed(1)) : null
     };
 
-    // ==============================
-    // RENDERIZAÇÃO
-    // ==============================
     return res.render("metas", {
       tituloPagina: "Painel de metas",
       ano,
@@ -290,11 +268,10 @@ async function painelMetas(req, res) {
       progressoRedacoes,
       progressoSaude
     });
+
   } catch (error) {
     console.error("❌ Erro ao carregar painel de metas:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar painel de metas. Veja o console.");
+    return res.status(500).send("Erro ao carregar painel de metas.");
   }
 }
 

@@ -1,14 +1,16 @@
 // controllers/simuladoController.js
 //
+// Agora 100% MULTI-USUÁRIO!
 // Controla tudo relacionado aos SIMULADOS:
-// - Form criar simulado
-// - Criar simulado
-// - Listar simulados + filtro
-// - Detalhar
-// - Editar
+// - Form criar
+// - Criar
+// - Listar (somente do usuário)
+// - Detalhar (somente do usuário)
+// - Editar (somente do usuário)
 // - Atualizar
 // - Excluir
-// - Sistema automático de medalhas
+// - Sistema automático de medalhas por usuário
+//
 
 const { Simulado, Dia } = require("../models");
 const { toISODate, formatarDDMMYYYY } = require("../utils/datas");
@@ -33,6 +35,8 @@ function novoSimuladoForm(req, res) {
 // ===================================================================
 async function criarSimulado(req, res) {
   try {
+    const usuarioId = req.session.usuario.id;
+
     const {
       data,
       tempo_total_minutos,
@@ -49,11 +53,13 @@ async function criarSimulado(req, res) {
       return res.redirect("/simulados/novo?erro=1");
     }
 
-    // Garante que o dia existe
-    let dia = await Dia.findOne({ where: { data } });
-    if (!dia) dia = await Dia.create({ data });
+    // Garante dia correto para o usuário
+    let dia = await Dia.findOne({ where: { data, usuario_id: usuarioId } });
+    if (!dia)
+      dia = await Dia.create({ data, usuario_id: usuarioId });
 
     await Simulado.create({
+      usuario_id: usuarioId,
       dia_id: dia.id,
       tempo_total_minutos: tempo_total_minutos ? Number(tempo_total_minutos) : null,
       resultado_resumo: resultado_resumo || null,
@@ -66,10 +72,8 @@ async function criarSimulado(req, res) {
       acertos_matematica: acertos_matematica !== "" ? Number(acertos_matematica) : null
     });
 
-    // ===============================
-    // CHECK AUTOMÁTICO DE MEDALHAS
-    // ===============================
-    const novasMedalhas = await verificarMedalhas();
+    // MEDALHAS POR USUÁRIO
+    const novasMedalhas = await verificarMedalhas(usuarioId);
     if (novasMedalhas.length > 0) {
       return res.render("medalha_nova", { novasMedalhas });
     }
@@ -82,24 +86,33 @@ async function criarSimulado(req, res) {
 }
 
 // ===================================================================
-// LISTAR SIMULADOS COM FILTRO
+// LISTAR SIMULADOS (somente do usuário)
 // ===================================================================
 async function listarSimulados(req, res) {
+  const usuarioId = req.session.usuario.id;
   const { de, ate } = req.query;
 
   try {
     const simuladosBrutos = await Simulado.findAll({
-      include: [{ model: Dia, as: "dia", attributes: ["data"] }],
+      where: { usuario_id: usuarioId },
+      include: [
+        {
+          model: Dia,
+          as: "dia",
+          attributes: ["data"],
+          where: { usuario_id: usuarioId }
+        }
+      ],
       order: [["id", "DESC"]]
     });
 
     const simuladosProcessados = simuladosBrutos.map((s) => {
       const sim = s.get({ plain: true });
 
-      let dataISO = sim.dia?.data;
-      if (dataISO instanceof Date) dataISO = toISODate(dataISO);
-
-      const dataFormatada = dataISO ? formatarDDMMYYYY(dataISO) : null;
+      const dataISO =
+        typeof sim.dia.data === "string"
+          ? sim.dia.data
+          : toISODate(sim.dia.data);
 
       const totalAcertos =
         (sim.acertos_linguagens || 0) +
@@ -110,7 +123,7 @@ async function listarSimulados(req, res) {
       return {
         id: sim.id,
         dataISO,
-        dataFormatada,
+        dataFormatada: formatarDDMMYYYY(dataISO),
         tempo_total_minutos: sim.tempo_total_minutos,
         resultado_resumo: sim.resultado_resumo,
         area_que_mais_errou: sim.area_que_mais_errou,
@@ -125,8 +138,8 @@ async function listarSimulados(req, res) {
 
     let simulados = simuladosProcessados;
 
-    if (de) simulados = simulados.filter((s) => s.dataISO && s.dataISO >= de);
-    if (ate) simulados = simulados.filter((s) => s.dataISO && s.dataISO <= ate);
+    if (de) simulados = simulados.filter((s) => s.dataISO >= de);
+    if (ate) simulados = simulados.filter((s) => s.dataISO <= ate);
 
     res.render("simulados_lista", {
       tituloPagina: "Histórico de simulados",
@@ -141,12 +154,22 @@ async function listarSimulados(req, res) {
 }
 
 // ===================================================================
-// DETALHAR SIMULADO
+// DETALHAR SIMULADO (somente do usuário)
 // ===================================================================
 async function detalheSimulado(req, res) {
+  const usuarioId = req.session.usuario.id;
+
   try {
-    const simulado = await Simulado.findByPk(req.params.id, {
-      include: [{ model: Dia, as: "dia", attributes: ["data"] }]
+    const simulado = await Simulado.findOne({
+      where: { id: req.params.id, usuario_id: usuarioId },
+      include: [
+        {
+          model: Dia,
+          as: "dia",
+          attributes: ["data"],
+          where: { usuario_id: usuarioId }
+        }
+      ]
     });
 
     if (!simulado) return res.status(404).send("Simulado não encontrado.");
@@ -162,12 +185,17 @@ async function detalheSimulado(req, res) {
 }
 
 // ===================================================================
-// EDITAR FORM
+// EDITAR FORM (somente do usuário)
 // ===================================================================
 async function editarSimuladoForm(req, res) {
+  const usuarioId = req.session.usuario.id;
+
   try {
-    const simulado = await Simulado.findByPk(req.params.id, {
-      include: [{ model: Dia, as: "dia", attributes: ["data"] }]
+    const simulado = await Simulado.findOne({
+      where: { id: req.params.id, usuario_id: usuarioId },
+      include: [
+        { model: Dia, as: "dia", attributes: ["data"] }
+      ]
     });
 
     if (!simulado) return res.status(404).send("Simulado não encontrado.");
@@ -186,6 +214,8 @@ async function editarSimuladoForm(req, res) {
 // ATUALIZAR SIMULADO
 // ===================================================================
 async function atualizarSimulado(req, res) {
+  const usuarioId = req.session.usuario.id;
+
   try {
     const id = req.params.id;
 
@@ -203,8 +233,9 @@ async function atualizarSimulado(req, res) {
 
     if (!data) return res.redirect(`/simulados/${id}/editar`);
 
-    let dia = await Dia.findOne({ where: { data } });
-    if (!dia) dia = await Dia.create({ data });
+    let dia = await Dia.findOne({ where: { data, usuario_id: usuarioId } });
+    if (!dia)
+      dia = await Dia.create({ data, usuario_id: usuarioId });
 
     await Simulado.update(
       {
@@ -218,7 +249,9 @@ async function atualizarSimulado(req, res) {
         acertos_naturezas: acertos_naturezas !== "" ? Number(acertos_naturezas) : null,
         acertos_matematica: acertos_matematica !== "" ? Number(acertos_matematica) : null
       },
-      { where: { id } }
+      {
+        where: { id, usuario_id: usuarioId }
+      }
     );
 
     return res.redirect("/simulados");
@@ -229,11 +262,16 @@ async function atualizarSimulado(req, res) {
 }
 
 // ===================================================================
-// EXCLUIR SIMULADO
+// EXCLUIR SIMULADO (somente do usuário)
 // ===================================================================
 async function excluirSimulado(req, res) {
+  const usuarioId = req.session.usuario.id;
+
   try {
-    await Simulado.destroy({ where: { id: req.params.id } });
+    await Simulado.destroy({
+      where: { id: req.params.id, usuario_id: usuarioId }
+    });
+
     return res.redirect("/simulados");
   } catch (error) {
     console.error("❌ Erro ao excluir simulado:", error);

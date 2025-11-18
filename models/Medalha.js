@@ -5,41 +5,20 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
-        primaryKey: true,
+        primaryKey: true
       },
-
-      nome: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-
-      descricao: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-
-      categoria: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-
-      tipo_trigger: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-
-      valor_trigger: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      }
+      nome: DataTypes.STRING,
+      descricao: DataTypes.STRING,
+      categoria: DataTypes.STRING,
+      tipo_trigger: DataTypes.STRING,
+      valor_trigger: DataTypes.INTEGER
     },
     {
       tableName: "medalhas"
     }
   );
 
-  // 🔥 ASSOCIAÇÃO QUE FALTAVA
-  Medalha.associate = models => {
+  Medalha.associate = (models) => {
     Medalha.hasMany(models.MedalhaUsuario, {
       foreignKey: "medalha_id",
       as: "usuarios"

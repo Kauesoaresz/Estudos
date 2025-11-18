@@ -3516,3 +3516,127 @@ body.modal-open {
     transform: scale(1);
   }
 }
+
+/* =========================================
+   LOGIN / CADASTRO
+========================================= */
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  min-height: calc(100vh - 80px);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 26px 26px;
+  border-radius: 22px;
+  background: rgba(20, 22, 30, 0.92);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+}
+
+.theme-light .auth-card {
+  background: #f7f7fb;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.auth-subtitle {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-bottom: 18px;
+}
+
+.auth-error {
+  background: rgba(255, 82, 82, 0.14);
+  border: 1px solid rgba(255, 82, 82, 0.7);
+  color: #ffb3b3;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.theme-light .auth-error {
+  background: #ffeaea;
+  color: #c62828;
+  border-color: #ef5350;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.auth-field label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.8;
+}
+
+.auth-field input {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(5, 7, 15, 0.8);
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.theme-light .auth-field input {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.auth-button {
+  margin-top: 6px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  background: linear-gradient(90deg, #1c9aff, #00e5ff);
+  color: #0b1020;
+  box-shadow: 0 12px 30px rgba(28, 154, 255, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 36px rgba(28, 154, 255, 0.8);
+}
+
+.auth-footer-text {
+  margin-top: 16px;
+  font-size: 13px;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.auth-footer-text a {
+  color: var(--kst-primary);
+  font-weight: 600;
+}

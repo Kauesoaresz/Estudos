@@ -7,97 +7,47 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      data: {
-        type: DataTypes.DATEONLY,
+
+      usuario_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
       },
 
-      // Sono e rotina
-      hora_acordou: {
-        type: DataTypes.TIME,
-        allowNull: true
-      },
-      hora_dormiu: {
-        type: DataTypes.TIME,
-        allowNull: true
-      },
-      horas_sono_total: {
-        type: DataTypes.DECIMAL(5, 2),
-        allowNull: true
-      },
-      qualidade_sono_nota: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      tirou_soneca: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true
-      },
-      minutos_soneca: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
+      data: { type: DataTypes.DATEONLY, allowNull: false },
 
-      // Estudos gerais
-      horas_estudo_liquidas: {
-        type: DataTypes.DECIMAL(5, 2),
-        allowNull: true
-      },
-      questoes_feitas_total: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      questoes_acertos_total: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
+      hora_acordou: DataTypes.TIME,
+      hora_dormiu: DataTypes.TIME,
+      horas_sono_total: DataTypes.DECIMAL(5,2),
+      qualidade_sono_nota: DataTypes.INTEGER,
+      tirou_soneca: DataTypes.BOOLEAN,
+      minutos_soneca: DataTypes.INTEGER,
 
-      // Reflexão
-      erros_do_dia: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      melhorar_amanha: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      ponto_alto_dia: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      maior_vacilo_dia: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
+      horas_estudo_liquidas: DataTypes.DECIMAL(5,2),
+      questoes_feitas_total: DataTypes.INTEGER,
+      questoes_acertos_total: DataTypes.INTEGER,
 
-      // Meta
-      meta_principal_dia: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      status_meta: {
-        type: DataTypes.ENUM("SIM", "NAO", "PARCIAL"),
-        allowNull: true
-      },
+      erros_do_dia: DataTypes.TEXT,
+      melhorar_amanha: DataTypes.TEXT,
+      ponto_alto_dia: DataTypes.TEXT,
+      maior_vacilo_dia: DataTypes.TEXT,
 
-      // Estado mental
-      nivel_foco: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      nivel_energia: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-      },
-      humor: {
-        type: DataTypes.ENUM("BOM", "OK", "RUIM"),
-        allowNull: true
-      }
+      meta_principal_dia: DataTypes.TEXT,
+      status_meta: DataTypes.ENUM("SIM", "NAO", "PARCIAL"),
+
+      nivel_foco: DataTypes.INTEGER,
+      nivel_energia: DataTypes.INTEGER,
+      humor: DataTypes.ENUM("BOM","OK","RUIM")
     },
     {
       tableName: "dias"
     }
   );
+
+  Dia.associate = (models) => {
+    Dia.belongsTo(models.Usuario, { foreignKey: "usuario_id", as: "usuario" });
+    Dia.hasMany(models.EstudoMateriaDia, { foreignKey: "dia_id", as: "estudos_materias" });
+    Dia.hasMany(models.Simulado, { foreignKey: "dia_id", as: "simulados" });
+  };
 
   return Dia;
 };

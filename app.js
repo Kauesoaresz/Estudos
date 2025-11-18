@@ -1,16 +1,29 @@
-// app.js
 // =====================================================
-//        KAUE – ESTUDOS  •  Versão com Medalhas
+//   KAUE – STUDY TRACKER  •  Login + Medalhas + Sessão
 // =====================================================
+
+// -------------------------------
+// DEPENDÊNCIAS
+// -------------------------------
+require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
 const db = require("./models");
 
-// IMPORTA A NOVA FUNÇÃO CORRETA
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+
+// Medalhas (seed)
 const { inicializarMedalhasBase } = require("./services/medalhasService");
 
-// Rotas
+// Middlewares de autenticação
+const { injectUser, ensureAuth } = require("./middlewares/authMiddleware");
+
+// Rotas novas (login e cadastro)
+const authRoutes = require("./routes/authRoutes");
+
+// Rotas antigas
 const diaRoutes = require("./routes/diaRoutes");
 const materiaRoutes = require("./routes/materiaRoutes");
 const estudoRoutes = require("./routes/estudoRoutes");
@@ -20,20 +33,45 @@ const revisaoRoutes = require("./routes/revisaoRoutes");
 const metasRoutes = require("./routes/metasRoutes");
 const medalhaRoutes = require("./routes/medalhaRoutes");
 
+// Rota nova – PERFIL
+const perfilRoutes = require("./routes/perfilRoutes");
+
+// -------------------------------
+// INICIAR APP
+// -------------------------------
 const app = express();
 
-// =====================================================
-// CONFIGURAÇÕES DO EXPRESS
-// =====================================================
+// -------------------------------
+// CONFIG EXPRESS
+// -------------------------------
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-// =====================================================
-// CONEXÃO COM BANCO + SYNC + INICIALIZAÇÃO DAS MEDALHAS
-// =====================================================
+// -------------------------------
+// COOKIES + SESSÃO
+// -------------------------------
+app.use(cookieParser());
+
+app.use(
+  session({
+    secret: "KAUE-SEGREDO-MASTER-2025",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 30 // 30 dias
+    }
+  })
+);
+
+// Disponibiliza dados do usuário p/ o EJS
+app.use(injectUser);
+
+// -------------------------------
+// BANCO + SYNC + MEDALHAS
+// -------------------------------
 (async () => {
   try {
     await db.sequelize.authenticate();
@@ -42,32 +80,41 @@ app.use(express.urlencoded({ extended: true }));
     await db.sequelize.sync();
     console.log("✅ Models sincronizados");
 
-    // === CHAMA O SEED NOVO DE 80 MEDALHAS ===
     await inicializarMedalhasBase();
     console.log("🏅 Medalhas base carregadas");
-
   } catch (error) {
     console.error("❌ Erro ao iniciar banco:", error.message);
   }
 })();
 
-// =====================================================
-// ROTAS PRINCIPAIS
-// =====================================================
+// -------------------------------
+// ROTAS ABERTAS (SEM LOGIN)
+// -------------------------------
+app.use("/", authRoutes); // /login, /cadastro, /logout
 
-app.use("/", diaRoutes);
-app.use("/materias", materiaRoutes);
-app.use("/estudos", estudoRoutes);
-app.use("/simulados", simuladoRoutes);
-app.use("/estatisticas", estatisticasRoutes);
-app.use("/revisao", revisaoRoutes);
-app.use(metasRoutes);
-app.use(medalhaRoutes);
+// -------------------------------
+// HOME LOGADA
+// -------------------------------
+app.get("/", ensureAuth, (req, res) => {
+  return res.redirect("/dias");
+});
 
-// =====================================================
+// -------------------------------
+// ROTAS PROTEGIDAS
+// -------------------------------
+app.use("/dias", ensureAuth, diaRoutes);
+app.use("/materias", ensureAuth, materiaRoutes);
+app.use("/estudos", ensureAuth, estudoRoutes);
+app.use("/simulados", ensureAuth, simuladoRoutes);
+app.use("/estatisticas", ensureAuth, estatisticasRoutes);
+app.use("/revisao", ensureAuth, revisaoRoutes);
+app.use("/metas", ensureAuth, metasRoutes);
+app.use("/medalhas", ensureAuth, medalhaRoutes);
+app.use("/perfil", ensureAuth, perfilRoutes);
+
+// -------------------------------
 // SERVIDOR
-// =====================================================
-
+// -------------------------------
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

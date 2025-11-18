@@ -1,26 +1,23 @@
 // controllers/materiaController.js
 //
-// Controla tudo relacionado às MATÉRIAS:
-// - Listar
-// - Criar
-// - Detalhes (com resumo)
-// - Editar
-// - Atualizar
-// - Excluir
+// Controla MATÉRIAS no modo multiusuário.
+// Cada usuário tem SUAS próprias matérias e estudos.
 
 const { Materia, EstudoMateriaDia, Dia } = require("../models");
-const { formatarDDMMYYYY } = require("../utils/datas");
 
 // ---------------------
 // LISTAR MATÉRIAS
 // ---------------------
 async function listarMaterias(req, res) {
   try {
+    const usuarioId = req.session.usuario.id;
+
     const sucesso = req.query.sucesso === "1";
     const erro = req.query.erro === "1";
     const erroExcluir = req.query.erroExcluir === "1";
 
     const materias = await Materia.findAll({
+      where: { usuario_id: usuarioId },
       order: [["nome", "ASC"]],
       raw: true
     });
@@ -34,9 +31,7 @@ async function listarMaterias(req, res) {
     });
   } catch (error) {
     console.error("❌ Erro ao listar matérias:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar matérias. Veja o console para mais detalhes.");
+    return res.status(500).send("Erro ao carregar matérias.");
   }
 }
 
@@ -45,6 +40,7 @@ async function listarMaterias(req, res) {
 // ---------------------
 async function criarMateria(req, res) {
   try {
+    const usuarioId = req.session.usuario.id;
     const { nome } = req.body;
 
     if (!nome || !nome.trim()) {
@@ -52,15 +48,14 @@ async function criarMateria(req, res) {
     }
 
     await Materia.create({
-      nome: nome.trim()
+      nome: nome.trim(),
+      usuario_id: usuarioId
     });
 
     return res.redirect("/materias?sucesso=1");
   } catch (error) {
     console.error("❌ Erro ao criar matéria:", error);
-    return res
-      .status(500)
-      .send("Erro ao criar matéria. Veja o console para mais detalhes.");
+    return res.status(500).send("Erro ao criar matéria.");
   }
 }
 
@@ -68,14 +63,24 @@ async function criarMateria(req, res) {
 // DETALHE DE UMA MATÉRIA
 // ---------------------
 async function detalheMateria(req, res) {
+  const usuarioId = req.session.usuario.id;
   const id = req.params.id;
+
   try {
-    const materia = await Materia.findByPk(id, {
+    const materia = await Materia.findOne({
+      where: { id, usuario_id: usuarioId },
       include: [
         {
           model: EstudoMateriaDia,
           as: "estudos",
-          include: [{ model: Dia, as: "dia", attributes: ["data"] }]
+          include: [
+            {
+              model: Dia,
+              as: "dia",
+              attributes: ["data"],
+              where: { usuario_id: usuarioId }
+            }
+          ]
         }
       ]
     });
@@ -93,15 +98,10 @@ async function detalheMateria(req, res) {
     const diasSet = new Set();
 
     (mat.estudos || []).forEach((e) => {
-      if (e.minutos_estudados != null) {
-        totalMinutos += Number(e.minutos_estudados);
-      }
-      if (e.questoes_feitas != null) {
-        totalQuestoes += Number(e.questoes_feitas);
-      }
-      if (e.questoes_certas != null) {
-        totalCertas += Number(e.questoes_certas);
-      }
+      totalMinutos += Number(e.minutos_estudados || 0);
+      totalQuestoes += Number(e.questoes_feitas || 0);
+      totalCertas += Number(e.questoes_certas || 0);
+
       if (e.dia && e.dia.data) {
         diasSet.add(e.dia.data.toString());
       }
@@ -127,10 +127,8 @@ async function detalheMateria(req, res) {
       }
     });
   } catch (error) {
-    console.error("❌ Erro ao carregar detalhes da matéria:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar detalhes da matéria. Veja o console.");
+    console.error("❌ Erro ao detalhar matéria:", error);
+    return res.status(500).send("Erro ao carregar detalhes da matéria.");
   }
 }
 
@@ -138,9 +136,15 @@ async function detalheMateria(req, res) {
 // EDITAR MATÉRIA (form)
 // ---------------------
 async function editarMateriaForm(req, res) {
+  const usuarioId = req.session.usuario.id;
   const id = req.params.id;
+
   try {
-    const materia = await Materia.findByPk(id, { raw: true });
+    const materia = await Materia.findOne({
+      where: { id, usuario_id: usuarioId },
+      raw: true
+    });
+
     if (!materia) {
       return res.status(404).send("Matéria não encontrada.");
     }
@@ -151,9 +155,7 @@ async function editarMateriaForm(req, res) {
     });
   } catch (error) {
     console.error("❌ Erro ao carregar matéria para edição:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar matéria. Veja o console.");
+    return res.status(500).send("Erro ao carregar matéria para edição.");
   }
 }
 
@@ -161,43 +163,61 @@ async function editarMateriaForm(req, res) {
 // ATUALIZAR MATÉRIA
 // ---------------------
 async function atualizarMateria(req, res) {
+  const usuarioId = req.session.usuario.id;
   const id = req.params.id;
+
   try {
     const { nome } = req.body;
+
     if (!nome || !nome.trim()) {
       return res.redirect(`/materias/${id}/editar`);
     }
 
-    await Materia.update({ nome: nome.trim() }, { where: { id } });
+    await Materia.update(
+      { nome: nome.trim() },
+      { where: { id, usuario_id: usuarioId } }
+    );
 
     return res.redirect("/materias");
   } catch (error) {
     console.error("❌ Erro ao atualizar matéria:", error);
-    return res
-      .status(500)
-      .send("Erro ao atualizar matéria. Veja o console.");
+    return res.status(500).send("Erro ao atualizar matéria.");
   }
 }
 
 // ---------------------
 // EXCLUIR MATÉRIA
-// (só se não tiver estudos relacionados)
+// (somente se tiver 0 estudos dela)
 // ---------------------
 async function excluirMateria(req, res) {
+  const usuarioId = req.session.usuario.id;
   const id = req.params.id;
+
   try {
-    const count = await EstudoMateriaDia.count({ where: { materia_id: id } });
+    // Só conta estudos do usuário
+    const count = await EstudoMateriaDia.count({
+      where: { materia_id: id },
+      include: [
+        {
+          model: Dia,
+          as: "dia",
+          where: { usuario_id: usuarioId }
+        }
+      ]
+    });
+
     if (count > 0) {
       return res.redirect("/materias?erroExcluir=1");
     }
 
-    await Materia.destroy({ where: { id } });
+    await Materia.destroy({
+      where: { id, usuario_id: usuarioId }
+    });
+
     return res.redirect("/materias");
   } catch (error) {
     console.error("❌ Erro ao excluir matéria:", error);
-    return res
-      .status(500)
-      .send("Erro ao excluir matéria. Veja o console.");
+    return res.status(500).send("Erro ao excluir matéria.");
   }
 }
 

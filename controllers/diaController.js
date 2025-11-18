@@ -3,6 +3,7 @@
 // Controla:
 // - Home (dashboard)
 // - Registro diário (criar, listar, detalhar, editar, excluir)
+// - Agora 100% filtrado por usuário (usuario_id)
 
 const { Dia, Materia, EstudoMateriaDia, Simulado } = require("../models");
 const {
@@ -11,7 +12,6 @@ const {
   formatarDDMMYYYY
 } = require("../utils/datas");
 const { Op } = require("sequelize");
-const verificarMedalhas = require("../utils/verificarMedalhas");
 
 // ---------------------
 // Helpers internos
@@ -34,10 +34,8 @@ function agregaDias(lista) {
   let somaQuestoes = 0;
 
   lista.forEach((d) => {
-    const horas =
-      d.horas_estudo_liquidas != null ? Number(d.horas_estudo_liquidas) : 0;
-    const questoes =
-      d.questoes_feitas_total != null ? Number(d.questoes_feitas_total) : 0;
+    const horas = d.horas_estudo_liquidas != null ? Number(d.horas_estudo_liquidas) : 0;
+    const questoes = d.questoes_feitas_total != null ? Number(d.questoes_feitas_total) : 0;
 
     if (horas > 0 || questoes > 0) diasComEstudo++;
 
@@ -58,14 +56,8 @@ function agregaDias(lista) {
   };
 }
 
-/**
- * Gera insights automáticos sobre um dia com base nele e em dias anteriores.
- * Não mexe em banco, só devolve um array de strings.
- */
 function gerarInsightsDia(diaHoje, ultimosDias) {
   const insights = [];
-
-  // Segurança básica
   if (!diaHoje) return insights;
 
   const horasHoje =
@@ -99,115 +91,70 @@ function gerarInsightsDia(diaHoje, ultimosDias) {
   const taxaAcertoHoje =
     questoesHoje > 0 ? Math.round((acertosHoje / questoesHoje) * 100) : null;
 
-  // --------------------------
-  // Média de horas de estudo dos últimos dias
-  // --------------------------
+  // Média recente
   const diasComEstudoRecentes = ultimosDias.filter((d) => {
-    const h =
-      d.horas_estudo_liquidas != null
-        ? Number(d.horas_estudo_liquidas)
-        : 0;
+    const h = d.horas_estudo_liquidas != null ? Number(d.horas_estudo_liquidas) : 0;
     return h > 0;
   });
 
   let mediaHorasRecentes = 0;
   if (diasComEstudoRecentes.length > 0) {
     const somaHorasRecentes = diasComEstudoRecentes.reduce((acc, d) => {
-      const h =
-        d.horas_estudo_liquidas != null
-          ? Number(d.horas_estudo_liquidas)
-          : 0;
+      const h = d.horas_estudo_liquidas != null ? Number(d.horas_estudo_liquidas) : 0;
       return acc + h;
     }, 0);
     mediaHorasRecentes = somaHorasRecentes / diasComEstudoRecentes.length;
   }
 
-  // 1) Comparação com a média recente de estudo
   if (mediaHorasRecentes > 0) {
     if (horasHoje >= mediaHorasRecentes + 1) {
-      insights.push(
-        "Você estudou acima da sua média recente de horas — ótimo sinal de progresso."
-      );
+      insights.push("Você estudou acima da sua média recente — ótimo progresso.");
     } else if (horasHoje > 0 && horasHoje <= mediaHorasRecentes - 1) {
-      insights.push(
-        "Você estudou menos do que a sua média recente. Se possível, tente compensar nos próximos dias."
-      );
+      insights.push("Você estudou menos do que a média recente. Tente compensar depois.");
     }
-  } else if (horasHoje > 0) {
-    // Poucos dados anteriores
-    insights.push(
-      "Você registrou horas de estudo hoje. Com mais dias salvos, vou conseguir comparar com sua média."
-    );
   }
 
-  // 2) Sono
   if (sonoHoje > 0 && sonoHoje < 6) {
-    insights.push(
-      "Seu sono foi baixo hoje (menos de 6h). Isso tende a prejudicar foco e rendimento nos estudos."
-    );
+    insights.push("Seu sono foi baixo hoje (menos de 6h). Isso prejudica foco.");
   } else if (sonoHoje >= 7.5) {
-    insights.push(
-      "Você dormiu bem hoje (mais de 7h30). Provavelmente isso ajudou na sua energia e concentração."
-    );
+    insights.push("Você dormiu muito bem hoje. Isso favorece energia e foco.");
   }
 
-  // 3) Relação entre foco/energia e estudo
   if (focoHoje != null) {
     if (focoHoje >= 8 && horasHoje > 0) {
-      insights.push(
-        "Seu nível de foco foi alto e você estudou hoje. Aproveite esses dias fortes para puxar conteúdos mais difíceis."
-      );
+      insights.push("Seu foco estava alto e você estudou. Aproveite dias assim.");
     } else if (focoHoje <= 4 && horasHoje > 0) {
-      insights.push(
-        "Você estudou mesmo com foco baixo. Talvez valha revisar o que foi estudado para consolidar melhor."
-      );
+      insights.push("Você estudou mesmo com foco baixo. Pode valer revisar esse conteúdo.");
     }
   }
 
   if (energiaHoje != null && energiaHoje <= 4 && horasHoje > 0) {
-    insights.push(
-      "Sua energia estava baixa hoje. Observe se isso se repete em certos horários ou depois de certas rotinas."
-    );
+    insights.push("Sua energia estava baixa hoje. Veja se isso se repete.");
   }
 
-  // 4) Humor
   if (humorHoje === "ruim") {
-    insights.push(
-      "Seu humor hoje não foi dos melhores. Tente identificar o que mais pesou e veja se isso impacta diretamente nos estudos."
-    );
+    insights.push("Seu humor estava ruim hoje. Isso impacta nos estudos.");
   } else if (humorHoje === "bom" && horasHoje > 0) {
-    insights.push(
-      "Você relatou um humor bom e conseguiu estudar. Essa combinação é ótima para criar constância."
-    );
+    insights.push("Humor bom + estudo = ótima combinação.");
   }
 
-  // 5) Questões e taxa de acerto
-  if (questoesHoje >= 30 && taxaAcertoHoje != null && taxaAcertoHoje >= 70) {
-    insights.push(
-      `Você fez ${questoesHoje} questões com cerca de ${taxaAcertoHoje}% de acerto. Isso é um volume muito bom para um único dia.`
-    );
-  } else if (
-    questoesHoje >= 10 &&
-    taxaAcertoHoje != null &&
-    taxaAcertoHoje < 60
-  ) {
-    insights.push(
-      `Você fez ${questoesHoje} questões, mas com uma taxa de acerto em torno de ${taxaAcertoHoje}%. Vale revisar os conteúdos que mais errou.`
-    );
+  if (questoesHoje >= 30 && taxaAcertoHoje >= 70) {
+    insights.push(`Você fez ${questoesHoje} questões com ${taxaAcertoHoje}% de acerto!`);
   }
 
-  // Limita a no máximo 3 insights para não ficar textão
   return insights.slice(0, 3);
 }
 
 // ---------------------
-// EXPORT: funções do controller
+// HOME (dashboard)
 // ---------------------
 
-// Home = painel Hoje / 7d / 30d + gráficos (últimos 30 dias)
 async function home(req, res) {
   try {
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+
     const diasBrutos = await Dia.findAll({
+      where: { usuario_id: usuarioId },
       order: [["data", "ASC"]],
       raw: true
     });
@@ -215,14 +162,7 @@ async function home(req, res) {
     const hoje = new Date();
     const hojeISO = hoje.toISOString().slice(0, 10);
 
-    // Dia de hoje
-    let diaHoje = null;
-    for (const d of diasBrutos) {
-      if (toISODate(d.data) === hojeISO) {
-        diaHoje = d;
-        break;
-      }
-    }
+    let diaHoje = diasBrutos.find(d => toISODate(d.data) === hojeISO);
 
     let resumoHoje = {
       existe: false,
@@ -237,85 +177,43 @@ async function home(req, res) {
 
     if (diaHoje) {
       let dataLabel = diaHoje.data;
-      if (typeof dataLabel === "string" && dataLabel.includes("-")) {
-        const [ano, mes, dia] = dataLabel.split("-");
-        dataLabel = `${dia}/${mes}`;
+      if (dataLabel.includes("-")) {
+        const [a, m, d] = dataLabel.split("-");
+        dataLabel = `${d}/${m}`;
       }
       resumoHoje = {
         existe: true,
         dataLabel,
-        horasEstudo:
-          diaHoje.horas_estudo_liquidas != null
-            ? Number(diaHoje.horas_estudo_liquidas)
-            : 0,
-        questoes:
-          diaHoje.questoes_feitas_total != null
-            ? Number(diaHoje.questoes_feitas_total)
-            : 0,
-        horasSono:
-          diaHoje.horas_sono_total != null
-            ? Number(diaHoje.horas_sono_total)
-            : null,
-        foco:
-          diaHoje.nivel_foco != null ? Number(diaHoje.nivel_foco) : null,
-        energia:
-          diaHoje.nivel_energia != null
-            ? Number(diaHoje.nivel_energia)
-            : null,
-        humor: diaHoje.humor || null
+        horasEstudo: Number(diaHoje.horas_estudo_liquidas || 0),
+        questoes: Number(diaHoje.questoes_feitas_total || 0),
+        horasSono: diaHoje.horas_sono_total || null,
+        foco: diaHoje.nivel_foco || null,
+        energia: diaHoje.nivel_energia || null,
+        humor: diaHoje.humor
       };
     }
 
-    // Últimos 7 e 30 dias
-    const diasUltimos7 = diasBrutos.filter((d) => {
-      const iso = toISODate(d.data);
-      const diff = diffDiasFromHoje(iso);
+    const diasUltimos7 = diasBrutos.filter(d => {
+      const diff = diffDiasFromHoje(d.data);
       return diff >= 0 && diff <= 7;
     });
 
-    const diasUltimos30 = diasBrutos.filter((d) => {
-      const iso = toISODate(d.data);
-      const diff = diffDiasFromHoje(iso);
+    const diasUltimos30 = diasBrutos.filter(d => {
+      const diff = diffDiasFromHoje(d.data);
       return diff >= 0 && diff <= 30;
     });
 
     const resumo7 = agregaDias(diasUltimos7);
     const resumo30 = agregaDias(diasUltimos30);
 
-    // Gráficos da home = últimos 30 dias
-    const diasOrdenados30 = [...diasUltimos30].sort((a, b) => {
-      const isoA = toISODate(a.data) || "";
-      const isoB = toISODate(b.data) || "";
-      if (isoA < isoB) return -1;
-      if (isoA > isoB) return 1;
-      return 0;
-    });
+    const diasOrdenados30 = [...diasUltimos30].sort((a, b) => a.data.localeCompare(b.data));
 
-    const labels30 = [];
-    const horas30 = [];
-    const questoes30 = [];
-
-    diasOrdenados30.forEach((d) => {
-      let label = d.data;
-      if (typeof label === "string" && label.includes("-")) {
-        const [ano, mes, dia] = label.split("-");
-        label = `${dia}/${mes}`;
-      }
-      labels30.push(label);
-      horas30.push(
-        d.horas_estudo_liquidas != null
-          ? Number(d.horas_estudo_liquidas)
-          : 0
-      );
-      questoes30.push(
-        d.questoes_feitas_total != null
-          ? Number(d.questoes_feitas_total)
-          : 0
-      );
-    });
+    const labels30 = diasOrdenados30.map(d => d.data.slice(8));
+    const horas30 = diasOrdenados30.map(d => Number(d.horas_estudo_liquidas || 0));
+    const questoes30 = diasOrdenados30.map(d => Number(d.questoes_feitas_total || 0));
 
     res.render("home", {
-      tituloPagina: "Rastreador de Estudos do Kauê",
+      tituloPagina: "Rastreador de Estudos",
       resumoHoje,
       resumo7,
       resumo30,
@@ -324,56 +222,31 @@ async function home(req, res) {
       questoes30
     });
   } catch (error) {
-    console.error("❌ Erro ao carregar dashboard da home:", error);
-    res.render("home", {
-      tituloPagina: "Rastreador de Estudos do Kauê",
-      resumoHoje: {
-        existe: false,
-        dataLabel: null,
-        horasEstudo: 0,
-        questoes: 0,
-        horasSono: null,
-        foco: null,
-        energia: null,
-        humor: null
-      },
-      resumo7: {
-        totalDias: 0,
-        diasComEstudo: 0,
-        somaHoras: 0,
-        mediaHoras: 0,
-        somaQuestoes: 0,
-        mediaQuestoes: 0
-      },
-      resumo30: {
-        totalDias: 0,
-        diasComEstudo: 0,
-        somaHoras: 0,
-        mediaHoras: 0,
-        somaQuestoes: 0,
-        mediaQuestoes: 0
-      },
-      labels30: [],
-      horas30: [],
-      questoes30: []
-    });
+    console.error("❌ Erro na Home:", error);
+    res.status(500).send("Erro ao carregar dashboard.");
   }
 }
 
-// Form de novo dia
+// ---------------------
+// FORM
+// ---------------------
+
 function novoDiaForm(req, res) {
   const sucesso = req.query.sucesso === "1";
-
   res.render("dia_novo", {
     tituloPagina: "Registrar dia",
     sucesso
   });
 }
 
-// Salvar novo dia
+// ---------------------
+// CRIAR DIA
+// ---------------------
 
 async function criarDia(req, res) {
   try {
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+
     const {
       data,
       hora_acordou,
@@ -401,141 +274,106 @@ async function criarDia(req, res) {
     }
 
     await Dia.create({
+      usuario_id: usuarioId,
       data,
       hora_acordou: hora_acordou || null,
-      hora_dormmiu: hora_dormiu || null,
-      horas_sono_total: horas_sono_total ? Number(horas_sono_total) : null,
-      qualidade_sono_nota: qualidade_sono_nota ? Number(qualidade_sono_nota) : null,
-      tirou_soneca:
-        tirou_soneca === "" || tirou_soneca === undefined
-          ? null
-          : tirou_soneca === "SIM",
-      minutos_soneca: minutos_soneca ? Number(minutos_soneca) : null,
-      horas_estudo_liquidas: horas_estudo_liquidas ? Number(horas_estudo_liquidas) : null,
-      questoes_feitas_total: questoes_feitas_total ? Number(questoes_feitas_total) : null,
-      questoes_acertos_total: questoes_acertos_total ? Number(questoes_acertos_total) : null,
+      hora_dormiu: hora_dormiu || null,
+      horas_sono_total: horas_sono_total || null,
+      qualidade_sono_nota: qualidade_sono_nota || null,
+      tirou_soneca: tirou_soneca === "SIM" ? true : tirou_soneca === "NAO" ? false : null,
+      minutos_soneca: minutos_soneca || null,
+      horas_estudo_liquidas: horas_estudo_liquidas || null,
+      questoes_feitas_total: questoes_feitas_total || null,
+      questoes_acertos_total: questoes_acertos_total || null,
       erros_do_dia: erros_do_dia || null,
       melhorar_amanha: melhorar_amanha || null,
       ponto_alto_dia: ponto_alto_dia || null,
       maior_vacilo_dia: maior_vacilo_dia || null,
       meta_principal_dia: meta_principal_dia || null,
       status_meta: status_meta || null,
-      nivel_foco: nivel_foco ? Number(nivel_foco) : null,
-      nivel_energia: nivel_energia ? Number(nivel_energia) : null,
+      nivel_foco: nivel_foco || null,
+      nivel_energia: nivel_energia || null,
       humor: humor || null
     });
 
-
-
     const { verificarMedalhas } = require("../services/medalhasService");
-const novasMedalhas = await verificarMedalhas();
+    const novasMedalhas = await verificarMedalhas(usuarioId);
 
-if (novasMedalhas.length > 0) {
-  return res.render("medalha_nova", { novasMedalhas });
-}
+    if (novasMedalhas.length > 0) {
+      return res.render("medalha_nova", { novasMedalhas });
+    }
 
-
-
+    return res.redirect("/?sucesso=1");
   } catch (error) {
-    console.error("❌ Erro ao salvar dia:", error);
+    console.error("❌ Erro ao criar dia:", error);
     return res.status(500).send("Erro ao salvar o dia.");
   }
 }
 
+// ---------------------
+// HISTÓRICO
+// ---------------------
 
-// Histórico de dias (resumo) + filtro
 async function listarDias(req, res) {
-  const { de, ate, somente_com_estudo } = req.query;
-
   try {
-    const diasBrutos = await Dia.findAll({
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+    const { de, ate, somente_com_estudo } = req.query;
+
+    let diasBrutos = await Dia.findAll({
+      where: { usuario_id: usuarioId },
       order: [["data", "DESC"]],
       raw: true
     });
 
-    const diasProcessados = diasBrutos.map((d) => {
-      let dataFormatada = d.data;
-      if (typeof d.data === "string" && d.data.includes("-")) {
-        dataFormatada = formatarDDMMYYYY(d.data);
-      }
-
-      let taxaAcerto = null;
-      if (
-        d.questoes_feitas_total &&
-        d.questoes_acertos_total != null &&
-        d.questoes_feitas_total > 0
-      ) {
-        taxaAcerto = Math.round(
-          (d.questoes_acertos_total / d.questoes_feitas_total) * 100
-        );
-      }
+    diasBrutos = diasBrutos.map(d => {
+      const dataFormatada = formatarDDMMYYYY(d.data);
+      const taxaAcerto =
+        d.questoes_feitas_total > 0 && d.questoes_acertos_total != null
+          ? Math.round((d.questoes_acertos_total / d.questoes_feitas_total) * 100)
+          : null;
 
       return {
         ...d,
-        id: d.id,
         dataFormatada,
         taxaAcerto
       };
     });
 
-    // remove dias completamente vazios
-    let dias = diasProcessados.filter((d) => {
-      const semHoras = d.horas_estudo_liquidas == null;
-      const semQuestoes =
-        d.questoes_feitas_total == null && d.questoes_acertos_total == null;
-      const semFocoEnergia =
-        d.nivel_foco == null && d.nivel_energia == null;
-      const semHumorMeta = !d.humor && !d.status_meta;
+    if (de) diasBrutos = diasBrutos.filter(d => d.data >= de);
+    if (ate) diasBrutos = diasBrutos.filter(d => d.data <= ate);
 
-      const diaVazio =
-        semHoras && semQuestoes && semFocoEnergia && semHumorMeta;
-
-      return !diaVazio;
-    });
-
-    // filtro por data (string YYYY-MM-DD compara certinho)
-    if (de) {
-      dias = dias.filter((d) => d.data >= de);
-    }
-    if (ate) {
-      dias = dias.filter((d) => d.data <= ate);
-    }
-
-    // filtro: apenas dias com estudo (horas ou questões)
     if (somente_com_estudo === "1") {
-      dias = dias.filter((d) => {
-        const horas =
-          d.horas_estudo_liquidas != null
-            ? Number(d.horas_estudo_liquidas)
-            : 0;
-        const quest =
-          d.questoes_feitas_total != null
-            ? Number(d.questoes_feitas_total)
-            : 0;
-        return horas > 0 || quest > 0;
+      diasBrutos = diasBrutos.filter(d => {
+        const horas = Number(d.horas_estudo_liquidas || 0);
+        const questoes = Number(d.questoes_feitas_total || 0);
+        return horas > 0 || questoes > 0;
       });
     }
 
     res.render("dias_lista", {
-      tituloPagina: "Histórico de dias",
-      dias,
+      tituloPagina: "Histórico",
+      dias: diasBrutos,
       de: de || "",
       ate: ate || "",
-      somente_com_estudo: somente_com_estudo || ""
+      somente_com_estudo
     });
   } catch (error) {
     console.error("❌ Erro ao listar dias:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar histórico de dias. Veja o console.");
+    res.status(500).send("Erro ao listar dias.");
   }
 }
 
-// Detalhe de um dia
+// ---------------------
+// DETALHE DO DIA
+// ---------------------
+
 async function detalhesDia(req, res) {
-  const id = req.params.id;
   try {
-    const dia = await Dia.findByPk(id, {
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+    const id = req.params.id;
+
+    const dia = await Dia.findOne({
+      where: { id, usuario_id: usuarioId },
       include: [
         {
           model: EstudoMateriaDia,
@@ -555,10 +393,10 @@ async function detalhesDia(req, res) {
 
     const diaPlain = dia.get({ plain: true });
 
-    // Buscar últimos 10 dias (excluindo o dia atual) para comparação
     const ultimosDias = await Dia.findAll({
       where: {
-        id: { [Op.ne]: diaPlain.id }
+        usuario_id: usuarioId,
+        id: { [Op.ne]: id }
       },
       order: [["data", "DESC"]],
       limit: 10,
@@ -573,18 +411,25 @@ async function detalhesDia(req, res) {
       insights
     });
   } catch (error) {
-    console.error("❌ Erro ao carregar detalhes do dia:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar detalhes do dia. Veja o console.");
+    console.error("❌ Erro ao detalhar dia:", error);
+    res.status(500).send("Erro ao carregar detalhes.");
   }
 }
 
-// Editar dia (form)
+// ---------------------
+// EDITAR DIA (FORM)
+// ---------------------
+
 async function editarDiaForm(req, res) {
-  const id = req.params.id;
   try {
-    const dia = await Dia.findByPk(id, { raw: true });
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+    const id = req.params.id;
+
+    const dia = await Dia.findOne({
+      where: { id, usuario_id: usuarioId },
+      raw: true
+    });
+
     if (!dia) {
       return res.status(404).send("Dia não encontrado.");
     }
@@ -594,110 +439,96 @@ async function editarDiaForm(req, res) {
       dia
     });
   } catch (error) {
-    console.error("❌ Erro ao carregar dia para edição:", error);
-    return res
-      .status(500)
-      .send("Erro ao carregar dia para edição. Veja o console.");
+    console.error("❌ Erro ao carregar edição:", error);
+    res.status(500).send("Erro ao carregar edição.");
   }
 }
 
-// Atualizar dia
-async function atualizarDia(req, res) {
-  const id = req.params.id;
-  try {
-    const {
-      data,
-      hora_acordou,
-      hora_dormiu,
-      horas_sono_total,
-      qualidade_sono_nota,
-      tirou_soneca,
-      minutos_soneca,
-      horas_estudo_liquidas,
-      questoes_feitas_total,
-      questoes_acertos_total,
-      erros_do_dia,
-      melhorar_amanha,
-      ponto_alto_dia,
-      maior_vacilo_dia,
-      meta_principal_dia,
-      status_meta,
-      nivel_foco,
-      nivel_energia,
-      humor
-    } = req.body;
+// ---------------------
+// ATUALIZAR DIA
+// ---------------------
 
-    if (!data) {
-      return res.status(400).send("Data é obrigatória.");
-    }
+async function atualizarDia(req, res) {
+  try {
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+    const id = req.params.id;
+
+    const body = req.body;
 
     await Dia.update(
       {
-        data,
-        hora_acordou: hora_acordou || null,
-        hora_dormiu: hora_dormiu || null,
-        horas_sono_total: horas_sono_total ? Number(horas_sono_total) : null,
-        qualidade_sono_nota: qualidade_sono_nota
-          ? Number(qualidade_sono_nota)
-          : null,
-        tirou_soneca:
-          tirou_soneca === "" || tirou_soneca === undefined
-            ? null
-            : tirou_soneca === "SIM",
-        minutos_soneca: minutos_soneca ? Number(minutos_soneca) : null,
-        horas_estudo_liquidas: horas_estudo_liquidas
-          ? Number(horas_estudo_liquidas)
-          : null,
-        questoes_feitas_total: questoes_feitas_total
-          ? Number(questoes_feitas_total)
-          : null,
-        questoes_acertos_total: questoes_acertos_total
-          ? Number(questoes_acertos_total)
-          : null,
-        erros_do_dia: erros_do_dia || null,
-        melhorar_amanha: melhorar_amanha || null,
-        ponto_alto_dia: ponto_alto_dia || null,
-        maior_vacilo_dia: maior_vacilo_dia || null,
-        meta_principal_dia: meta_principal_dia || null,
-        status_meta: status_meta || null,
-        nivel_foco: nivel_foco ? Number(nivel_foco) : null,
-        nivel_energia: nivel_energia ? Number(nivel_energia) : null,
-        humor: humor || null
+        data: body.data,
+        hora_acordou: body.hora_acordou || null,
+        hora_dormiu: body.hora_dormiu || null,
+        horas_sono_total: body.horas_sono_total || null,
+        qualidade_sono_nota: body.qualidade_sono_nota || null,
+        tirou_soneca: body.tirou_soneca === "SIM" ? true : body.tirou_soneca === "NAO" ? false : null,
+        minutos_soneca: body.minutos_soneca || null,
+        horas_estudo_liquidas: body.horas_estudo_liquidas || null,
+        questoes_feitas_total: body.questoes_feitas_total || null,
+        questoes_acertos_total: body.questoes_acertos_total || null,
+        erros_do_dia: body.erros_do_dia || null,
+        melhorar_amanha: body.melhorar_amanha || null,
+        ponto_alto_dia: body.ponto_alto_dia || null,
+        maior_vacilo_dia: body.maior_vacilo_dia || null,
+        meta_principal_dia: body.meta_principal_dia || null,
+        status_meta: body.status_meta || null,
+        nivel_foco: body.nivel_foco || null,
+        nivel_energia: body.nivel_energia || null,
+        humor: body.humor || null
       },
-      { where: { id } }
+      {
+        where: { id, usuario_id: usuarioId }
+      }
     );
 
-    return res.redirect("/dias");
+    res.redirect("/dias");
   } catch (error) {
     console.error("❌ Erro ao atualizar dia:", error);
-    return res
-      .status(500)
-      .send("Erro ao atualizar o dia. Veja o console.");
+    res.status(500).send("Erro ao atualizar dia.");
   }
 }
 
-// Excluir dia (apaga também estudos/simulados ligados)
+// ---------------------
+// EXCLUIR DIA + estudos e simulados
+// ---------------------
+
 async function excluirDia(req, res) {
-  const id = req.params.id;
   try {
-    await EstudoMateriaDia.destroy({ where: { dia_id: id } });
-    await Simulado.destroy({ where: { dia_id: id } });
-    await Dia.destroy({ where: { id } });
-    return res.redirect("/dias");
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+    const id = req.params.id;
+
+    await EstudoMateriaDia.destroy({
+      where: { dia_id: id }
+    });
+
+    await Simulado.destroy({
+      where: { dia_id: id }
+    });
+
+    await Dia.destroy({
+      where: { id, usuario_id: usuarioId }
+    });
+
+    res.redirect("/dias");
   } catch (error) {
     console.error("❌ Erro ao excluir dia:", error);
-    return res
-      .status(500)
-      .send("Erro ao excluir o dia. Veja o console.");
+    res.status(500).send("Erro ao excluir dia.");
   }
 }
 
-// --------------------------------------
-// RECORDES PESSOAIS
-// --------------------------------------
+// ---------------------
+// RECORDES
+// ---------------------
+
 async function recordesPessoais(req, res) {
   try {
-    const dias = await Dia.findAll({ raw: true });
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+
+    const dias = await Dia.findAll({
+      where: { usuario_id: usuarioId },
+      raw: true
+    });
 
     if (!dias.length) {
       return res.render("recordes", {
@@ -706,7 +537,6 @@ async function recordesPessoais(req, res) {
       });
     }
 
-    // Recordes simples
     const maiorHoras = Math.max(...dias.map(d => d.horas_estudo_liquidas || 0));
     const maiorQuestoes = Math.max(...dias.map(d => d.questoes_feitas_total || 0));
 
@@ -724,8 +554,7 @@ async function recordesPessoais(req, res) {
     const maiorFoco = Math.max(...dias.map(d => d.nivel_foco || 0));
     const maiorEnergia = Math.max(...dias.map(d => d.nivel_energia || 0));
 
-    // SEQUÊNCIA DE DIAS ESTUDANDO
-    const diasOrdenados = dias.sort((a, b) => (a.data > b.data ? 1 : -1));
+    const diasOrdenados = dias.sort((a, b) => a.data.localeCompare(b.data));
 
     let maiorSequencia = 0;
     let atual = 0;
@@ -742,7 +571,7 @@ async function recordesPessoais(req, res) {
       }
     }
 
-    return res.render("recordes", {
+    res.render("recordes", {
       tituloPagina: "Recordes pessoais",
       possuiDados: true,
       maiorHoras,
@@ -752,23 +581,22 @@ async function recordesPessoais(req, res) {
       maiorEnergia,
       maiorSequencia
     });
-
   } catch (err) {
     console.error("Erro ao carregar recordes:", err);
-    res.status(500).send("Erro ao carregar recordes.");
+    res.status(500).send("Erro.");
   }
 }
 
-// -------------------------------------------------
-// CALENDÁRIO / MAPA DE CALOR — VERSÃO PREMIUM
-// -------------------------------------------------
+// ---------------------
+// CALENDÁRIO
+// ---------------------
+
 async function calendarioEstudos(req, res) {
   try {
-    // ------------------------------
-    // PEGAR MÊS E ANO DA URL
-    // ------------------------------
+    const usuarioId = req.session.usuario.id; //🔥 CORRIGIDO
+
     let ano = Number(req.query.ano);
-    let mesIndex = Number(req.query.mes); // 0 = Janeiro
+    let mesIndex = Number(req.query.mes);
 
     const hoje = new Date();
 
@@ -777,10 +605,10 @@ async function calendarioEstudos(req, res) {
       mesIndex = hoje.getMonth();
     }
 
-    // ------------------------------
-    // Buscar todos os dias do BD
-    // ------------------------------
-    const diasBD = await Dia.findAll({ raw: true });
+    const diasBD = await Dia.findAll({
+      where: { usuario_id: usuarioId },
+      raw: true
+    });
 
     const inicio = new Date(ano, mesIndex, 1);
     const fim = new Date(ano, mesIndex + 1, 0);
@@ -788,17 +616,13 @@ async function calendarioEstudos(req, res) {
 
     let diasMes = [];
 
-    // ------------------------------
-    // Gerar dias do mês
-    // ------------------------------
     for (let dia = 1; dia <= totalDiasMes; dia++) {
       const dataISO = `${ano}-${String(mesIndex + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
 
       const registro = diasBD.find(d => d.data === dataISO);
 
-      let horas = registro ? Number(registro.horas_estudo_liquidas) || 0 : 0;
+      const horas = registro ? Number(registro.horas_estudo_liquidas || 0) : 0;
 
-      // Categoria visual por hora
       let cor = "zero";
       if (horas >= 8) cor = "h8";
       else if (horas >= 7) cor = "h7";
@@ -814,63 +638,48 @@ async function calendarioEstudos(req, res) {
         dataISO,
         horas,
         cor,
-        destaque: horas >= 8 // mostra ícone 🔥
+        destaque: horas >= 8
       });
     }
 
-    // ------------------------------
-    // Navegação de meses
-    // ------------------------------
+    const nomesMeses = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
     const mesAnterior = mesIndex === 0 ? 11 : mesIndex - 1;
     const anoAnterior = mesIndex === 0 ? ano - 1 : ano;
 
     const mesProximo = mesIndex === 11 ? 0 : mesIndex + 1;
     const anoProximo = mesIndex === 11 ? ano + 1 : ano;
 
-    const nomesMeses = [
-      "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-      "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
-    ];
-
-    // ------------------------------
-    // RESUMO DO MÊS
-    // ------------------------------
     const totalHorasMes = diasMes.reduce((acc, d) => acc + d.horas, 0);
     const diasEstudados = diasMes.filter(d => d.horas > 0).length;
     const mediaDiaria = diasEstudados > 0 ? (totalHorasMes / diasEstudados) : 0;
 
-    // ------------------------------
-    // Renderizar
-    // ------------------------------
-    return res.render("calendario", {
+    res.render("calendario", {
       tituloPagina: "Calendário de estudos",
       diasMes,
       mesLabel: `${nomesMeses[mesIndex]} de ${ano}`,
       possuiDados: diasBD.length > 0,
-
-      // Navegação
       anoAnterior,
       mesAnterior,
       anoProximo,
       mesProximo,
-
-      // Dados do resumo
       totalHorasMes,
       diasEstudados,
       mediaDiaria: mediaDiaria.toFixed(1)
     });
-
   } catch (err) {
     console.error("Erro no calendário:", err);
     res.status(500).send("Erro ao carregar calendário.");
   }
 }
 
-
-
 // -------------------------------------------------
-// EXPORTAR CONTROLLER COMPLETO
+// EXPORTAR CONTROLLER
 // -------------------------------------------------
+
 module.exports = {
   home,
   novoDiaForm,
@@ -883,4 +692,3 @@ module.exports = {
   recordesPessoais,
   calendarioEstudos
 };
-
