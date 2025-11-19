@@ -1,0 +1,162 @@
+/* =============================================
+   TELA ISOLADA DA ROTINA
+   ============================================= */
+
+body.page-rotina {
+  margin: 0;
+  background: #eef4fa;
+  font-family: "Inter", sans-serif;
+}
+
+/* Botão Voltar */
+.rotina-top-bar {
+  padding: 20px;
+}
+
+.btn-voltar {
+  background: #1c9aff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: .2s;
+}
+
+.btn-voltar:hover {
+  filter: brightness(1.1);
+}
+
+/* Conteúdo */
+.kst-home-header {
+  padding: 0 40px;
+  margin-bottom: 30px;
+}
+
+.kst-home-title {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+.kst-home-subtitle {
+  opacity: 0.7;
+}
+
+/* Toolbar */
+.kst-rotina-toolbar {
+  padding: 0 40px;
+  margin-bottom: 25px;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #1c9aff, #3db7ff);
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* GRID */
+.kst-rotina-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 22px;
+  padding: 0 40px 40px 40px;
+}
+
+/* CARD DOS DIAS */
+.kst-rotina-day {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+.day-title {
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* Espaço para onde entram os blocos */
+.day-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Card vazio */
+.empty {
+  text-align: center;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #f4f6fa;
+  border: 1px dashed #d0d6e0;
+}
+
+/* Card de bloco */
+.card {
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+.card-time {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.card-desc {
+  font-size: 13px;
+  opacity: .75;
+  margin-bottom: 10px;
+}
+
+/* Ações */
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.btn-xs {
+  padding: 4px 8px;
+  background: #e8eef5;
+  border-radius: 6px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.btn-danger {
+  background: #ff6868;
+  color: #fff;
+}
+
+.select-xs {
+  padding: 4px;
+  font-size: 12px;
+}
+
+.add-btn {
+  margin-top: 20px;
+  background: #f1f4f8;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+}

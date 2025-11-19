@@ -35,6 +35,9 @@ const medalhaRoutes = require("./routes/medalhaRoutes");
 // Rota nova – PERFIL
 const perfilRoutes = require("./routes/perfilRoutes");
 
+// Rota nova – ROTINA
+const rotinaRoutes = require("./routes/routineRoutes");
+
 // -------------------------------
 // INICIAR APP
 // -------------------------------
@@ -46,8 +49,19 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// SERVE ARQUIVOS DA PASTA PUBLIC
 app.use(express.static(path.join(__dirname, "public")));
+
+// FORM PARSER
 app.use(express.urlencoded({ extended: true }));
+
+// -------------------------------
+// ⚠️ IMPORTANTE
+// REMOVEMOS COMPLETAMENTE express-ejs-layouts
+// -------------------------------
+// ❌ app.use(expressLayouts);
+// ❌ app.set("layout", "layouts/default");
+
 
 // -------------------------------
 // COOKIES + SESSÃO
@@ -109,6 +123,9 @@ app.use("/estatisticas", ensureAuth, estatisticasRoutes);
 app.use("/revisao", ensureAuth, revisaoRoutes);
 app.use("/medalhas", ensureAuth, medalhaRoutes);
 app.use("/perfil", ensureAuth, perfilRoutes);
+
+// 🚀 ROTINA (SEM HEADER/FOOTER)
+app.use("/rotina", ensureAuth, rotinaRoutes);
 
 // -------------------------------
 // SERVIDOR

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= tituloPagina %></title>
+
+  <!-- CSS exclusivo da rotina -->
+  <link rel="stylesheet" href="/css/pages/rotina.css">
+</head>
+
+<body class="page-rotina">
+
+  <div class="rotina-top-bar">
+    <a href="/" class="btn-voltar">← Voltar ao painel</a>
+  </div>
+
+  <section class="kst-rotina">
+
+    <div class="kst-home-header">
+      <h1 class="kst-home-title">Rotina</h1>
+      <p class="kst-home-subtitle">
+        Organize sua semana ideal: horários de acordar, estudar, treinar, revisar e dormir.
+      </p>
+    </div>
+
+    <div class="kst-rotina-toolbar">
+      <a href="/rotina/novo" class="btn-primary">+ Novo bloco de rotina</a>
+    </div>
+
+    <div class="kst-rotina-grid">
+
+      <% diasSemana.forEach((dia, i) => { %>
+        <div class="kst-rotina-day">
+
+          <h3 class="day-title"><%= dia.label.toUpperCase() %></h3>
+
+          <div class="day-cards">
+
+            <% if (!rotinaPorDia[i].length) { %>
+              <div class="empty">Nenhum bloco definido para este dia.</div>
+            <% } else { %>
+
+              <% rotinaPorDia[i].forEach(b => { %>
+
+                <div class="card" style="border-left: 4px solid <%= b.color || '#1c9aff' %>">
+
+                  <div class="card-time"><%= b.startTime %> – <%= b.endTime %></div>
+                  <div class="card-title"><%= b.title %></div>
+
+                  <% if (b.description) { %>
+                    <div class="card-desc"><%= b.description %></div>
+                  <% } %>
+
+                  <div class="card-actions">
+                    <a href="/rotina/<%= b.id %>/editar" class="btn-xs">Editar</a>
+
+                    <form action="/rotina/<%= b.id %>/excluir" method="POST"
+                      onsubmit="return confirm('Excluir este bloco?');">
+                      <button class="btn-xs btn-danger">Excluir</button>
+                    </form>
+
+                    <form action="/rotina/<%= b.id %>/duplicar" method="POST">
+                      <select name="targetWeekday" class="select-xs">
+                        <% diasSemana.forEach(d => { %>
+                          <option value="<%= d.value %>" <%= d.value === b.weekday ? 'disabled' : '' %>><%= d.short %></option>
+                        <% }) %>
+                      </select>
+
+                      <button class="btn-xs">Duplicar</button>
+                    </form>
+                  </div>
+
+                </div>
+
+              <% }) %>
+
+            <% } %>
+
+          </div>
+
+          <a href="/rotina/novo?weekday=<%= dia.value %>" class="btn-secondary add-btn">
+            + Bloco para <%= dia.short %>
+          </a>
+
+        </div>
+      <% }) %>
+
+    </div>
+  </section>
+
+</body>
+</html>

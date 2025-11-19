@@ -13,6 +13,9 @@ const SimuladoModel = require("./Simulado");
 const MedalhaModel = require("./Medalha");
 const MedalhaUsuarioModel = require("./MedalhaUsuario");
 
+// NOVO MODEL
+const RoutineBlockModel = require("./RoutineBlock");
+
 // INICIALIZA OS MODELS
 const Usuario = UsuarioModel(sequelize, DataTypes);
 const Dia = DiaModel(sequelize, DataTypes);
@@ -21,13 +24,13 @@ const EstudoMateriaDia = EstudoMateriaDiaModel(sequelize, DataTypes);
 const Simulado = SimuladoModel(sequelize, DataTypes);
 const Medalha = MedalhaModel(sequelize, DataTypes);
 const MedalhaUsuario = MedalhaUsuarioModel(sequelize, DataTypes);
+const RoutineBlock = RoutineBlockModel(sequelize, DataTypes); // NOVO
 
 // ===============================
 // ASSOCIAÇÕES ENTRE OS MODELS
 // ===============================
 
 // ---- USUÁRIO x DIA ----
-// 1 usuário tem vários dias
 Usuario.hasMany(Dia, {
   foreignKey: "usuario_id",
   as: "dias"
@@ -117,6 +120,16 @@ MedalhaUsuario.belongsTo(Medalha, {
   as: "medalha"
 });
 
+// ---- USUÁRIO x ROUTINE_BLOCK (NOVO) ----
+Usuario.hasMany(RoutineBlock, {
+  foreignKey: "usuario_id",
+  as: "routine_blocks"
+});
+RoutineBlock.belongsTo(Usuario, {
+  foreignKey: "usuario_id",
+  as: "usuario"
+});
+
 // ===============================
 // EXPORTA TUDO
 // ===============================
@@ -128,7 +141,8 @@ const db = {
   EstudoMateriaDia,
   Simulado,
   Medalha,
-  MedalhaUsuario
+  MedalhaUsuario,
+  RoutineBlock // NOVO
 };
 
 module.exports = db;
