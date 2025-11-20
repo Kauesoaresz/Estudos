@@ -1,0 +1,338 @@
+/* ============================================================
+   PÁGINA — REVISÕES PROGRAMADAS (KAUÊ STUDY TRACKER)
+   Layout avançado com animações, cores por matéria, progresso
+============================================================ */
+
+/* CONTAINER GERAL */
+.kst-rev-agenda-page {
+  padding-top: 1.25rem;
+  padding-bottom: 2.5rem;
+}
+
+/* CABEÇALHO */
+.kst-rev-agenda-header {
+  margin-bottom: 1.6rem;
+}
+
+.kst-rev-agenda-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+}
+
+.kst-rev-agenda-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--kst-text-muted);
+}
+
+/* SEÇÕES */
+.kst-rev-agenda-section {
+  margin-top: 2rem;
+}
+
+.kst-rev-agenda-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.kst-rev-agenda-section-caption {
+  margin: 0;
+  color: var(--kst-text-muted);
+  font-size: 0.92rem;
+}
+
+/* ============================================================
+   CARDS DE HOJE / ATRASADAS
+============================================================ */
+
+.kst-rev-agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.rev-card {
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-lg);
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--kst-border-soft);
+  box-shadow: var(--kst-shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rev-card--hoje { border-color: #22c55e; }
+.rev-card--atrasada { border-color: #ef4444; }
+
+.rev-card-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.rev-card-meta,
+.rev-card-sub {
+  color: var(--kst-text-soft);
+  margin: 0;
+}
+
+/* ============================================================
+   PILLS (R1–R5)
+============================================================ */
+
+.rev-pill {
+  display: inline-flex;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid #3b82f640;
+  background: #3b82f618;
+  color: #3b82f6;
+}
+
+/* ============================================================
+   LISTA PRINCIPAL (MATÉRIA)
+============================================================ */
+
+.kst-rev-materias-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* BLOCO DA MATÉRIA */
+.rev-materia-block {
+  background: white;
+  border-radius: 18px;
+  border: 1px solid var(--kst-border-soft);
+  box-shadow: var(--kst-shadow-soft);
+  overflow: hidden;
+  --accent: var(--rev-materia-accent, #3b82f6);
+}
+
+/* HEADER DA MATÉRIA */
+.rev-materia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.3rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.rev-materia-header:hover {
+  background: var(--kst-bg-subtle);
+}
+
+.rev-materia-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.rev-materia-caption {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: var(--kst-text-soft);
+}
+
+/* Badge de progresso geral da matéria */
+.rev-materia-progress {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--kst-text-muted);
+}
+
+.rev-materia-progress-badge {
+  background: var(--accent);
+  color: white;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* ============================================================
+   ÍCONE DE ABRIR/FECHAR (CHEVRON ANIMADO)
+============================================================ */
+
+.rev-materia-toggle-btn,
+.rev-estudo-toggle-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  display: grid;
+  place-content: center;
+}
+
+.rev-materia-toggle-icon,
+.rev-estudo-toggle-icon {
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--kst-text-soft);
+  border-bottom: 2px solid var(--kst-text-soft);
+  transform: rotate(45deg);
+  transition: transform 0.18s ease;
+}
+
+.rev-materia-toggle-icon.is-open,
+.rev-estudo-toggle-icon.is-open {
+  transform: rotate(225deg);
+}
+
+/* ============================================================
+   BODY DA MATÉRIA (COLAPSÁVEL COM ANIMAÇÃO)
+============================================================ */
+
+.rev-materia-body {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1.2rem;
+  transition: max-height 0.45s ease;
+  border-top: 1px solid var(--kst-border-soft);
+}
+
+.rev-materia-body.is-open {
+  padding: 1rem 1.2rem 1.2rem;
+  max-height: 2000px;
+}
+
+/* ============================================================
+   BLOCO DO CONTEÚDO
+============================================================ */
+
+.rev-estudo-block {
+  background: var(--kst-bg-base);
+  border-radius: 14px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.8rem;
+  border-left: 4px solid var(--accent);
+}
+
+/* HEADER DO CONTEÚDO */
+.rev-estudo-header {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.rev-estudo-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.rev-estudo-meta {
+  margin: 0.1rem 0 0;
+  color: var(--kst-text-soft);
+  font-size: 0.82rem;
+}
+
+/* ============================================================
+   BARRA DE PROGRESSO DO CICLO (R1–R5)
+============================================================ */
+
+.rev-estudo-progress {
+  margin-top: 0.5rem;
+}
+
+.rev-estudo-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--kst-border-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.rev-estudo-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+.rev-estudo-progress-label {
+  font-size: 0.78rem;
+  color: var(--kst-text-muted);
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* ============================================================
+   LISTA DE R1–R5 (COLAPSÁVEL)
+============================================================ */
+
+.rev-estudo-revisoes {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s ease;
+  margin-top: 0.5rem;
+  border-top: 1px dashed var(--kst-border-soft);
+  padding-top: 0.5rem;
+}
+
+.rev-estudo-revisoes.is-open {
+  max-height: 2000px;
+}
+
+/* R1–R5 Linha */
+.rev-estudo-rev-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+
+/* ============================================================
+   RESPONSIVO
+============================================================ */
+
+@media (max-width: 720px) {
+  .rev-estudo-rev-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rev-materia-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+}
+
+/* ===============================
+   FIX — Ações dos cards atrasados
+   =============================== */
+
+.rev-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;           /* espaçamento entre os botões */
+  margin-top: 0.6rem;     /* separa do conteúdo acima */
+}
+
+.rev-card-actions form,
+.rev-card-actions a {
+  width: 100%;            /* todos com a mesma largura */
+}
+
+.rev-card-actions button,
+.rev-card-actions .kst-btn {
+  width: 100%;            /* botões realmente ocupam 100% */
+  text-align: center;
+}
+
+/* Botões fantasma dentro de cards */
+.kst-btn-ghost {
+  background: #f4f4f4;
+  border: 1px solid #e5e5e5;
+}
+
+.rev-btn-ignore {
+  color: var(--kst-text-soft);
+}
+

@@ -1,0 +1,87 @@
+<%- include("partials/header", { tituloPagina }) %>
+
+<link rel="stylesheet" href="/css/pages/revisoes_programadas.css">
+
+<div class="kst-container kst-rev-agenda-page">
+
+  <header class="kst-rev-agenda-header">
+    <h1 class="kst-rev-agenda-title">Histórico de Revisões</h1>
+    <p class="kst-rev-agenda-subtitle">
+      Aqui ficam todas as revisões marcadas como feitas ou ignoradas.
+    </p>
+
+    
+
+  <% if (!lista || lista.length === 0) { %>
+    <p class="kst-rev-empty-msg">Você ainda não possui revisões no histórico.</p>
+
+  <% } else { %>
+
+    <div class="kst-rev-agenda-grid">
+
+      <% lista.forEach(r => { %>
+        <article class="rev-card rev-card--historico">
+
+          <div class="rev-card-main">
+
+            <div class="rev-card-top-row">
+              <span class="rev-pill rev-pill--ciclo"><%= r.tipo_ciclo %></span>
+              <span class="rev-card-date"><%= r.dataLabel %></span>
+            </div>
+
+            <h3 class="rev-card-title"><%= r.materiaNome %></h3>
+
+            <!-- STATUS -->
+            <p class="rev-card-sub">
+              Status: 
+              <strong>
+                <%= r.status === "feito" ? "feito" : "ignorado" %>
+              </strong>
+            </p>
+
+            <!-- TÓPICOS -->
+            <% if (r.topicos_estudados) { %>
+              <p class="rev-card-sub">
+                <strong>Conteúdo:</strong> <%= r.topicos_estudados %>
+              </p>
+            <% } %>
+
+            <!-- MINUTOS / QUESTÕES -->
+            <p class="rev-card-meta">
+              <% if (r.minutos_estudados) { %>
+                <span><%= r.minutos_estudados %> min</span>
+              <% } %>
+
+              <% if (r.questoes_feitas) { %>
+                <span> • <%= r.questoes_feitas %> questões (<%= r.questoes_certas || 0 %> certas)</span>
+              <% } %>
+            </p>
+
+          </div>
+
+          <div class="rev-card-actions">
+
+            <% if (r.origem_id) { %>
+              <a class="kst-btn kst-btn-link kst-btn-sm" href="/estudos/<%= r.origem_id %>">
+                Ver estudo original
+              </a>
+            <% } %>
+
+            <form method="POST" action="/revisoes-programadas/<%= r.id %>/deletar">
+              <button class="kst-btn kst-btn-danger kst-btn-sm" type="submit">
+                Deletar
+              </button>
+            </form>
+
+          </div>
+
+        </article>
+      <% }) %>
+
+    </div>
+
+  <% } %>
+
+</div>
+
+<%- include("partials/footer") %>

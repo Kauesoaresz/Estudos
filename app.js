@@ -29,8 +29,8 @@ const materiaRoutes = require("./routes/materiaRoutes");
 const estudoRoutes = require("./routes/estudoRoutes");
 const simuladoRoutes = require("./routes/simuladoRoutes");
 const estatisticasRoutes = require("./routes/estatisticasRoutes");
-const revisaoRoutes = require("./routes/revisaoRoutes");
 const medalhaRoutes = require("./routes/medalhaRoutes");
+const revisaoProgramadaRoutes = require("./routes/revisaoProgramadaRoutes");
 
 // Rota nova – PERFIL
 const perfilRoutes = require("./routes/perfilRoutes");
@@ -120,12 +120,12 @@ app.use("/materias", ensureAuth, materiaRoutes);
 app.use("/estudos", ensureAuth, estudoRoutes);
 app.use("/simulados", ensureAuth, simuladoRoutes);
 app.use("/estatisticas", ensureAuth, estatisticasRoutes);
-app.use("/revisao", ensureAuth, revisaoRoutes);
 app.use("/medalhas", ensureAuth, medalhaRoutes);
 app.use("/perfil", ensureAuth, perfilRoutes);
 
 // 🚀 ROTINA (SEM HEADER/FOOTER)
 app.use("/rotina", ensureAuth, rotinaRoutes);
+app.use("/revisoes-programadas", revisaoProgramadaRoutes);
 
 // -------------------------------
 // SERVIDOR

@@ -1,0 +1,376 @@
+<%- include("partials/header", { tituloPagina }) %>
+
+<link rel="stylesheet" href="/css/pages/revisoes_programadas.css">
+
+<div class="kst-container kst-rev-agenda-page">
+
+  <!-- CABEÇALHO -->
+  <header class="kst-rev-agenda-header">
+    <h1 class="kst-rev-agenda-title">Revisões programadas</h1>
+    <p class="kst-rev-agenda-subtitle">
+      Aqui aparecem as revisões R1, R2, R3, R4 e R5 geradas automaticamente a partir dos seus estudos de conteúdo novo.
+    </p>
+
+    
+  </header>
+
+  <!-- ===================================================== -->
+  <!-- HOJE -->
+  <!-- ===================================================== -->
+  <section class="kst-rev-agenda-section">
+    <div class="kst-rev-agenda-section-head">
+      <h2 class="kst-rev-agenda-section-title">Para hoje</h2>
+      <p class="kst-rev-agenda-section-caption">Revisões marcadas exatamente para a data de hoje.</p>
+    </div>
+
+    <% if (!hoje || hoje.length === 0) { %>
+      <p class="kst-rev-empty-msg">Você não tem revisões programadas para hoje.</p>
+    <% } else { %>
+      <div class="kst-rev-agenda-grid">
+
+        <% hoje.forEach(r => { %>
+          <article class="rev-card rev-card--hoje">
+
+            <div class="rev-card-main">
+
+              <div class="rev-card-top-row">
+                <span class="rev-pill rev-pill--ciclo"><%= r.tipo_ciclo %></span>
+                <span class="rev-card-date">Hoje • <%= r.dataLabel %></span>
+              </div>
+
+              <h3 class="rev-card-title"><%= r.materiaNome %></h3>
+
+              <% if (r.topicos_estudados) { %>
+                <p class="rev-card-sub">
+                  <strong>Conteúdo:</strong> <%= r.topicos_estudados %>
+                </p>
+              <% } else { %>
+                <p class="rev-card-sub">Revisão gerada automaticamente a partir de um estudo de conteúdo novo.</p>
+              <% } %>
+
+              <p class="rev-card-meta">
+                <% if (r.minutos_estudados) { %>
+                  <span><%= r.minutos_estudados %> min</span>
+                <% } %>
+                <% if (r.questoes_feitas) { %>
+                  <span> • <%= r.questoes_feitas %> questões (<%= r.questoes_certas || 0 %> certas)</span>
+                <% } %>
+              </p>
+
+            </div>
+
+            <div class="rev-card-actions">
+
+              <% if (r.origem_id) { %>
+                <a class="kst-btn kst-btn-link kst-btn-sm" href="/estudos/<%= r.origem_id %>">
+                  Ver estudo original
+                </a>
+              <% } %>
+
+              <form method="POST" action="/revisoes-programadas/<%= r.id %>/fazer">
+                <button class="kst-btn kst-btn-primary kst-btn-sm" type="submit">
+                  Fiz essa revisão
+                </button>
+              </form>
+
+              <form method="POST" action="/revisoes-programadas/<%= r.id %>/adiar">
+                <input type="hidden" name="dias" value="2">
+                <button class="kst-btn kst-btn-ghost kst-btn-sm" type="submit">
+                  Adiar +2 dias
+                </button>
+              </form>
+
+              <form method="POST" action="/revisoes-programadas/<%= r.id %>/ignorar">
+                <button class="kst-btn kst-btn-link kst-btn-sm rev-btn-ignore" type="submit">
+                  Ignorar
+                </button>
+              </form>
+
+            </div>
+
+          </article>
+        <% }) %>
+
+      </div>
+    <% } %>
+  </section>
+
+  <!-- ===================================================== -->
+<!-- ATRASADAS — CARDS VERMELHOS ORGANIZADOS -->
+<!-- ===================================================== -->
+<section class="kst-rev-agenda-section">
+  <div class="kst-rev-agenda-section-head">
+    <h2 class="kst-rev-agenda-section-title">Atrasadas</h2>
+    <p class="kst-rev-agenda-section-caption">Revisões vencidas em dias anteriores.</p>
+  </div>
+
+  <% if (!atrasadas || atrasadas.length === 0) { %>
+    <p class="kst-rev-empty-msg">Nenhuma revisão atrasada. Boa!</p>
+  <% } else { %>
+
+    <div class="kst-rev-agenda-grid">
+
+      <% atrasadas.forEach(r => { %>
+        <article class="rev-card rev-card--atrasada">
+
+          <div class="rev-card-main">
+
+            <!-- Cabeçalho do card -->
+            <div class="rev-card-top-row">
+              <span class="rev-pill rev-pill--ciclo"><%= r.tipo_ciclo %></span>
+
+              <span class="rev-card-date">
+                Venceu em <%= r.dataLabel %> •
+                <strong><%= r.diasAtraso %> dia(s) de atraso</strong>
+              </span>
+            </div>
+
+            <!-- Matéria -->
+            <h3 class="rev-card-title"><%= r.materiaNome %></h3>
+
+            <!-- Conteúdo estudado -->
+            <% if (r.topicos_estudados) { %>
+              <p class="rev-card-sub">
+                <strong>Conteúdo:</strong> <%= r.topicos_estudados %>
+              </p>
+            <% } else { %>
+              <p class="rev-card-sub">
+                Recuperar esta revisão ajuda a fixar o conteúdo estudado.
+              </p>
+            <% } %>
+
+            <!-- Metadados (tempo, questões etc) -->
+            <p class="rev-card-meta">
+              <% if (r.minutos_estudados) { %>
+                <span><%= r.minutos_estudados %> min</span>
+              <% } %>
+
+              <% if (r.questoes_feitas) { %>
+                <span> • <%= r.questoes_feitas %> questões (<%= r.questoes_certas || 0 %> certas)</span>
+              <% } %>
+            </p>
+
+          </div>
+
+          <!-- AÇÕES -->
+          <div class="rev-card-actions">
+
+            <% if (r.origem_id) { %>
+              <a class="kst-btn kst-btn-link kst-btn-sm" href="/estudos/<%= r.origem_id %>">
+                Ver estudo original
+              </a>
+            <% } %>
+
+            <form method="POST" action="/revisoes-programadas/<%= r.id %>/fazer">
+              <button class="kst-btn kst-btn-primary kst-btn-sm" type="submit">
+                Fiz agora
+              </button>
+            </form>
+
+            <form method="POST" action="/revisoes-programadas/<%= r.id %>/adiar">
+              <input type="hidden" name="dias" value="1">
+              <button class="kst-btn kst-btn-ghost kst-btn-sm" type="submit">
+                Adiar +1 dia
+              </button>
+            </form>
+
+            <form method="POST" action="/revisoes-programadas/<%= r.id %>/ignorar">
+              <button class="kst-btn kst-btn-link kst-btn-sm rev-btn-ignore" type="submit">
+                Ignorar
+              </button>
+            </form>
+
+          </div>
+
+        </article>
+      <% }) %>
+
+    </div>
+
+  <% } %>
+</section>
+
+
+  <!-- ===================================================== -->
+  <!-- FUTURAS AGRUPADAS (MATÉRIA → CONTEÚDO → R1…R5) -->
+  <!-- ===================================================== -->
+  <section class="kst-rev-agenda-section">
+    <div class="kst-rev-agenda-section-head">
+      <h2 class="kst-rev-agenda-section-title">Próximas revisões</h2>
+      <p class="kst-rev-agenda-section-caption">
+        Revisões futuras agrupadas por matéria e conteúdo estudado.
+      </p>
+    </div>
+
+    <% if (!futurasAgrupadas || futurasAgrupadas.length === 0) { %>
+      <p class="kst-rev-empty-msg">Nenhuma revisão futura cadastrada (ainda).</p>
+    <% } else { %>
+
+      <div class="kst-rev-materias-list">
+
+        <% futurasAgrupadas.forEach(m => { %>
+
+          <section
+            class="rev-materia-block"
+            data-kst-materia
+            style="--rev-materia-accent: <%= m.accentColor %>;"
+          >
+
+            <!-- Cabeçalho da matéria (COLAPSÁVEL) -->
+            <header class="rev-materia-header" data-kst-materia-toggle>
+              <div class="rev-materia-header-main">
+                <h3 class="rev-materia-title"><%= m.materiaNome %></h3>
+                <p class="rev-materia-caption">
+                  <%= m.totalRevisoesPendentes %> revisão(ões) futura(s) pendente(s) nesta matéria.
+                </p>
+
+                <% if (m.percentConcluido != null) { %>
+                  <p class="rev-materia-progress">
+                    Progresso geral das revisões: 
+                    <span class="rev-materia-progress-badge"><%= m.percentConcluido %>% concluído</span>
+                  </p>
+                <% } %>
+              </div>
+              <button type="button" class="rev-materia-toggle-btn" aria-label="Expandir matéria">
+                <span class="rev-materia-toggle-icon"></span>
+              </button>
+            </header>
+
+            <!-- Corpo da matéria: lista de conteúdos (fechado inicialmente) -->
+            <div class="rev-materia-body">
+
+              <% m.estudos.forEach(est => { %>
+                <article class="rev-estudo-block" data-kst-estudo>
+
+                  <!-- Cabeçalho do conteúdo (COLAPSÁVEL) -->
+                  <header class="rev-estudo-header" data-kst-estudo-toggle>
+                    <div class="rev-estudo-header-main">
+                      <h4 class="rev-estudo-title">
+                        <% if (est.topicos_estudados) { %>
+                          <%= est.topicos_estudados %>
+                        <% } else { %>
+                          Conteúdo sem descrição
+                        <% } %>
+                      </h4>
+
+                      <p class="rev-estudo-meta">
+                        <% if (est.minutos_estudados) { %>
+                          <span><%= est.minutos_estudados %> min</span>
+                        <% } %>
+                        <% if (est.questoes_feitas) { %>
+                          <span> • <%= est.questoes_feitas %> questões (<%= est.questoes_certas || 0 %> certas)</span>
+                        <% } %>
+                      </p>
+
+                      <% if (est.percentConcluido != null) { %>
+                        <div class="rev-estudo-progress">
+                          <div class="rev-estudo-progress-bar">
+                            <div
+                              class="rev-estudo-progress-fill"
+                              style="width: <%= est.percentConcluido %>%;">
+                            </div>
+                          </div>
+                          <span class="rev-estudo-progress-label">
+                            <%= est.percentConcluido %>% do ciclo R1–R5 concluído
+                          </span>
+                        </div>
+                      <% } %>
+                    </div>
+
+                    <div class="rev-estudo-header-right">
+                      <% if (est.origem_id) { %>
+                        <a class="kst-btn kst-btn-link kst-btn-xs" href="/estudos/<%= est.origem_id %>">
+                          Ver estudo original
+                        </a>
+                      <% } %>
+
+                      <button type="button" class="rev-estudo-toggle-btn" aria-label="Expandir revisões deste conteúdo">
+                        <span class="rev-estudo-toggle-icon"></span>
+                      </button>
+                    </div>
+                  </header>
+
+                  <!-- Lista de R1..R5 desse conteúdo (fechada inicialmente) -->
+                  <div class="rev-estudo-revisoes">
+                    <% est.revisoes.forEach(rev => { %>
+                      <div class="rev-estudo-rev-row">
+
+                        <div class="rev-estudo-rev-info">
+                          <span class="rev-pill rev-pill--ciclo"><%= rev.tipo_ciclo %></span>
+                          <span class="rev-estudo-rev-date">
+                            <%= rev.dataLabel %> • em <%= rev.diasRestantes %> dia(s)
+                          </span>
+                        </div>
+
+                        <div class="rev-estudo-rev-actions">
+                          <form method="POST" action="/revisoes-programadas/<%= rev.id %>/fazer">
+                            <button class="kst-btn kst-btn-outline kst-btn-xs" type="submit">
+                              Já revisei
+                            </button>
+                          </form>
+
+                          <form method="POST" action="/revisoes-programadas/<%= rev.id %>/adiar">
+                            <input type="hidden" name="dias" value="2">
+                            <button class="kst-btn kst-btn-ghost kst-btn-xs" type="submit">
+                              Adiar +2 dias
+                            </button>
+                          </form>
+                        </div>
+
+                      </div>
+                    <% }) %>
+                  </div>
+
+                </article>
+              <% }) %>
+
+            </div>
+
+          </section>
+
+        <% }) %>
+
+      </div>
+
+    <% } %>
+  </section>
+
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // MATÉRIA → abre / fecha lista de conteúdos
+    document.querySelectorAll("[data-kst-materia-toggle]").forEach(function (header) {
+      header.addEventListener("click", function (event) {
+        const isToggleBtn = event.target.closest(".rev-materia-toggle-btn");
+        const isLink = event.target.closest("a");
+        if (isLink && !isToggleBtn) return;
+
+        const block = header.closest("[data-kst-materia]");
+        const body = block.querySelector(".rev-materia-body");
+        const icon = header.querySelector(".rev-materia-toggle-icon");
+
+        const isOpen = body.classList.toggle("is-open");
+        icon.classList.toggle("is-open", isOpen);
+      });
+    });
+
+    // CONTEÚDO → abre / fecha lista de R1–R5
+    document.querySelectorAll("[data-kst-estudo-toggle]").forEach(function (header) {
+      header.addEventListener("click", function (event) {
+        const isToggleBtn = event.target.closest(".rev-estudo-toggle-btn");
+        const isLink = event.target.closest("a");
+        if (isLink && !isToggleBtn) return;
+
+        const block = header.closest("[data-kst-estudo]");
+        const list = block.querySelector(".rev-estudo-revisoes");
+        const icon = header.querySelector(".rev-estudo-toggle-icon");
+
+        const isOpen = list.classList.toggle("is-open");
+        icon.classList.toggle("is-open", isOpen);
+      });
+    });
+  });
+</script>
+
+<%- include("partials/footer") %>

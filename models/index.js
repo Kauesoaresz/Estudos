@@ -12,11 +12,12 @@ const EstudoMateriaDiaModel = require("./EstudoMateriaDia");
 const SimuladoModel = require("./Simulado");
 const MedalhaModel = require("./Medalha");
 const MedalhaUsuarioModel = require("./MedalhaUsuario");
-
-// NOVO MODEL
 const RoutineBlockModel = require("./RoutineBlock");
 
-// INICIALIZA OS MODELS
+// NOVO MODEL
+const RevisaoProgramadaModel = require("./RevisaoProgramada");
+
+// INICIALIZA TODOS OS MODELS
 const Usuario = UsuarioModel(sequelize, DataTypes);
 const Dia = DiaModel(sequelize, DataTypes);
 const Materia = MateriaModel(sequelize, DataTypes);
@@ -24,115 +25,90 @@ const EstudoMateriaDia = EstudoMateriaDiaModel(sequelize, DataTypes);
 const Simulado = SimuladoModel(sequelize, DataTypes);
 const Medalha = MedalhaModel(sequelize, DataTypes);
 const MedalhaUsuario = MedalhaUsuarioModel(sequelize, DataTypes);
-const RoutineBlock = RoutineBlockModel(sequelize, DataTypes); // NOVO
+const RoutineBlock = RoutineBlockModel(sequelize, DataTypes);
+const RevisaoProgramada = RevisaoProgramadaModel(sequelize, DataTypes);
 
-// ===============================
-// ASSOCIAÇÕES ENTRE OS MODELS
-// ===============================
+// =============================================================
+//  ASSOCIAÇÕES COMPLETAS DO SISTEMA
+// =============================================================
 
 // ---- USUÁRIO x DIA ----
-Usuario.hasMany(Dia, {
-  foreignKey: "usuario_id",
-  as: "dias"
-});
-Dia.belongsTo(Usuario, {
-  foreignKey: "usuario_id",
-  as: "usuario"
-});
+Usuario.hasMany(Dia, { foreignKey: "usuario_id", as: "dias" });
+Dia.belongsTo(Usuario, { foreignKey: "usuario_id", as: "usuario" });
 
 // ---- USUÁRIO x MATÉRIA ----
-Usuario.hasMany(Materia, {
-  foreignKey: "usuario_id",
-  as: "materias"
-});
-Materia.belongsTo(Usuario, {
-  foreignKey: "usuario_id",
-  as: "usuario"
-});
+Usuario.hasMany(Materia, { foreignKey: "usuario_id", as: "materias" });
+Materia.belongsTo(Usuario, { foreignKey: "usuario_id", as: "usuario" });
 
 // ---- USUÁRIO x ESTUDO_MATERIA_DIA ----
-Usuario.hasMany(EstudoMateriaDia, {
-  foreignKey: "usuario_id",
-  as: "estudos"
-});
-EstudoMateriaDia.belongsTo(Usuario, {
-  foreignKey: "usuario_id",
-  as: "usuario"
-});
+Usuario.hasMany(EstudoMateriaDia, { foreignKey: "usuario_id", as: "estudos" });
+EstudoMateriaDia.belongsTo(Usuario, { foreignKey: "usuario_id", as: "usuario" });
 
 // ---- USUÁRIO x SIMULADO ----
-Usuario.hasMany(Simulado, {
-  foreignKey: "usuario_id",
-  as: "simulados"
-});
-Simulado.belongsTo(Usuario, {
-  foreignKey: "usuario_id",
-  as: "usuario"
-});
+Usuario.hasMany(Simulado, { foreignKey: "usuario_id", as: "simulados" });
+Simulado.belongsTo(Usuario, { foreignKey: "usuario_id", as: "usuario" });
 
 // ---- USUÁRIO x MEDALHA_USUARIO ----
-Usuario.hasMany(MedalhaUsuario, {
+Usuario.hasMany(MedalhaUsuario, { foreignKey: "usuario_id", as: "medalhas_usuario" });
+MedalhaUsuario.belongsTo(Usuario, { foreignKey: "usuario_id", as: "usuario" });
+
+// ---- DIA x ESTUDO_MATERIA_DIA ----
+Dia.hasMany(EstudoMateriaDia, { foreignKey: "dia_id", as: "estudos_materias" });
+EstudoMateriaDia.belongsTo(Dia, { foreignKey: "dia_id", as: "dia" });
+
+// ---- MATÉRIA x ESTUDO_MATERIA_DIA ----
+Materia.hasMany(EstudoMateriaDia, { foreignKey: "materia_id", as: "estudos" });
+EstudoMateriaDia.belongsTo(Materia, { foreignKey: "materia_id", as: "materia" });
+
+// ---- DIA x SIMULADO ----
+Dia.hasMany(Simulado, { foreignKey: "dia_id", as: "simulados" });
+Simulado.belongsTo(Dia, { foreignKey: "dia_id", as: "dia" });
+
+// ---- MEDALHA x MEDALHA_USUARIO ----
+Medalha.hasMany(MedalhaUsuario, { foreignKey: "medalha_id", as: "conquistas" });
+MedalhaUsuario.belongsTo(Medalha, { foreignKey: "medalha_id", as: "medalha" });
+
+// ---- USUÁRIO x ROUTINE_BLOCK ----
+Usuario.hasMany(RoutineBlock, { foreignKey: "usuario_id", as: "routine_blocks" });
+RoutineBlock.belongsTo(Usuario, { foreignKey: "usuario_id", as: "usuario" });
+
+// =============================================================
+//  REVISÕES PROGRAMADAS – ASSOCIAÇÕES NOVAS
+// =============================================================
+
+// USUÁRIO x REVISÃO_PROGRAMADA
+Usuario.hasMany(RevisaoProgramada, {
   foreignKey: "usuario_id",
-  as: "medalhas_usuario"
+  as: "revisoes_programadas"
 });
-MedalhaUsuario.belongsTo(Usuario, {
+RevisaoProgramada.belongsTo(Usuario, {
   foreignKey: "usuario_id",
   as: "usuario"
 });
 
-// ---- DIA x ESTUDO_MATERIA_DIA ----
-Dia.hasMany(EstudoMateriaDia, {
-  foreignKey: "dia_id",
-  as: "estudos_materias"
-});
-EstudoMateriaDia.belongsTo(Dia, {
-  foreignKey: "dia_id",
-  as: "dia"
-});
-
-// ---- MATÉRIA x ESTUDO_MATERIA_DIA ----
-Materia.hasMany(EstudoMateriaDia, {
+// MATÉRIA x REVISÃO_PROGRAMADA
+Materia.hasMany(RevisaoProgramada, {
   foreignKey: "materia_id",
-  as: "estudos"
+  as: "revisoes_programadas"
 });
-EstudoMateriaDia.belongsTo(Materia, {
+RevisaoProgramada.belongsTo(Materia, {
   foreignKey: "materia_id",
   as: "materia"
 });
 
-// ---- DIA x SIMULADO ----
-Dia.hasMany(Simulado, {
-  foreignKey: "dia_id",
-  as: "simulados"
+// ESTUDO_MATERIA_DIA x REVISÃO_PROGRAMADA (origem_id)
+EstudoMateriaDia.hasMany(RevisaoProgramada, {
+  foreignKey: "origem_id",
+  as: "revisoes_geradas"
 });
-Simulado.belongsTo(Dia, {
-  foreignKey: "dia_id",
-  as: "dia"
-});
-
-// ---- MEDALHA x MEDALHA_USUARIO ----
-Medalha.hasMany(MedalhaUsuario, {
-  foreignKey: "medalha_id",
-  as: "conquistas"
-});
-MedalhaUsuario.belongsTo(Medalha, {
-  foreignKey: "medalha_id",
-  as: "medalha"
+RevisaoProgramada.belongsTo(EstudoMateriaDia, {
+  foreignKey: "origem_id",
+  as: "estudo_origem"
 });
 
-// ---- USUÁRIO x ROUTINE_BLOCK (NOVO) ----
-Usuario.hasMany(RoutineBlock, {
-  foreignKey: "usuario_id",
-  as: "routine_blocks"
-});
-RoutineBlock.belongsTo(Usuario, {
-  foreignKey: "usuario_id",
-  as: "usuario"
-});
-
-// ===============================
-// EXPORTA TUDO
-// ===============================
+// =============================================================
+//  EXPORTA TUDO
+// =============================================================
 const db = {
   sequelize,
   Usuario,
@@ -142,7 +118,8 @@ const db = {
   Simulado,
   Medalha,
   MedalhaUsuario,
-  RoutineBlock // NOVO
+  RoutineBlock,
+  RevisaoProgramada
 };
 
 module.exports = db;

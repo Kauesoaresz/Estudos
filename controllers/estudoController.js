@@ -3,7 +3,7 @@
 // Agora 100% multiusuário! Cada usuário só vê os próprios estudos.
 //
 
-const { EstudoMateriaDia, Materia, Dia } = require("../models");
+const { EstudoMateriaDia, Materia, Dia, RevisaoProgramada } = require("../models");
 const { toISODate, formatarDDMMYYYY } = require("../utils/datas");
 const { verificarMedalhas } = require("../services/medalhasService");
 
@@ -62,19 +62,33 @@ async function criarEstudo(req, res) {
     if (!dia)
       dia = await Dia.create({ data, usuario_id: usuarioId });
 
-    await EstudoMateriaDia.create({
-      usuario_id: usuarioId,
-      dia_id: dia.id,
-      materia_id: Number(materia_id),
-      minutos_estudados: minutos_estudados ? Number(minutos_estudados) : null,
-      tipo_estudo: tipo_estudo || null,
-      topicos_estudados: topicos_estudados || null,
-      questoes_feitas: questoes_feitas ? Number(questoes_feitas) : null,
-      questoes_certas: questoes_certas ? Number(questoes_certas) : null,
-      questoes_marcadas_revisao: questoes_marcadas_revisao
-        ? Number(questoes_marcadas_revisao)
-        : null
-    });
+    const novoEstudo = await EstudoMateriaDia.create({
+  usuario_id: usuarioId,
+  dia_id: dia.id,
+  materia_id: Number(materia_id),
+  minutos_estudados: minutos_estudados ? Number(minutos_estudados) : null,
+  tipo_estudo: tipo_estudo || null,
+  topicos_estudados: topicos_estudados || null,
+  questoes_feitas: questoes_feitas ? Number(questoes_feitas) : null,
+  questoes_certas: questoes_certas ? Number(questoes_certas) : null,
+  questoes_marcadas_revisao: questoes_marcadas_revisao
+    ? Number(questoes_marcadas_revisao)
+    : null
+});
+
+// 🔥 DISPARAR REVISÕES AUTOMÁTICAS
+if (tipo_estudo === "CONTEUDO_NOVO") {
+  const dataISO = toISODate(data);
+  await gerarRevisoesAutomaticas(
+  usuarioId,
+  Number(materia_id),
+  novoEstudo.id,
+  dataISO,
+  topicos_estudados || ""
+);
+
+}
+
 
     // CHECK DE MEDALHAS (por usuário)
     const novasMedalhas = await verificarMedalhas(usuarioId);
@@ -310,6 +324,40 @@ async function excluirEstudo(req, res) {
     res.status(500).send("Erro ao excluir estudo.");
   }
 }
+
+// =====================================================================
+// FUNÇÃO ESPECIAL: CRIAR REVISÕES FUTURAS R1 → R5
+// =====================================================================
+async function gerarRevisoesAutomaticas(usuario_id, materia_id, origem_id, dataBaseISO, conteudo) {
+
+  const ciclos = [
+    { tipo: "R1", dias: 1 },
+    { tipo: "R2", dias: 3 },
+    { tipo: "R3", dias: 7 },
+    { tipo: "R4", dias: 15 },
+    { tipo: "R5", dias: 30 },
+  ];
+
+  const base = new Date(dataBaseISO);
+
+  for (const c of ciclos) {
+    const novaData = new Date(base);
+    novaData.setDate(novaData.getDate() + c.dias);
+
+    const dataISO = novaData.toISOString().slice(0, 10);
+
+    await RevisaoProgramada.create({
+      usuario_id,
+      materia_id,
+      origem_id,
+      tipo_ciclo: c.tipo,
+      data_programada: dataISO,
+      status: "pendente",
+      conteudo    // 🔥 AGORA SALVANDO OS TÓPICOS DO ESTUDO
+    });
+  }
+}
+
 
 // ===================================================================
 // EXPORTAR CONTROLLER COMPLETO

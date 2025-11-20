@@ -1,0 +1,181 @@
+/* ============================================================
+   PÁGINA — DETALHES DO ESTUDO (KAUÊ STUDY TRACKER)
+   Layout limpo, moderno e profissional
+============================================================ */
+
+/* CONTAINER GERAL */
+.kst-study-details-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem 1.2rem 3rem;
+}
+
+/* CABEÇALHO */
+.kst-study-header {
+  margin-bottom: 1.4rem;
+}
+
+.kst-study-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+  color: var(--kst-text-main);
+}
+
+.kst-study-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--kst-text-muted);
+}
+
+/* ============================================================
+   CARD PRINCIPAL
+============================================================ */
+
+.kst-study-main-card {
+  background: var(--kst-bg-elevated);
+  border-radius: var(--kst-radius-xl);
+  padding: 1.6rem 1.8rem;
+  border: 1px solid var(--kst-border-soft);
+  box-shadow: var(--kst-shadow-soft);
+}
+
+/* GRID SUPERIOR */
+.kst-study-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+  margin-bottom: 1.8rem;
+}
+
+/* MINI-CARD */
+.kst-study-mini-card {
+  background: var(--kst-bg-base);
+  border-radius: var(--kst-radius-lg);
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--kst-border-soft);
+}
+
+.kst-study-mini-card h4 {
+  font-size: 1.1rem;
+  margin: 0 0 0.7rem;
+  font-weight: 600;
+}
+
+/* TEXTOS DAS INFO */
+.kst-study-mini-card p {
+  margin: 0.35rem 0;
+  font-size: 0.92rem;
+}
+
+/* ÍCONES dentro dos parágrafos */
+.kst-study-mini-card p strong {
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+/* ============================================================
+   BADGES
+============================================================ */
+
+.kst-badge-tipo-estudo {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  display: inline-block;
+}
+
+.kst-badge--novo {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.kst-badge--revisao {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+.kst-badge--erro {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+
+/* BADGE DE ACERTO */
+.kst-badge-acerto {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.kst-acerto-alto {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.kst-acerto-medio {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
+}
+
+.kst-acerto-baixo {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+}
+
+/* ============================================================
+   TÓPICOS ESTUDADOS
+============================================================ */
+
+.kst-study-section-title {
+  margin: 0 0 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--kst-text-main);
+}
+
+.kst-study-topicos {
+  background: var(--kst-bg-base);
+  padding: 1rem 1.2rem;
+  border-radius: var(--kst-radius-lg);
+  border: 1px solid var(--kst-border-soft);
+  font-size: 0.95rem;
+  line-height: 1.45rem;
+  color: var(--kst-text-main);
+}
+
+/* ============================================================
+   AÇÕES (BOTÕES)
+============================================================ */
+
+.kst-study-actions {
+  margin-top: 1.6rem;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.kst-study-actions .kst-btn {
+  padding: 0.55rem 1.3rem;
+  border-radius: var(--kst-radius-full);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+/* ============================================================
+   RESPONSIVO
+============================================================ */
+
+@media (max-width: 720px) {
+  .kst-study-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kst-study-main-card {
+    padding: 1.3rem 1.4rem;
+  }
+}

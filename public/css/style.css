@@ -4604,3 +4604,70 @@ body.theme-dark .kst-logout-btn:hover {
   color: var(--kst-text-main) !important;
   border: 1px solid var(--kst-border-subtle) !important;
 }
+
+/* ============================
+   FIX DO MENU MOBILE BUGADO
+   ============================ */
+
+/* ⚠️ Fecha o menu por padrão sempre */
+@media (max-width: 900px) {
+  .kst-header-nav {
+    display: none !important;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--kst-bg-elevated);
+    padding: 1.2rem 1.4rem;
+    border-bottom: 1px solid var(--kst-border-subtle);
+    z-index: 9999;
+  }
+
+  /* ⚠️ Só abre quando .is-open é adicionada pelo JS */
+  .kst-header-nav.is-open {
+    display: block !important;
+  }
+
+  /* Tamanho correto dos itens */
+  .kst-nav-group-top {
+    width: 100%;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.7rem !important;
+  }
+
+  .kst-nav-top-item,
+  .kst-nav-top-trigger {
+    width: 100% !important;
+    padding: 0.55rem 0 !important;
+    font-size: 1.05rem !important;
+    justify-content: space-between;
+  }
+
+  /* Dropdown mobile */
+  .kst-nav-dropdown {
+    display: none !important;
+    background: var(--kst-bg-elevated);
+    margin-top: 0.4rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--kst-border-subtle);
+    padding: 0.4rem !important;
+  }
+
+  .kst-nav-top-item--has-dropdown.is-open .kst-nav-dropdown {
+    display: block !important;
+  }
+
+  /* Hamburger no topo */
+  .kst-nav-toggle {
+    display: inline-flex !important;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10000;
+  }
+
+  /* 🔧 Garante que o menu NÃO abra sozinho ao carregar */
+  body:not(.force-menu-open) .kst-header-nav:not(.is-open) {
+    display: none !important;
+  }
+}
