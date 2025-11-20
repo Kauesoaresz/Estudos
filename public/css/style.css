@@ -1751,30 +1751,66 @@ body.theme-dark .kst-alert-error {
 
 
 /* =====================================================================
-   11 — HISTÓRICO DE DIAS
+   OVERRIDE DEFINITIVO — HISTÓRICO DE DIAS
    ===================================================================== */
 
-/* aqui usamos kst-filter-bar, kst-card, kst-table globais */
+/* força a tabela a usar o tema */
+.kst-table {
+  background: var(--kst-bg-elevated) !important;
+  color: var(--kst-text-main) !important;
+  border-collapse: collapse !important;
+}
 
+/* cabeçalho */
+.kst-table thead {
+  background: var(--kst-bg-elevated-soft) !important;
+}
+
+.kst-table thead th {
+  color: var(--kst-text-muted) !important;
+  border-bottom: 1px solid var(--kst-border-subtle) !important;
+  background: var(--kst-bg-elevated-soft) !important;
+}
+
+/* corpo */
+.kst-table tbody td {
+  color: var(--kst-text-main) !important;
+  background: var(--kst-bg-elevated) !important;
+  border-bottom: 1px solid var(--kst-border-subtle) !important;
+}
+
+/* linhas alternadas */
+.kst-table tbody tr:nth-child(even) td {
+  background: var(--kst-bg-elevated-soft) !important;
+}
+
+/* hover */
+.kst-table tbody tr:hover td {
+  background: var(--kst-primary-soft) !important;
+}
+
+/* cores da taxa */
 .kst-taxa--low {
-  color: var(--kst-danger);
-}
-.kst-taxa--mid {
-  color: #f59e0b;
-}
-.kst-taxa--high {
-  color: var(--kst-success);
+  color: var(--kst-danger) !important;
 }
 
-/* Tabela mais compacta no mobile */
+.kst-taxa--mid {
+  color: var(--kst-warning) !important;
+}
+
+.kst-taxa--high {
+  color: var(--kst-success) !important;
+}
+
+/* mobile */
 @media (max-width: 680px) {
   .kst-table {
-    font-size: 0.82rem;
+    font-size: 0.82rem !important;
   }
 
   .kst-table th,
   .kst-table td {
-    padding: 0.65rem 0.6rem;
+    padding: 0.65rem 0.6rem !important;
   }
 
   .kst-table th:nth-child(5),
@@ -1783,9 +1819,10 @@ body.theme-dark .kst-alert-error {
   .kst-table td:nth-child(6),
   .kst-table th:nth-child(7),
   .kst-table td:nth-child(7) {
-    display: none;
+    display: none !important;
   }
 }
+
 
 
 /* =====================================================================
@@ -4407,4 +4444,163 @@ body.theme-dark .kst-logout-btn:hover {
   line-height: 1.45;
   color: var(--kst-text-main);
   white-space: pre-wrap;
+}
+
+/* ==========================================================
+   OVERRIDE DEFINITIVO — CARDS DO RESUMO DA MATÉRIA
+   Funciona 100% no Light e Dark Mode
+   ========================================================== */
+
+/* Card principal */
+.kst-card,
+.kst-card-block {
+  background: var(--kst-bg-elevated) !important;
+  color: var(--kst-text-main) !important;
+  border-radius: var(--kst-radius-lg) !important;
+  border: 1px solid var(--kst-border-subtle) !important;
+  box-shadow: var(--kst-shadow-md) !important;
+}
+
+/* Títulos dentro do card */
+.kst-block-title {
+  color: var(--kst-text-muted) !important;
+}
+
+/* Linhas de detalhe */
+.kst-details-line {
+  color: var(--kst-text-main) !important;
+  border-bottom: 1px solid var(--kst-border-subtle) !important;
+}
+
+/* Tags de taxa de acerto, sucesso, etc */
+.kst-tag-success {
+  background: var(--kst-success-soft) !important;
+  color: var(--kst-success) !important;
+}
+
+/* Lista de tópicos */
+.kst-topicos-list {
+  background: transparent !important;
+}
+
+.kst-topico-item {
+  background: var(--kst-bg-elevated-soft) !important;
+  border: 1px solid var(--kst-border-subtle) !important;
+  color: var(--kst-text-main) !important;
+}
+
+.kst-topico-header {
+  color: var(--kst-text-main) !important;
+}
+
+.kst-topico-datas {
+  color: var(--kst-text-muted) !important;
+}
+
+.kst-topico-minutos {
+  background: var(--kst-primary-soft) !important;
+  color: var(--kst-primary) !important;
+}
+
+/* Botões "Voltar" e "Editar nome" já usam variáveis, mas reforçamos */
+.kst-btn-secondary {
+  background: var(--kst-bg-elevated-soft) !important;
+  color: var(--kst-text-main) !important;
+  border: 1px solid var(--kst-border-subtle) !important;
+}
+
+/* ==========================================================
+   OVERRIDE FINAL — TELA DE RESUMO DA MATÉRIA
+   ========================================================== */
+
+/* Ajuste de contraste para modo escuro */
+[data-theme="dark"] {
+  --kst-text-main: #e9ecf2 !important;
+  --kst-text-muted: #d2d7df !important;
+  --kst-border-subtle: rgba(255, 255, 255, 0.08) !important;
+  --kst-bg-elevated-soft: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* CARD PRINCIPAL */
+.kst-card,
+.kst-card-block {
+  background: var(--kst-bg-elevated) !important;
+  color: var(--kst-text-main) !important;
+  border-radius: var(--kst-radius-lg) !important;
+  border: 1px solid var(--kst-border-subtle) !important;
+  box-shadow: var(--kst-shadow-md) !important;
+}
+
+/* TÍTULO DO CARD */
+.kst-block-title {
+  color: var(--kst-text-main) !important;
+  font-weight: 600 !important;
+}
+
+/* LINHAS DE DETALHE */
+.kst-details-line strong {
+  color: var(--kst-text-main) !important;
+  font-weight: 600 !important;
+}
+
+/* TAG DE ACERTO */
+.kst-tag-success {
+  background: var(--kst-success-soft) !important;
+  color: var(--kst-success) !important;
+  padding: 0.15rem 0.45rem !important;
+  border-radius: var(--kst-radius-sm) !important;
+  font-weight: 600 !important;
+}
+
+/* LISTA DE TÓPICOS */
+.kst-topicos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* ITEM DO TÓPICO */
+.kst-topico-item {
+  background: var(--kst-bg-elevated-soft) !important;
+  border-radius: var(--kst-radius-lg) !important;
+  border: 1px solid var(--kst-border-subtle) !important;
+  padding: 1rem !important;
+  color: var(--kst-text-main) !important;
+}
+
+/* HEADER DO TÓPICO */
+.kst-topico-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--kst-text-main) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+
+/* TAG DE MINUTOS */
+.kst-topico-minutos {
+  background: var(--kst-primary-soft) !important;
+  color: var(--kst-primary) !important;
+  padding: 0.25rem 0.6rem !important;
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+}
+
+/* Datas do tópico */
+.kst-topico-datas {
+  margin-top: 0.35rem !important;
+  font-size: 0.9rem !important;
+  color: var(--kst-text-muted) !important;
+}
+
+/* BOTÕES */
+.kst-btn-secondary {
+  background: var(--kst-bg-elevated-soft) !important;
+  color: var(--kst-text-main) !important;
+  border: 1px solid var(--kst-border-subtle) !important;
 }
