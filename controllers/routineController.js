@@ -56,7 +56,7 @@ module.exports = {
         tituloPagina: "Rotina",
         rotinaPorDia,
         diasSemana,
-        layout: "layouts/blank"   // ← layout isolado
+        layout: "layouts/blank"
       });
 
     } catch (error) {
@@ -225,6 +225,53 @@ module.exports = {
     } catch (error) {
       console.error("Erro ao duplicar:", error);
       return res.status(500).send("Erro ao duplicar bloco");
+    }
+  },
+
+  // POST /rotina/:id/duplicar-multiplos  ← NOVO
+  async duplicateMultiple(req, res) {
+    try {
+      const usuarioId = getUserId(req);
+      if (!usuarioId) return res.redirect("/login");
+
+      const { id } = req.params;
+      const { targetWeekdays } = req.body; // ex: "1,3,5"
+
+      if (!targetWeekdays || targetWeekdays.trim() === "") {
+        return res.redirect("/rotina");
+      }
+
+      const dias = targetWeekdays
+        .split(",")
+        .map((d) => d.trim())
+        .filter((d) => d !== "");
+
+      if (dias.length === 0) return res.redirect("/rotina");
+
+      const original = await RoutineBlock.findOne({
+        where: { id, usuario_id: usuarioId }
+      });
+
+      if (!original) return res.redirect("/rotina");
+
+      // Criar para cada dia marcado
+      for (const weekday of dias) {
+        await RoutineBlock.create({
+          weekday: parseInt(weekday, 10),
+          startTime: original.startTime,
+          endTime: original.endTime,
+          title: original.title,
+          description: original.description,
+          color: original.color,
+          usuario_id: usuarioId
+        });
+      }
+
+      return res.redirect("/rotina");
+
+    } catch (error) {
+      console.error("Erro ao duplicar múltiplos:", error);
+      return res.status(500).send("Erro ao duplicar blocos");
     }
   }
 };

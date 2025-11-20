@@ -12,14 +12,13 @@
 <body class="page-rotina">
 
   <div class="rotina-top-bar">
-  <a href="/" class="btn-voltar">← Voltar ao painel</a>
+    <a href="/" class="btn-voltar">← Voltar ao painel</a>
 
-  <!-- BOTÃO TEMA CLARO/ESCURO -->
-  <button id="toggle-theme" class="theme-toggle-btn">
-    🌙
-  </button>
-</div>
-
+    <!-- BOTÃO TEMA CLARO/ESCURO -->
+    <button id="toggle-theme" class="theme-toggle-btn">
+      🌙
+    </button>
+  </div>
 
   <section class="kst-rotina">
 
@@ -54,43 +53,93 @@
             <% } else { %>
 
               <% rotinaPorDia[i].forEach((b) => { %>
-                <div class="routine-block" style="--block-color: <%= b.color || '#1C9AFF' %>">
+                <div class="routine-block" style="--block-color: <%= b.color || '#1C9AFF' %>" data-block-id="<%= b.id %>">
 
-                  <div class="routine-label">
-                    <span><%= b.title %></span>
+                  <!-- Cabeçalho do bloco: etiqueta + menu ⋮ -->
+                  <div class="routine-header">
+                    <div class="routine-label">
+                      <span><%= b.title %></span>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="routine-menu-btn"
+                      data-block-id="<%= b.id %>">
+                      ⋮
+                    </button>
+
+                    <!-- MENU PRINCIPAL DO BLOCO -->
+                    <div class="routine-menu" data-menu-for="<%= b.id %>">
+                      <!-- Editar -->
+                      <button
+                        type="button"
+                        class="routine-menu-item js-menu-edit"
+                        data-edit-url="/rotina/<%= b.id %>/editar">
+                        Editar
+                      </button>
+
+                      <!-- Excluir -->
+                      <form
+                        action="/rotina/<%= b.id %>/excluir"
+                        method="POST"
+                        onsubmit="return confirm('Excluir este bloco?');">
+                        <button type="submit" class="routine-menu-item danger">
+                          Excluir
+                        </button>
+                      </form>
+
+                      <!-- Duplicar (abre painel de dias) -->
+                      <button
+                        type="button"
+                        class="routine-menu-item js-menu-dup"
+                        data-block-id="<%= b.id %>">
+                        Duplicar…
+                      </button>
+                    </div>
                   </div>
 
+                  <!-- Horários -->
                   <div class="routine-time">
                     <span><%= b.startTime %></span><br>
                     <span><%= b.endTime %></span>
                   </div>
 
+                  <!-- Descrição -->
                   <% if (b.description) { %>
                     <div class="routine-desc"><%= b.description %></div>
                   <% } %>
 
-                  <div class="routine-actions">
-                    <a href="/rotina/<%= b.id %>/editar" class="btn-xs">Editar</a>
+                  <!-- PAINEL DE DUPLICAÇÃO (VÁRIOS DIAS DE UMA VEZ) -->
+                  <div class="routine-dup-panel" data-dup-for="<%= b.id %>">
+                    <p class="dup-title">Duplicar bloco para:</p>
 
-                    <form action="/rotina/<%= b.id %>/excluir"
-                          method="POST"
-                          onsubmit="return confirm('Excluir este bloco?');">
-                      <button type="submit" class="btn-xs btn-danger">Excluir</button>
-                    </form>
+                    <div class="dup-days">
+                      <% diasSemana.forEach(d => { %>
+                        <label class="dup-day-option">
+                          <input
+                            type="checkbox"
+                            value="<%= d.value %>"
+                            <%= d.value === b.weekday ? 'disabled' : '' %> >
+                          <span><%= d.short %></span>
+                        </label>
+                      <% }) %>
+                    </div>
 
-                    <form action="/rotina/<%= b.id %>/duplicar"
-                          method="POST"
-                          class="dup-form">
-                      <select name="targetWeekday" class="select-xs">
-                        <% diasSemana.forEach(d => { %>
-                          <option value="<%= d.value %>" <%= d.value === b.weekday ? 'disabled' : '' %>>
-                            <%= d.short %>
-                          </option>
-                        <% }) %>
-                      </select>
+                    <div class="dup-actions">
+                      <button type="button" class="btn-xs dup-cancel">
+                        Cancelar
+                      </button>
 
-                      <button type="submit" class="btn-xs">Duplicar</button>
-                    </form>
+                      <form
+                        action="/rotina/<%= b.id %>/duplicar-multiplos"
+                        method="POST"
+                        class="dup-form">
+                        <input type="hidden" name="targetWeekdays" value="">
+                        <button type="submit" class="btn-xs">
+                          Duplicar
+                        </button>
+                      </form>
+                    </div>
                   </div>
                 </div>
               <% }) %>
@@ -111,7 +160,6 @@
   </section>
 
   <script src="/js/theme.js"></script>
-
-
+  <script src="/js/rotina.js"></script>
 </body>
 </html>

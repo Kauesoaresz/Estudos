@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const routineController = require("../controllers/routineController");
 
-// LISTA GERAL
+// LISTA GERAL (Página principal da rotina)
 router.get("/", routineController.index);
 
 // CRIAR
@@ -18,7 +18,10 @@ router.post("/:id/editar", routineController.update);
 // EXCLUIR
 router.post("/:id/excluir", routineController.destroy);
 
-// DUPLICAR
+// DUPLICAR (modo antigo — 1 dia por vez)
 router.post("/:id/duplicar", routineController.duplicate);
+
+// DUPLICAR MÚLTIPLOS (NOVO — vários dias ao mesmo tempo)
+router.post("/:id/duplicar-multiplos", routineController.duplicateMultiple);
 
 module.exports = router;

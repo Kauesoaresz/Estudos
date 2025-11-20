@@ -1,5 +1,5 @@
 /* =========================================================
-   KAUE STUDY TRACKER – ROTINA PREMIUM (COM DIVISÕES)
+   KAUE STUDY TRACKER – ROTINA PREMIUM (COM DIVISÕES + MENU)
    Tema Claro/Escuro via variáveis
    ========================================================= */
 
@@ -18,6 +18,9 @@
   --border-soft: #d1d5db;
   --border-strong: #9ca3af;
   --timeline-line: #cbd5e1;
+
+  --menu-bg: #ffffff;
+  --menu-border: #e5e7eb;
 }
 
 /* TEMA ESCURO */
@@ -32,6 +35,9 @@
   --border-soft: #334155;
   --border-strong: #475569;
   --timeline-line: #334155;
+
+  --menu-bg: #0f172a;
+  --menu-border: #1f2937;
 }
 
 /* ------------------------------------------
@@ -163,7 +169,7 @@
   position: relative;
   margin-bottom: 20px;
   background: var(--bg-block);
-  padding: 8px 10px 6px;
+  padding: 8px 10px 8px;
   border-radius: 10px;
   border: 1px solid var(--border-soft);
   transition: background 0.3s, border 0.3s;
@@ -174,11 +180,22 @@
   content: "";
   position: absolute;
   left: -3px;
-  top: 12px;
+  top: 16px;
   width: 8px;
   height: 8px;
   border-radius: 999px;
   background: var(--block-color);
+}
+
+/* ------------------------------------------
+   CABEÇALHO DO BLOCO (label + menu ⋮)
+------------------------------------------ */
+
+.routine-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
 }
 
 /* etiqueta */
@@ -192,13 +209,66 @@
   color: #fff;
 }
 
-/* hora */
+/* botão ⋮ */
+.routine-menu-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+/* ------------------------------------------
+   MENU PRINCIPAL (Editar / Excluir / Duplicar)
+------------------------------------------ */
+
+.routine-menu {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--menu-bg);
+  border-radius: 8px;
+  border: 1px solid var(--menu-border);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+  padding: 4px 0;
+  min-width: 120px;
+  display: none;
+  z-index: 20;
+}
+
+.routine-menu.open {
+  display: block;
+}
+
+.routine-menu-item {
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.routine-menu-item:hover {
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.routine-menu-item.danger {
+  color: #b91c1c;
+}
+
+/* ------------------------------------------
+   HORÁRIOS / DESCRIÇÃO
+------------------------------------------ */
+
 .routine-time {
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: 0.78rem;
 }
 
-/* descrição */
 .routine-desc {
   font-size: 0.75rem;
   margin-top: 4px;
@@ -206,38 +276,69 @@
 }
 
 /* ------------------------------------------
-   BOTÕES MINI
+   PAINEL DE DUPLICAÇÃO (vários dias)
 ------------------------------------------ */
 
-.routine-actions {
+.routine-dup-panel {
+  margin-top: 8px;
+  padding: 8px 8px 10px;
+  border-radius: 8px;
+  border: 1px dashed var(--border-soft);
+  background: rgba(148, 163, 184, 0.08);
+  font-size: 0.75rem;
+  display: none;
+}
+
+.routine-dup-panel.open {
+  display: block;
+}
+
+.dup-title {
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+.dup-days {
   display: flex;
   flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.dup-day-option {
+  display: flex;
+  align-items: center;
   gap: 4px;
-  margin-top: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-block);
 }
 
+.dup-day-option span {
+  font-size: 0.72rem;
+}
+
+.dup-day-option input[disabled] + span {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.dup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* Botões pequenos reaproveitados */
 .btn-xs {
-  padding: 3px 6px;
-  font-size: 0.7rem;
-  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  border-radius: 8px;
   border: 1px solid var(--border-soft);
   background: var(--bg-block);
   color: var(--text-primary);
-}
-
-.btn-danger {
-  background: #b91c1c !important;
-  border-color: #ef4444 !important;
-  color: #fff !important;
-}
-
-.select-xs {
-  padding: 2px 4px;
-  font-size: 0.7rem;
-  border-radius: 6px;
-  border: 1px solid var(--border-soft);
-  background: var(--bg-block);
-  color: var(--text-primary);
+  cursor: pointer;
 }
 
 /* ------------------------------------------
@@ -268,5 +369,17 @@
 @media (max-width: 650px) {
   .kst-rotina-grid {
     grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.routine-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 650px) {
+  .rotina-day {
+    margin-bottom: 20px;
+    border-right: none !important;
   }
 }
