@@ -1,311 +1,272 @@
 /* =========================================================
-   KAUE STUDY TRACKER – TELA DE ROTINA (INDEX)
-   Layout premium, 7 colunas, scroll horizontal em telas pequenas
+   KAUE STUDY TRACKER – ROTINA PREMIUM (COM DIVISÕES)
+   Tema Claro/Escuro via variáveis
    ========================================================= */
 
-/* BACKGROUND GERAL DA PÁGINA DE ROTINA */
+/* ------------------------------------------
+   VARIÁVEIS DO TEMA
+------------------------------------------ */
+
+:root {
+  --bg-page: #f2f4f7;
+  --bg-container: #ffffff;
+  --bg-block: #ffffff;
+
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+
+  --border-soft: #d1d5db;
+  --border-strong: #9ca3af;
+  --timeline-line: #cbd5e1;
+}
+
+/* TEMA ESCURO */
+.dark {
+  --bg-page: #111827;
+  --bg-container: #1e293b;
+  --bg-block: #1e293b;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+
+  --border-soft: #334155;
+  --border-strong: #475569;
+  --timeline-line: #334155;
+}
+
+/* ------------------------------------------
+   PÁGINA
+------------------------------------------ */
+
 .page-rotina {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: "Inter", sans-serif;
   min-height: 100vh;
   margin: 0;
-  background: #eef4fa;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #111827;
+  transition: background 0.3s, color 0.3s;
 }
 
-/* --------------------------------------
-   BARRA SUPERIOR (VOLTA AO PAINEL)
--------------------------------------- */
+/* ------------------------------------------
+   TOPO
+------------------------------------------ */
+
 .rotina-top-bar {
-  padding: 24px 40px 0 40px;
-}
-
-.rotina-top-bar .btn-voltar {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #1c9aff;
-  color: #fff;
-  font-size: 0.92rem;
-  font-weight: 600;
-  padding: 9px 18px;
-  border-radius: 999px;
-  text-decoration: none;
-  box-shadow: 0 6px 14px rgba(28, 154, 255, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
-}
-
-.rotina-top-bar .btn-voltar:hover {
-  filter: brightness(1.06);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(28, 154, 255, 0.4);
-}
-
-/* --------------------------------------
-   CONTAINER PRINCIPAL
--------------------------------------- */
-
-.kst-rotina {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 16px 40px 40px 40px;
-}
-
-/* TÍTULO + SUBTÍTULO */
-
-.kst-home-header {
-  margin-bottom: 18px;
-}
-
-.kst-home-title {
-  font-size: 1.9rem;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.kst-home-subtitle {
-  font-size: 0.95rem;
-  opacity: 0.7;
-}
-
-/* TOOLBAR COM BOTÃO NOVO BLOCO */
-
-.kst-rotina-toolbar {
-  margin-top: 10px;
-  margin-bottom: 22px;
-}
-
-/* BOTÃO PRINCIPAL (NOVO BLOCO) */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 22px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #1c9aff, #3db7ff);
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  box-shadow: 0 6px 16px rgba(28, 154, 255, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
-}
-
-.btn-primary:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(28, 154, 255, 0.45);
-}
-
-/* BOTÃO SECUNDÁRIO (ADICIONAR POR DIA) */
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 9px 16px;
-  border-radius: 999px;
-  background: #f3f7ff;
-  border: 1px solid #d2ddf0;
-  color: #111827;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-}
-
-.btn-secondary:hover {
-  background: #e4edff;
-  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.18);
-  transform: translateY(-1px);
-}
-
-/* --------------------------------------
-   GRID DOS DIAS
--------------------------------------- */
-
-/* SEMPRE lado a lado – se faltar espaço, vira scroll horizontal */
-.kst-rotina-grid {
+  padding: 20px 42px 0 42px;
   display: flex;
-  gap: 18px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-}
-
-/* Scrollbar bonitinha só no eixo X */
-.kst-rotina-grid::-webkit-scrollbar {
-  height: 8px;
-}
-.kst-rotina-grid::-webkit-scrollbar-track {
-  background: transparent;
-}
-.kst-rotina-grid::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.8);
-  border-radius: 999px;
-}
-
-/* COLUNA DO DIA (CARD GRANDE) */
-.kst-rotina-day {
-  flex: 0 0 170px;              /* largura fixa por coluna */
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 16px 14px 16px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-}
-
-/* NOME DO DIA */
-.day-title {
-  text-align: center;
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #111827;
-}
-
-/* WRAPPER DOS CARDS DO DIA */
-.day-cards {
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 10px;
 }
 
-/* STATE VAZIO */
-.empty {
-  text-align: center;
-  font-size: 0.86rem;
-  color: #6b7280;
-  border-radius: 12px;
-  padding: 10px 8px;
-  border: 1px dashed #d1d5db;
-  background: #f9fbff;
+.btn-voltar,
+.theme-toggle-btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  background: var(--bg-block);
+  color: var(--text-primary);
+  border: 1px solid var(--border-soft);
+  cursor: pointer;
+  text-decoration: none;
 }
 
-/* BOTÃO DE ADD DO DIA (FICA COLADO EMBAIXO) */
-.add-btn {
-  margin-top: auto;
-  width: 100%;
-  justify-content: center;
+/* ------------------------------------------
+   CONTAINER DO CONTEÚDO
+------------------------------------------ */
+
+.kst-rotina {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px 42px 50px;
 }
 
-/* --------------------------------------
-   CARD DE BLOCO DE ROTINA
--------------------------------------- */
+.rotina-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
 
-.card {
-  background: #f9fbff;
-  border-radius: 12px;
-  border: 1px solid #e0e7ff;
-  padding: 10px 10px 8px 10px;
+.rotina-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 26px;
+}
+
+/* ------------------------------------------
+   ÁREA CENTRAL (fundo destacado)
+------------------------------------------ */
+
+.kst-rotina-grid {
+  background: var(--bg-container);
+  padding: 28px;
+  border-radius: 14px;
+  border: 1px solid var(--border-soft);
+
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 26px;
+
+  transition: background 0.3s;
+}
+
+/* ------------------------------------------
+   COLUNA DO DIA
+------------------------------------------ */
+
+.rotina-day {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+  padding-right: 14px;
+  border-right: 1px solid var(--border-soft);
 }
 
-/* borda colorida vem inline via border-left, só reforçamos */
-.card {
-  border-left-width: 4px !important;
+.rotina-day:last-child {
+  border-right: none;
 }
 
-/* efeito hover */
-.card:hover {
-  background: #f3f7ff;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18);
-  transform: translateY(-1px);
+.day-header {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 14px;
 }
 
-/* HORA */
-.card-time {
+.day-name {
   font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+/* ------------------------------------------
+   LINHA VERTICAL (TIMELINE)
+------------------------------------------ */
+
+.day-timeline {
+  position: relative;
+  padding-left: 26px;
+}
+
+.day-timeline::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--timeline-line);
+  opacity: 0.5;
+}
+
+/* ------------------------------------------
+   BLOCO
+------------------------------------------ */
+
+.routine-block {
+  position: relative;
+  margin-bottom: 20px;
+  background: var(--bg-block);
+  padding: 8px 10px 6px;
+  border-radius: 10px;
+  border: 1px solid var(--border-soft);
+  transition: background 0.3s, border 0.3s;
+}
+
+/* bolinha */
+.routine-block::before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--block-color);
+}
+
+/* etiqueta */
+.routine-label span {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.76rem;
   font-weight: 600;
-  color: #4b5563;
+  background: var(--block-color);
+  color: #fff;
 }
 
-/* TÍTULO */
-.card-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #111827;
+/* hora */
+.routine-time {
+  margin-top: 4px;
+  font-size: 0.78rem;
 }
 
-/* DESCRIÇÃO */
-.card-desc {
-  font-size: 0.82rem;
-  color: #4b5563;
-  line-height: 1.25rem;
+/* descrição */
+.routine-desc {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  color: var(--text-secondary);
 }
 
-/* AÇÕES */
-.card-actions {
+/* ------------------------------------------
+   BOTÕES MINI
+------------------------------------------ */
+
+.routine-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
   margin-top: 6px;
 }
 
-/* BOTÕES PEQUENOS */
 .btn-xs {
-  padding: 4px 8px;
-  font-size: 0.78rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  color: #111827;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.12s ease, border 0.12s ease, transform 0.12s ease;
+  padding: 3px 6px;
+  font-size: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-block);
+  color: var(--text-primary);
 }
 
-.btn-xs:hover {
-  background: #e5ecff;
-  border-color: #9ca3af;
-  transform: translateY(-0.5px);
-}
-
-/* BOTÃO PERIGOSO (EXCLUIR) */
 .btn-danger {
-  background: #f97373;
-  border-color: #ef4444;
-  color: #fff;
+  background: #b91c1c !important;
+  border-color: #ef4444 !important;
+  color: #fff !important;
 }
 
-.btn-danger:hover {
-  background: #ef4444;
-  border-color: #dc2626;
-}
-
-/* SELECT PEQUENO */
 .select-xs {
-  padding: 4px 4px;
-  font-size: 0.78rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  outline: none;
+  padding: 2px 4px;
+  font-size: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-block);
+  color: var(--text-primary);
 }
 
-/* -----------------------------
+/* ------------------------------------------
+   BOTÃO ADICIONAR
+------------------------------------------ */
+
+.btn-secondary {
+  margin-top: 10px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--bg-block);
+  border: 1px solid var(--border-soft);
+  font-size: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+/* ------------------------------------------
    RESPONSIVO
------------------------------ */
+------------------------------------------ */
 
-@media (max-width: 900px) {
-  .kst-rotina {
-    padding: 16px 16px 32px 16px;
+@media (max-width: 1150px) {
+  .kst-rotina-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
+}
 
-  .rotina-top-bar {
-    padding: 16px 16px 0 16px;
-  }
-
-  .kst-rotina-day {
-    flex: 0 0 160px;
+@media (max-width: 650px) {
+  .kst-rotina-grid {
+    grid-template-columns: repeat(1, 1fr);
   }
 }

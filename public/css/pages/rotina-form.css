@@ -1,84 +1,102 @@
-/* ==========================================
-   FORMULÁRIO PREMIUM — NOVO/EDITAR BLOCO
-   Mesmo estilo da lista, bem limpo e moderno
-   ========================================== */
+/* ==========================================================
+   KAUE STUDY TRACKER – FORMULÁRIO DE ROTINA (VERSÃO FINAL)
+   Clean • Premium • Tema Claro/Escuro
+   Com fundo destacado igual à tela principal
+   ========================================================== */
 
+/* FUNDO GERAL DA PÁGINA */
 .page-rotina {
-  background: #eef4fa;
-  min-height: 100vh;
+  background: var(--bg-page);
+  color: var(--text-primary);
   font-family: "Inter", sans-serif;
-  padding: 40px 0;
+  min-height: 100vh;
+  margin: 0;
+  transition: background 0.3s, color 0.3s;
 }
 
-/* TOPO VOLTAR */
+/* BOTÃO VOLTAR */
 .btn-voltar {
   display: inline-block;
-  background: #1c9aff;
-  padding: 10px 18px;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 0.95rem;
+  margin-left: 42px;
+  margin-top: 28px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
   font-weight: 600;
-  margin-left: 40px;
+  color: var(--text-primary);
+  background: var(--bg-block);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
   text-decoration: none;
-  transition: .2s;
+  cursor: pointer;
 }
 
-.btn-voltar:hover {
-  filter: brightness(1.1);
-}
+/* ----------------------------------------------
+   CARD CENTRAL (FORM)
+---------------------------------------------- */
 
-/* CARD CENTRAL */
 .kst-rotina-form {
-  width: 650px;
+  width: 620px;
   margin: 40px auto;
-  background: #ffffff;
-  padding: 32px;
-  border-radius: 18px;
-  box-shadow: 0 5px 18px rgba(0,0,0,0.10);
+  background: var(--bg-container);
+  padding: 28px 30px 34px;
+  border-radius: 16px;
+  border: 1px solid var(--border-soft);
+  transition: 0.3s;
 }
 
-/* TÍTULO */
+/* TÍTULO DO FORM */
 .kst-rotina-form h1 {
-  font-size: 1.9rem;
-  margin-bottom: 5px;
+  font-size: 1.6rem;
   font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-primary);
 }
 
 .kst-rotina-form p {
-  opacity: 0.7;
-  margin-bottom: 25px;
+  margin: 0 0 18px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
 }
 
-/* INPUTS */
+/* ----------------------------------------------
+   INPUTS
+---------------------------------------------- */
+
 .kst-rotina-form label {
   font-weight: 600;
-  margin-bottom: 5px;
   display: block;
   margin-top: 18px;
+  margin-bottom: 6px;
+  font-size: 0.88rem;
+  color: var(--text-primary);
 }
 
 .kst-rotina-form input,
 .kst-rotina-form select,
 .kst-rotina-form textarea {
   width: 100%;
-  padding: 12px 14px;
+  background: var(--bg-block);
+  color: var(--text-primary);
+  border: 1px solid var(--border-soft);
   border-radius: 10px;
-  border: 1px solid #ccd6e1;
-  background: #fdfdfd;
-  font-size: 0.95rem;
-  transition: .15s;
+  padding: 11px 13px;
+  font-size: 0.92rem;
+  transition: 0.2s;
 }
 
 .kst-rotina-form input:focus,
 .kst-rotina-form select:focus,
 .kst-rotina-form textarea:focus {
-  border-color: #1c9aff;
-  box-shadow: 0 0 0 3px rgba(28,154,255,0.25);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
   outline: none;
+  background: var(--bg-block);
 }
 
-/* LINHA HORÁRIO */
+/* ----------------------------------------------
+   LINHA DOS HORÁRIOS
+---------------------------------------------- */
+
 .time-row {
   display: flex;
   align-items: center;
@@ -86,45 +104,89 @@
 }
 
 .time-row span {
-  opacity: .7;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
 }
 
-/* BOTÕES */
+/* ----------------------------------------------
+   CAMPO "Cor"
+---------------------------------------------- */
+
+.color-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.color-row input[type="color"] {
+  width: 48px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-soft);
+  cursor: pointer;
+  background: var(--bg-block);
+}
+
+/* ----------------------------------------------
+   AÇÕES DO FORM (BOTÕES)
+---------------------------------------------- */
+
 .form-actions {
+  margin-top: 26px;
   display: flex;
   justify-content: flex-end;
-  margin-top: 25px;
   gap: 12px;
 }
 
-.btn-primary {
-  background: linear-gradient(90deg, #1c9aff, #3db7ff);
-  padding: 12px 22px;
-  color: #fff;
-  border-radius: 10px;
+/* BOTÃO SALVAR */
+.kst-rotina-form .btn-primary {
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3b82f6, #38bdf8);
   border: none;
-  font-size: 0.95rem;
+  color: #fff;
+  font-size: 0.93rem;
   font-weight: 600;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.15s ease;
 }
 
-.btn-primary:hover {
+.kst-rotina-form .btn-primary:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+/* BOTÃO CANCELAR */
+.kst-rotina-form .btn-secondary {
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: var(--bg-block);
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.kst-rotina-form .btn-secondary:hover {
   filter: brightness(1.08);
 }
 
-.btn-secondary {
-  background: #f3f6fa;
-  border: 1px solid #cfd8e3;
-  padding: 12px 22px;
-  border-radius: 10px;
-  color: #444;
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: .2s;
-}
+/* ----------------------------------------------
+   RESPONSIVO
+---------------------------------------------- */
 
-.btn-secondary:hover {
-  background: #e9eef5;
+@media (max-width: 768px) {
+  .kst-rotina-form {
+    width: 92%;
+    margin-top: 28px;
+    padding: 22px 20px 28px;
+  }
+
+  .btn-voltar {
+    margin-left: 20px;
+  }
 }

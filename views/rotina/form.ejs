@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= tituloPagina %></title>
 
- <link rel="stylesheet" href="/css/pages/rotina.css">
-<link rel="stylesheet" href="/css/pages/rotina-form.css">
-
+  <link rel="stylesheet" href="/css/pages/rotina.css">
+  <link rel="stylesheet" href="/css/pages/rotina-form.css">
 </head>
 
 <body class="page-rotina">
@@ -20,21 +19,27 @@
 
     <div class="form-header">
       <h1><%= isEdit ? "Editar bloco da rotina" : "Novo bloco da rotina" %></h1>
-      <p>Defina um horário fixo.</p>
+      <p>Defina um horário fixo que será repetido toda semana.</p>
     </div>
 
-    <form action="<%= formAction %>" method="POST">
+    <form action="<%= formAction %>" method="POST" class="rotina-form">
 
       <label>Nome do bloco</label>
-      <input type="text" name="title" required maxlength="80"
-      value="<%= routineBlock ? routineBlock.title : '' %>">
+      <input
+        type="text"
+        name="title"
+        required
+        maxlength="80"
+        value="<%= routineBlock ? routineBlock.title : '' %>"
+        placeholder="Ex.: Acordar, Estudar Matemática, Treinar Basquete, Trabalho..."
+      >
 
       <label>Dia da semana</label>
       <select name="weekday" required>
         <% diasSemana.forEach(d => { %>
           <option value="<%= d.value %>"
             <%= (routineBlock && routineBlock.weekday === d.value) ||
-                 (!routineBlock && selectedWeekday === d.value)
+                (!routineBlock && selectedWeekday === d.value)
               ? "selected" : "" %>>
             <%= d.label %>
           </option>
@@ -43,23 +48,45 @@
 
       <label>Horário</label>
       <div class="time-row">
-        <input type="time" name="startTime" required value="<%= routineBlock ? routineBlock.startTime : '' %>">
+        <input
+          type="time"
+          name="startTime"
+          required
+          value="<%= routineBlock ? routineBlock.startTime : '' %>">
         <span>até</span>
-        <input type="time" name="endTime" required value="<%= routineBlock ? routineBlock.endTime : '' %>">
+        <input
+          type="time"
+          name="endTime"
+          required
+          value="<%= routineBlock ? routineBlock.endTime : '' %>">
       </div>
 
       <label>Descrição</label>
-      <textarea name="description" rows="3"><%= routineBlock?.description || "" %></textarea>
+      <textarea
+        name="description"
+        rows="3"
+        placeholder="Detalhes do bloco (ex.: 30 questões, treino de arremesso, revisão de resumos)..."><%= routineBlock?.description || "" %></textarea>
 
-      <label>Cor</label>
-      <input type="color" name="color" value="<%= routineBlock?.color || '#1C9AFF' %>">
+      <div class="color-row">
+        <div>
+          <label>Cor do bloco</label>
+          <p class="color-hint">Essa cor será usada na etiqueta do bloco na timeline.</p>
+        </div>
+        <input
+          type="color"
+          name="color"
+          value="<%= routineBlock?.color || '#1C9AFF' %>">
+      </div>
 
       <div class="form-actions">
         <a href="/rotina" class="btn-secondary">Cancelar</a>
-        <button class="btn-primary"><%= isEdit ? "Salvar alterações" : "Salvar bloco" %></button>
+        <button class="btn-primary" type="submit">
+          <%= isEdit ? "Salvar alterações" : "Salvar bloco" %>
+        </button>
       </div>
     </form>
   </section>
+  <script src="/js/theme.js"></script>
 
 </body>
 </html>
