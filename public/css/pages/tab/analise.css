@@ -286,3 +286,54 @@
   margin: 0 auto; 
   display: block;
 }
+
+/* ===============================
+   AJUSTE PREMIUM DO SELETOR DE ÁREA
+================================== */
+
+.filter-card {
+  padding: 2rem !important;
+  display: flex;
+  justify-content: center;
+}
+
+.filter-card form {
+  width: 100%;
+  max-width: 420px; /* aumenta o tamanho e centraliza */
+}
+
+.filter-card .kst-form-row {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.filter-card .kst-form-group {
+  width: 100%;
+  text-align: center; /* centraliza a label */
+}
+
+.filter-card .kst-form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.filter-card .kst-select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  transition: 0.25s ease;
+}
+
+/* Efeito bonito no focus */
+.filter-card .kst-select:focus {
+  border-color: var(--kst-primary);
+  box-shadow: 0 0 0 3px var(--kst-primary-transparent);
+}

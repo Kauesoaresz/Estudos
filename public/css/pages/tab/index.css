@@ -143,3 +143,22 @@
 /* =======================================
    FINAL DO CSS
 ======================================= */
+.tab-timeline-wrapper .kst-section-title {
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+.tab-timeline-wrapper .kst-page-subtitle {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.tab-blocks-section .kst-section-title {
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+.tab-blocks-section .kst-page-subtitle {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
