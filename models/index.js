@@ -13,9 +13,11 @@ const SimuladoModel = require("./Simulado");
 const MedalhaModel = require("./Medalha");
 const MedalhaUsuarioModel = require("./MedalhaUsuario");
 const RoutineBlockModel = require("./RoutineBlock");
-
-// NOVO MODEL
 const RevisaoProgramadaModel = require("./RevisaoProgramada");
+
+// 🟩 MODELS NOVOS DA TÉCNICA TAB
+const TabBlocoModel = require("./TabBloco");
+const TabErroModel = require("./TabErro");
 
 // INICIALIZA TODOS OS MODELS
 const Usuario = UsuarioModel(sequelize, DataTypes);
@@ -27,6 +29,10 @@ const Medalha = MedalhaModel(sequelize, DataTypes);
 const MedalhaUsuario = MedalhaUsuarioModel(sequelize, DataTypes);
 const RoutineBlock = RoutineBlockModel(sequelize, DataTypes);
 const RevisaoProgramada = RevisaoProgramadaModel(sequelize, DataTypes);
+
+// 🟩 INICIALIZAÇÃO DOS MODELS DO TAB
+const TabBloco = TabBlocoModel(sequelize, DataTypes);
+const TabErro = TabErroModel(sequelize, DataTypes);
 
 // =============================================================
 //  ASSOCIAÇÕES COMPLETAS DO SISTEMA
@@ -73,10 +79,8 @@ Usuario.hasMany(RoutineBlock, { foreignKey: "usuario_id", as: "routine_blocks" }
 RoutineBlock.belongsTo(Usuario, { foreignKey: "usuario_id", as: "usuario" });
 
 // =============================================================
-//  REVISÕES PROGRAMADAS – ASSOCIAÇÕES NOVAS
+//  REVISÕES PROGRAMADAS – ASSOCIAÇÕES
 // =============================================================
-
-// USUÁRIO x REVISÃO_PROGRAMADA
 Usuario.hasMany(RevisaoProgramada, {
   foreignKey: "usuario_id",
   as: "revisoes_programadas"
@@ -86,7 +90,6 @@ RevisaoProgramada.belongsTo(Usuario, {
   as: "usuario"
 });
 
-// MATÉRIA x REVISÃO_PROGRAMADA
 Materia.hasMany(RevisaoProgramada, {
   foreignKey: "materia_id",
   as: "revisoes_programadas"
@@ -96,7 +99,6 @@ RevisaoProgramada.belongsTo(Materia, {
   as: "materia"
 });
 
-// ESTUDO_MATERIA_DIA x REVISÃO_PROGRAMADA (origem_id)
 EstudoMateriaDia.hasMany(RevisaoProgramada, {
   foreignKey: "origem_id",
   as: "revisoes_geradas"
@@ -104,6 +106,31 @@ EstudoMateriaDia.hasMany(RevisaoProgramada, {
 RevisaoProgramada.belongsTo(EstudoMateriaDia, {
   foreignKey: "origem_id",
   as: "estudo_origem"
+});
+
+// =============================================================
+//  🔥 ASSOCIAÇÕES DA TÉCNICA TAB
+// =============================================================
+
+// USUÁRIO x TAB_BLOCO
+Usuario.hasMany(TabBloco, {
+  foreignKey: "usuarioId",
+  as: "tab_blocos"
+});
+TabBloco.belongsTo(Usuario, {
+  foreignKey: "usuarioId",
+  as: "usuario"
+});
+
+// TAB_BLOCO x TAB_ERRO
+TabBloco.hasMany(TabErro, {
+  foreignKey: "blocoId",
+  as: "erros",
+  onDelete: "CASCADE"
+});
+TabErro.belongsTo(TabBloco, {
+  foreignKey: "blocoId",
+  as: "bloco"
 });
 
 // =============================================================
@@ -119,7 +146,11 @@ const db = {
   Medalha,
   MedalhaUsuario,
   RoutineBlock,
-  RevisaoProgramada
+  RevisaoProgramada,
+
+  // 🔥 EXPORTA OS MODELS DA TAB
+  TabBloco,
+  TabErro
 };
 
 module.exports = db;

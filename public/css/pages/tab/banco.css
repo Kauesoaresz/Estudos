@@ -1,0 +1,319 @@
+/* ============================================================
+   BANCO TAB – ESTILO PREMIUM COMPLETO
+============================================================ */
+
+/* Área principal */
+.kst-main {
+  padding-top: 1rem;
+}
+
+.kst-container > section {
+  margin-bottom: 2.4rem;
+}
+
+/* Títulos */
+.kst-section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: .8rem;
+}
+
+/* ------------------------------------------------------------
+   CABEÇALHO DA PÁGINA
+------------------------------------------------------------ */
+
+.kst-page-header {
+  text-align: center !important;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.kst-page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.kst-page-subtitle {
+  margin-top: 0;
+  font-size: .95rem;
+  color: #6b7280;
+  opacity: 0.8;
+}
+
+/* ============================================================
+   RESUMO GERAL
+============================================================ */
+
+.kst-summary-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.4rem;
+  margin-top: 1.4rem;
+}
+
+.kst-summary-item {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e5e8ec;
+  border-radius: 14px;
+  padding: 1.6rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,.03);
+  transition: .25s ease;
+}
+
+.kst-summary-item:hover {
+  box-shadow: 0 6px 22px rgba(0,0,0,.06);
+}
+
+.kst-summary-label {
+  font-size: .92rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.kst-summary-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-top: .4rem;
+  color: #111827;
+}
+
+@media (max-width: 900px) {
+  .kst-summary-grid {
+    flex-wrap: wrap;
+  }
+  .kst-summary-item {
+    flex: 1 1 calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 600px) {
+  .kst-summary-item {
+    flex: 1 1 100%;
+  }
+}
+
+/* ============================================================
+   FILTROS
+============================================================ */
+
+.kst-filtros-card {
+  padding: 2rem;
+  border-radius: 18px;
+  border: 1px solid #e5e8ec;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,.03);
+}
+
+.kst-filtros-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.4rem;
+}
+
+.kst-filtros-header p {
+  margin-top: .25rem;
+  color: #6b7280;
+}
+
+.kst-form-row {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 1.4rem;
+}
+
+@media (max-width:900px) {
+  .kst-form-row {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (max-width:600px) {
+  .kst-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kst-form-group label {
+  font-size: .9rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: .4rem;
+  display: block;
+}
+
+.kst-select {
+  padding: .75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #d5d9de;
+  background: #f9fafb;
+  font-size: .95rem;
+  transition: .2s ease;
+}
+
+.kst-select:focus {
+  outline: none;
+  border-color: var(--kst-primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(28,154,255,.2);
+}
+
+#btnLimparFiltros {
+  padding: .55rem 1.2rem;
+  border-radius: 10px;
+  font-size: .87rem;
+  background: #f3f4f6;
+}
+
+/* ============================================================
+   TABELA PREMIUM
+============================================================ */
+
+.kst-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 18px;
+  border: 1px solid #e5e8ec;
+  box-shadow: 0 4px 20px rgba(0,0,0,.03);
+}
+
+.kst-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+  table-layout: auto;
+}
+
+.kst-table thead {
+  background: #f3f4f6;
+  border-bottom: 2px solid #e5e8ec;
+}
+
+.kst-table th {
+  padding: .9rem;
+  color: #374151;
+  font-weight: 700;
+}
+
+.kst-table td {
+  padding: .9rem;
+  border-bottom: 1px solid #e5e8ec;
+  vertical-align: middle;
+}
+
+.kst-table tr:hover {
+  background: #f9fafb;
+}
+
+.kst-tag {
+  background: rgba(28,154,255,.15);
+  color: var(--kst-primary);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: .78rem;
+}
+
+/* ============================================================
+   COLUNA "ANO" COMPACTA
+============================================================ */
+
+.kst-table td:first-child,
+.kst-table th:first-child {
+  width: 70px !important;
+  max-width: 70px !important;
+  white-space: nowrap !important;
+}
+
+/* ============================================================
+   DESKTOP GARANTIDO
+============================================================ */
+
+@media (min-width: 701px) {
+  .kst-table td, 
+  .kst-table th {
+    display: table-cell !important;
+  }
+}
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 700px) {
+
+  .kst-table thead {
+    display: none;
+  }
+
+  .kst-table tr {
+    display: block;
+    border: 1px solid #e5e8ec;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    padding: 1rem;
+  }
+
+  .kst-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: .45rem 0;
+    border: none!important;
+  }
+
+  .kst-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280;
+  }
+}
+
+/* ============================================================
+   RANKING
+============================================================ */
+
+.kst-list {
+  padding-left: 1.2rem;
+}
+
+.kst-list li {
+  padding: .45rem 0;
+  font-size: .95rem;
+  border-bottom: 1px solid #e5e8ec;
+}
+
+.kst-list li:last-child {
+  border-bottom: none;
+}
+
+/* ============================================================
+   GRÁFICOS
+============================================================ */
+
+.kst-charts-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.6rem;
+}
+
+.kst-chart-card {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e5e8ec;
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,.03);
+}
+
+.kst-chart-card canvas {
+  margin-top: 1rem;
+}
+
+@media (max-width:900px) {
+  .kst-charts-row {
+    flex-direction: column;
+  }
+}

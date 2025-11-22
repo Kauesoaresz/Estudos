@@ -1,0 +1,243 @@
+<%- include("../partials/header", { tituloPagina }) %>
+
+<link rel="stylesheet" href="/css/pages/tab/analise.css">
+
+<main class="kst-main">
+  <div class="kst-container">
+
+    <!-- CABEÇALHO -->
+    <div class="kst-page-header">
+      <div>
+        <h1 class="kst-page-title">Análise por área — TAB</h1>
+        <p class="kst-page-subtitle">
+          Veja um raio-x de uma área específica da prova usando seus blocos TAB.
+        </p>
+      </div>
+    </div>
+
+    <% if (!areasLista || areasLista.length === 0) { %>
+
+      <div class="kst-empty kst-mt-lg">
+        <p>Você ainda não possui blocos TAB registrados.</p>
+        <p>Crie alguns blocos para liberar esta análise.</p>
+      </div>
+
+    <% } else { %>
+
+      <!-- SELETOR DE ÁREA -->
+      <section class="kst-card kst-card-elevated kst-mb-lg filter-card">
+        <form action="/tab/analise" method="GET" class="kst-form-row">
+          <div class="kst-form-group">
+            <label class="kst-form-label">Área da prova</label>
+            <select name="area" class="kst-select" onchange="this.form.submit()">
+              <% areasLista.forEach(area => { %>
+                <option value="<%= area %>" <%= area === areaSelecionada ? 'selected' : '' %>>
+                  <%= area %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+        </form>
+      </section>
+
+      <!-- RESUMO DA ÁREA -->
+      <section class="kst-card kst-card-elevated kst-mb-lg summary-card">
+        <h2 class="kst-section-title">Resumo da área: <%= areaSelecionada %></h2>
+
+        <div class="kst-grid kst-grid-1-2-3 kst-mt-md">
+          <div class="kst-stat-box">
+            <h3 class="kst-stat-title">Blocos nessa área</h3>
+            <p class="kst-stat-number"><%= totalBlocosArea %></p>
+          </div>
+
+          <div class="kst-stat-box">
+            <h3 class="kst-stat-title">Erros totais</h3>
+            <p class="kst-stat-number"><%= totalErrosArea %></p>
+          </div>
+
+          <div class="kst-stat-box">
+            <h3 class="kst-stat-title">Média de erros/bloco</h3>
+            <p class="kst-stat-number"><%= mediaErrosArea.toFixed(1) %></p>
+          </div>
+
+          <div class="kst-stat-box">
+            <h3 class="kst-stat-title">Desconhecimento</h3>
+            <p class="kst-stat-number"><%= errosPorTipoArea.DESCONHECIMENTO %></p>
+          </div>
+
+          <div class="kst-stat-box">
+            <h3 class="kst-stat-title">Lacunas</h3>
+            <p class="kst-stat-number"><%= errosPorTipoArea.LACUNA %></p>
+          </div>
+
+          <div class="kst-stat-box">
+            <h3 class="kst-stat-title">Banalidades</h3>
+            <p class="kst-stat-number"><%= errosPorTipoArea.BANALIDADE %></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GRÁFICO -->
+      <section class="kst-card kst-card-elevated kst-mb-lg graph-card">
+        <h2 class="kst-section-title">Erros por bloco nessa área</h2>
+        <p class="kst-page-subtitle">
+          Cada barra representa um bloco TAB (ano + intervalo de questões).
+        </p>
+
+        <div class="kst-chart-wrapper">
+          <canvas id="chartErrosBlocosArea"></canvas>
+        </div>
+      </section>
+
+      <!-- BLOCOS DA ÁREA -->
+      <section class="kst-card kst-card-elevated kst-mt-md">
+        <h2 class="kst-section-title">Blocos dessa área</h2>
+
+        <% if (!blocosArea || !blocosArea.length) { %>
+          <p class="kst-empty kst-mt-md">
+            Nenhum bloco nessa área até agora.
+          </p>
+        <% } else { %>
+
+          <table class="kst-table kst-mt-md">
+            <thead>
+              <tr>
+                <th>Ano</th>
+                <th>Bloco</th>
+                <th>Prova</th>
+                <th>Total de erros</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% blocosArea.forEach(b => { 
+                   const totalErrosBl = b.erros ? b.erros.length : 0;
+              %>
+                <tr>
+                  <td data-label="Ano"><%= b.anoProva %></td>
+                  <td data-label="Bloco"><%= b.blocoPosicao %></td>
+                  <td data-label="Prova"><%= b.provaEtiqueta || '-' %></td>
+                  <td data-label="Total de erros" class="kst-table-erro-strong"><%= totalErrosBl %></td>
+                  <td data-label="Ações">
+                    <a href="/tab/<%= b.id %>" class="kst-btn kst-btn-secondary kst-btn-sm">
+                      Ver bloco
+                    </a>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+
+        <% } %>
+      </section>
+
+    <% } %>
+
+  </div>
+</main>
+
+<%- include("../partials/footer") %>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+(function () {
+  const dadosBlocos = <%- JSON.stringify(errosPorBloco || []) %>;
+
+  const labels = dadosBlocos.map(b => b.label);
+  const valores = dadosBlocos.map(b => b.totalErros);
+
+  const ctx = document.getElementById("chartErrosBlocosArea");
+  if (!ctx) return;
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: "Total de erros",
+        data: valores,
+        backgroundColor: "rgba(57, 136, 255, 0.55)",
+        hoverBackgroundColor: "rgba(57, 136, 255, 0.75)",
+        borderColor: "rgba(57, 136, 255, 1)",
+        borderWidth: 2,
+        borderRadius: 8,
+        maxBarThickness: 80
+      }]
+    },
+
+    plugins: [ChartDataLabels],
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      layout: { padding: { top: 20 } },
+
+      plugins: {
+        legend: { display: false },
+
+        datalabels: {
+          anchor: "end",
+          align: "end",
+          offset: -6,
+          color: document.body.classList.contains("theme-dark") ? "#fff" : "#111",
+          font: {
+            size: 14,
+            weight: "bold"
+          }
+        },
+
+        tooltip: {
+          callbacks: {
+            title: (ctx) => `Bloco: ${ctx[0].label}`,
+            label: (ctx) => `Erros totais: ${ctx.raw}`
+          }
+        }
+      },
+
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "Ano da prova — Intervalo do bloco",
+            color: document.body.classList.contains("theme-dark") ? "#fff" : "#000",
+            font: { size: 14, weight: "600" },
+            padding: { top: 10 }
+          },
+          ticks: {
+            color: document.body.classList.contains("theme-dark") ? "#ddd" : "#333",
+            font: { size: 13, weight: "500" },
+            maxRotation: 0,
+            minRotation: 0,
+            padding: 10
+          },
+          grid: { display: false }
+        },
+
+        y: {
+          title: {
+            display: true,
+            text: "Quantidade de erros",
+            color: document.body.classList.contains("theme-dark") ? "#fff" : "#000",
+            font: { size: 14, weight: "600" },
+            padding: 14
+          },
+          beginAtZero: true,
+          ticks: {
+            color: document.body.classList.contains("theme-dark") ? "#ccc" : "#444",
+            font: { size: 12 }
+          },
+          grid: {
+            color: document.body.classList.contains("theme-dark")
+              ? "rgba(255,255,255,0.05)"
+              : "rgba(0,0,0,0.08)"
+          }
+        }
+      }
+    }
+  });
+})();
+</script>

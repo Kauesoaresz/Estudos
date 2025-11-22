@@ -1,0 +1,309 @@
+<%- include("../partials/header", { tituloPagina }) %>
+
+<link rel="stylesheet" href="/css/pages/tab/banco.css">
+
+<main class="kst-main">
+  <div class="kst-container">
+
+    <!-- TÍTULO -->
+    <div class="kst-page-header">
+      <div>
+        <h1 class="kst-page-title">Banco de Erros TAB</h1>
+        <p class="kst-page-subtitle">Todos os erros registrados por você através da Técnica TAB.</p>
+      </div>
+
+      
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- PREPARAÇÃO DE DADOS -->
+    <!-- ===================================================== -->
+    <%
+      const total = erros?.length || 0;
+
+      const totalD = erros.filter(e => e.tipoErro === "DESCONHECIMENTO").length;
+      const totalL = erros.filter(e => e.tipoErro === "LACUNA").length;
+      const totalB = erros.filter(e => e.tipoErro === "BANALIDADE").length;
+
+      const anosUnicos = [...new Set(erros.map(e => e.bloco.anoProva))].sort((a,b)=>b-a);
+      const areasUnicas = [...new Set(erros.map(e => e.bloco.area))];
+      const blocosUnicos = [...new Set(erros.map(e => e.bloco.blocoPosicao))];
+
+      const areaCounts = {};
+      erros.forEach(e => {
+        areaCounts[e.bloco.area] = (areaCounts[e.bloco.area] || 0) + 1;
+      });
+
+      const questaoCounts = {};
+      erros.forEach(e => {
+        questaoCounts[e.numeroQuestao] =
+          (questaoCounts[e.numeroQuestao] || 0) + 1;
+      });
+
+      const rankingQuestoes = Object.entries(questaoCounts)
+        .sort((a,b) => b[1] - a[1])
+        .slice(0, 10);
+    %>
+
+
+    <% if (total === 0) { %>
+
+      <div class="kst-empty kst-mt-lg">
+        <p>Nenhum erro registrado ainda.</p>
+        <p>Resolva blocos TAB para preencher este painel.</p>
+      </div>
+
+    <% } else { %>
+
+      <!-- ===================================================== -->
+      <!-- RESUMO GERAL -->
+      <!-- ===================================================== -->
+      <section class="kst-card">
+        <h2 class="kst-section-title">Resumo geral</h2>
+
+        <div class="kst-summary-grid">
+
+          <div class="kst-summary-item">
+            <span class="kst-summary-label">Total de erros</span>
+            <span class="kst-summary-value"><%= total %></span>
+          </div>
+
+          <div class="kst-summary-item">
+            <span class="kst-summary-label">Desconhecimento</span>
+            <span class="kst-summary-value"><%= totalD %></span>
+          </div>
+
+          <div class="kst-summary-item">
+            <span class="kst-summary-label">Lacunas</span>
+            <span class="kst-summary-value"><%= totalL %></span>
+          </div>
+
+          <div class="kst-summary-item">
+            <span class="kst-summary-label">Banalidades</span>
+            <span class="kst-summary-value"><%= totalB %></span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================== -->
+      <!-- FILTROS -->
+      <!-- ===================================================== -->
+      <section class="kst-filtros-card">
+
+        <div class="kst-filtros-header">
+          <div>
+            <h2 class="kst-section-title">Filtros</h2>
+            <p>Refine a lista de erros abaixo.</p>
+          </div>
+
+          <button id="btnLimparFiltros" class="kst-btn kst-btn-secondary kst-btn-sm">
+            Limpar filtros
+          </button>
+        </div>
+
+        <div class="kst-form-row">
+
+          <div class="kst-form-group">
+            <label>Ano</label>
+            <select id="filtroAno" class="kst-select">
+              <option value="">Todos</option>
+              <% anosUnicos.forEach(a => { %>
+                <option value="<%= a %>"><%= a %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="kst-form-group">
+            <label>Área</label>
+            <select id="filtroArea" class="kst-select">
+              <option value="">Todas</option>
+              <% areasUnicas.forEach(a => { %>
+                <option value="<%= a %>"><%= a %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="kst-form-group">
+            <label>Tipo</label>
+            <select id="filtroTipo" class="kst-select">
+              <option value="">Todos</option>
+              <option value="DESCONHECIMENTO">Desconhecimento</option>
+              <option value="LACUNA">Lacuna</option>
+              <option value="BANALIDADE">Banalidade</option>
+            </select>
+          </div>
+
+          <div class="kst-form-group">
+            <label>Bloco</label>
+            <select id="filtroBloco" class="kst-select">
+              <option value="">Todos</option>
+              <% blocosUnicos.forEach(b => { %>
+                <option value="<%= b %>"><%= b %></option>
+              <% }) %>
+            </select>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================== -->
+      <!-- TABELA -->
+      <!-- ===================================================== -->
+      <section class="kst-card">
+        <h2 class="kst-section-title">Erros registrados</h2>
+
+        <table class="kst-table kst-mt-md" id="tabelaErros">
+          <thead>
+            <tr>
+              <th>Ano</th>
+              <th>Área</th>
+              <th>Bloco</th>
+              <th>Questão</th>
+              <th>Tipo</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% erros.forEach(erro => { %>
+              <tr 
+                data-ano="<%= erro.bloco.anoProva %>"
+                data-area="<%= erro.bloco.area %>"
+                data-tipo="<%= erro.tipoErro %>"
+                data-bloco="<%= erro.bloco.blocoPosicao %>"
+              >
+                <td data-label="Ano"><%= erro.bloco.anoProva %></td>
+                <td data-label="Área"><%= erro.bloco.area %></td>
+                <td data-label="Bloco"><%= erro.bloco.blocoPosicao %></td>
+                <td data-label="Questão"><%= erro.numeroQuestao %></td>
+                <td data-label="Tipo"><span class="kst-tag"><%= erro.tipoErro %></span></td>
+                <td data-label="Descrição"><%= erro.descricao %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================== -->
+      <!-- RANKING -->
+      <!-- ===================================================== -->
+      <section class="kst-card">
+        <h2 class="kst-section-title">Questões que você mais erra</h2>
+
+        <% if (!rankingQuestoes.length) { %>
+          <p class="kst-empty kst-mt-md">Nenhum dado suficiente.</p>
+        <% } else { %>
+          <ol class="kst-list kst-mt-md">
+            <% rankingQuestoes.forEach(([qtd, cont]) => { %>
+              <li><strong>Questão <%= qtd %></strong> — <%= cont %> erro(s)</li>
+            <% }) %>
+          </ol>
+        <% } %>
+      </section>
+
+      <!-- ===================================================== -->
+      <!-- GRÁFICOS FINAL -->
+      <!-- ===================================================== -->
+      <section class="kst-charts-row">
+
+        <div class="kst-chart-card">
+          <h2 class="kst-section-title">Erros por área</h2>
+          <canvas id="chartErrosArea"></canvas>
+        </div>
+
+        <div class="kst-chart-card">
+          <h2 class="kst-section-title">Erros por tipo</h2>
+          <canvas id="chartErrosTipo"></canvas>
+        </div>
+
+      </section>
+
+    <% } %>
+
+  </div>
+</main>
+
+<%- include("../partials/footer") %>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  /* ============================================================
+     FILTROS
+  ============================================================ */
+
+  const filtros = {
+    ano: document.getElementById("filtroAno"),
+    area: document.getElementById("filtroArea"),
+    tipo: document.getElementById("filtroTipo"),
+    bloco: document.getElementById("filtroBloco"),
+  };
+
+  const linhas = document.querySelectorAll("#tabelaErros tbody tr");
+  const btnLimpar = document.getElementById("btnLimparFiltros");
+
+  function aplicarFiltros() {
+    linhas.forEach(linha => {
+      const passAno = !filtros.ano.value || filtros.ano.value === linha.dataset.ano;
+      const passArea = !filtros.area.value || filtros.area.value === linha.dataset.area;
+      const passTipo = !filtros.tipo.value || filtros.tipo.value === linha.dataset.tipo;
+      const passBloco = !filtros.bloco.value || filtros.bloco.value === linha.dataset.bloco;
+
+      linha.style.display = (passAno && passArea && passTipo && passBloco) ? "" : "none";
+    });
+  }
+
+  Object.values(filtros).forEach(f => f.addEventListener("change", aplicarFiltros));
+
+  btnLimpar.addEventListener("click", () => {
+    Object.values(filtros).forEach(f => f.value = "");
+    aplicarFiltros();
+  });
+
+  /* ============================================================
+     GRÁFICOS
+  ============================================================ */
+
+  const dadosArea = <%- JSON.stringify(areaCounts) %>;
+  const dadosTipo = {
+    DESCONHECIMENTO: <%= totalD %>,
+    LACUNA: <%= totalL %>,
+    BANALIDADE: <%= totalB %>
+  };
+
+  if (document.getElementById("chartErrosArea")) {
+    new Chart(document.getElementById("chartErrosArea"), {
+      type: "bar",
+      data: {
+        labels: Object.keys(dadosArea),
+        datasets: [{
+          data: Object.values(dadosArea),
+          backgroundColor: "rgba(28,154,255,0.25)",
+          borderColor: "rgba(28,154,255,0.9)",
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+  }
+
+  if (document.getElementById("chartErrosTipo")) {
+    new Chart(document.getElementById("chartErrosTipo"), {
+      type: "pie",
+      data: {
+        labels: Object.keys(dadosTipo),
+        datasets: [{
+          data: Object.values(dadosTipo),
+          backgroundColor: [
+            "rgba(28,154,255,0.8)",
+            "rgba(255,200,0,0.8)",
+            "rgba(255,80,80,0.8)"
+          ]
+        }]
+      },
+      options: { responsive: true }
+    });
+  }
+</script>

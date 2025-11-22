@@ -1,0 +1,205 @@
+/* ============================================================
+   NOVO BLOCO TAB — Tela de Formulário
+   Suporte completo a tema claro e escuro
+   by Kauê Study Tracker
+===============================================================*/
+
+/* ------------------------------------------------------------
+   CARD DO FORMULÁRIO
+------------------------------------------------------------ */
+.kst-form-card {
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: var(--kst-shadow-soft);
+  margin-bottom: 2rem;
+}
+
+/* ------------------------------------------------------------
+   INPUTS / SELECT / TEXTAREA
+------------------------------------------------------------ */
+.kst-input,
+.kst-select,
+.kst-textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  border: 1px solid var(--kst-border-subtle);
+  background: var(--kst-bg-subtle);
+  color: var(--kst-text-primary);
+  transition: 0.25s;
+}
+
+.kst-input:focus,
+.kst-select:focus,
+.kst-textarea:focus {
+  border-color: var(--kst-primary);
+  background: var(--kst-bg-elevated);
+  box-shadow: 0 0 0 3px var(--kst-primary-transparent);
+  outline: none;
+}
+
+/* Textarea especial */
+.kst-textarea {
+  resize: vertical;
+  min-height: 150px;
+  max-height: 400px;
+  font-family: "Consolas", "Courier New", monospace;
+  line-height: 1.45rem;
+}
+
+
+/* ------------------------------------------------------------
+   LABELS E DICAS
+------------------------------------------------------------ */
+.kst-form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  color: var(--kst-text-secondary);
+}
+
+.kst-hint {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--kst-text-secondary);
+  opacity: 0.8;
+}
+
+
+/* ------------------------------------------------------------
+   GRID DO FORM
+------------------------------------------------------------ */
+.kst-form-row {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 800px) {
+  .kst-form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* ------------------------------------------------------------
+   AÇÕES DO FORM
+------------------------------------------------------------ */
+.kst-form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+/* ------------------------------------------------------------
+   GUIA / EXPLICAÇÃO DA TÉCNICA TAB
+------------------------------------------------------------ */
+.kst-guide {
+  background: var(--kst-bg-elevated);
+  border: 1px solid var(--kst-border-subtle);
+  border-radius: 18px;
+  padding: 2.2rem;
+  box-shadow: var(--kst-shadow-soft);
+}
+
+.kst-guide h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: var(--kst-text-primary);
+}
+
+.kst-guide h3 {
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  color: var(--kst-text-primary);
+}
+
+/* lista numerada */
+.kst-guide ol {
+  margin-left: 1.4rem;
+  line-height: 1.55rem;
+}
+
+.kst-guide li {
+  margin-bottom: 0.4rem;
+}
+
+/* bullets internos */
+.kst-guide ul {
+  margin-left: 1.2rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.kst-guide ul li {
+  margin-bottom: 0.25rem;
+}
+
+/* Código */
+.kst-code {
+  display: block;
+  margin-top: 0.6rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  background: var(--kst-bg-subtle);
+  border: 1px solid var(--kst-border-subtle);
+  color: var(--kst-text-primary);
+  font-family: Consolas, monospace;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+}
+
+
+/* ------------------------------------------------------------
+   TEMA CLARO / ESCURO
+   (automático pelo seu theme-light / theme-dark)
+------------------------------------------------------------ */
+
+/* Tema claro – ajustes específicos */
+body.theme-light .kst-form-card,
+body.theme-light .kst-guide {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.08);
+}
+
+/* Tema escuro */
+body.theme-dark .kst-form-card,
+body.theme-dark .kst-guide {
+  background: #0f1115;
+  border-color: rgba(255,255,255,0.08);
+}
+
+body.theme-dark .kst-textarea {
+  background: #0b0d10;
+  color: #f1f1f1;
+}
+
+
+/* ------------------------------------------------------------
+   MELHORIAS DE VISUAL 
+------------------------------------------------------------ */
+.kst-form-card:hover,
+.kst-guide:hover {
+  box-shadow: var(--kst-shadow-medium);
+  transition: 0.25s;
+}
+
+/* Centraliza título e subtítulo do guia */
+.kst-guide h2,
+.kst-guide .kst-page-subtitle {
+  text-align: center;
+}
+
+/* Ajuste do subtítulo abaixo do título */
+.kst-guide .kst-page-subtitle {
+  margin-top: 0.35rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}

@@ -1,0 +1,176 @@
+<%- include("../partials/header", { tituloPagina }) %>
+
+<link rel="stylesheet" href="/css/pages/tab/index.css">
+
+<main class="kst-main">
+  <div class="kst-container">
+
+    <!-- CABEÇALHO -->
+    <div class="kst-page-header">
+      <div>
+        <h1 class="kst-page-title">Técnica TAB</h1>
+        <p class="kst-page-subtitle">
+          Painel geral dos seus blocos de 15 questões para diagnóstico de erros.
+        </p>
+      </div>
+
+      
+    </div>
+
+    <% if (!blocos || blocos.length === 0) { %>
+
+      <div class="kst-empty kst-mt-lg">
+        <p>Você ainda não registrou nenhum bloco TAB.</p>
+        <p>Crie seu primeiro bloco clicando no botão acima.</p>
+      </div>
+
+    <% } else { %>
+
+      <%
+        const totalBlocos = blocos.length;
+        const totalErros = blocos.reduce((acc, b) => acc + (b.erros ? b.erros.length : 0), 0);
+        const mediaErros = totalBlocos ? (totalErros / totalBlocos) : 0;
+
+        const agora = new Date();
+        const seteDiasAtras = new Date(agora.getTime() - 7 * 24 * 60 * 60 * 1000);
+        let blocos7dias = 0;
+
+        blocos.forEach(b => {
+          const d = new Date(b.criado_em);
+          if (!isNaN(d.getTime()) && d >= seteDiasAtras) {
+            blocos7dias++;
+          }
+        });
+
+        const formatarData = (data) => {
+          const dt = new Date(data);
+          if (isNaN(dt.getTime())) return "";
+          return dt.toLocaleDateString("pt-BR");
+        };
+
+        const blocosTimeline = [...blocos].sort((a, b) => {
+          const d1 = new Date(a.criado_em);
+          const d2 = new Date(b.criado_em);
+          return d1 - d2;
+        });
+      %>
+
+      <!-- RESUMO EM 4 CARDS -->
+      <section class="tab-summary-grid">
+
+        <div class="tab-card">
+          <h3 class="tab-card-title">Blocos registrados</h3>
+          <p class="tab-card-number"><%= totalBlocos %></p>
+        </div>
+
+        <div class="tab-card">
+          <h3 class="tab-card-title">Erros totais</h3>
+          <p class="tab-card-number"><%= totalErros %></p>
+        </div>
+
+        <div class="tab-card">
+          <h3 class="tab-card-title">Média de erros/bloco</h3>
+          <p class="tab-card-number"><%= mediaErros.toFixed(1) %></p>
+        </div>
+
+        <div class="tab-card">
+          <h3 class="tab-card-title">Blocos nos últimos 7 dias</h3>
+          <p class="tab-card-number"><%= blocos7dias %></p>
+        </div>
+
+      </section>
+
+      <!-- LINHA DO TEMPO -->
+      <section class="kst-card kst-card-elevated tab-timeline-wrapper">
+        <h2 class="kst-section-title">Linha do tempo dos blocos</h2>
+        <p class="kst-page-subtitle">
+          A evolução dos blocos realizados.
+        </p>
+
+        <ul class="tab-timeline">
+          <% blocosTimeline.forEach(bloco => { 
+              const errosCount = bloco.erros ? bloco.erros.length : 0;
+          %>
+            <li class="tab-timeline-item">
+              <div class="tab-timeline-date">
+                <%= formatarData(bloco.criado_em) || "Data não registrada" %>
+              </div>
+              <div class="tab-timeline-content">
+                <strong>ENEM <%= bloco.anoProva %> — <%= bloco.area.toUpperCase() %></strong>
+                <span>· Questões <%= bloco.blocoPosicao %></span>
+                <span>· <%= errosCount %> erro(s)</span>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+      </section>
+
+      <!-- LISTA DOS BLOCOS -->
+      <section class="tab-blocks-section">
+        <h2 class="kst-section-title">Seus blocos TAB</h2>
+        <p class="kst-page-subtitle">Todos os blocos registrados.</p>
+
+        <div class="tab-blocks-grid">
+
+          <% blocos.forEach(bloco => { 
+              const erros = bloco.erros || [];
+              const totalErrosBloco = erros.length;
+
+              const totalD = erros.filter(e => e.tipoErro === "DESCONHECIMENTO").length;
+              const totalL = erros.filter(e => e.tipoErro === "LACUNA").length;
+              const totalB = erros.filter(e => e.tipoErro === "BANALIDADE").length;
+
+              let statusLabel = "OK";
+              let statusClass = "kst-badge-good";
+
+              if (totalErrosBloco >= 10) {
+                statusLabel = "Crítico";
+                statusClass = "kst-badge-danger";
+              } else if (totalErrosBloco >= 5) {
+                statusLabel = "Atenção";
+                statusClass = "kst-badge-warning";
+              } 
+          %>
+
+            <article class="kst-card kst-card-elevated tab-block-card">
+
+              <header class="tab-block-header">
+                <div>
+                  <h3 class="tab-block-title">ENEM <%= bloco.anoProva %> — <%= bloco.area %></h3>
+                  <p class="tab-block-meta">
+                    Questões <%= bloco.blocoPosicao %> · 
+                    <small><%= formatarData(bloco.criado_em) %></small>
+                  </p>
+                </div>
+                <span class="kst-badge <%= statusClass %>"><%= statusLabel %></span>
+              </header>
+
+              <div class="tab-block-stats">
+                <p><strong><%= totalErrosBloco %></strong> erros no bloco</p>
+                <p>Desconhecimento: <strong><%= totalD %></strong></p>
+                <p>Lacunas: <strong><%= totalL %></strong></p>
+                <p>Banalidades: <strong><%= totalB %></strong></p>
+              </div>
+
+              <footer class="tab-block-footer">
+                <a href="/tab/<%= bloco.id %>" class="kst-btn kst-btn-secondary kst-btn-sm">Ver detalhes</a>
+                <a href="/tab/<%= bloco.id %>/editar" class="kst-btn kst-btn-outline kst-btn-sm">Editar</a>
+                <form action="/tab/<%= bloco.id %>/excluir" method="POST" style="display:inline;"
+                  onsubmit="return confirm('Excluir esse bloco?');">
+                  <button type="submit" class="kst-btn kst-btn-danger kst-btn-sm">Excluir</button>
+                </form>
+              </footer>
+
+            </article>
+
+          <% }) %>
+
+        </div>
+      </section>
+
+    <% } %>
+
+  </div>
+</main>
+
+<%- include("../partials/footer") %>

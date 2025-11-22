@@ -37,6 +37,7 @@ const perfilRoutes = require("./routes/perfilRoutes");
 
 // Rota nova – ROTINA
 const rotinaRoutes = require("./routes/routineRoutes");
+const tabRoutes = require("./routes/tabRoutes");
 
 // -------------------------------
 // INICIAR APP
@@ -126,6 +127,7 @@ app.use("/perfil", ensureAuth, perfilRoutes);
 // 🚀 ROTINA (SEM HEADER/FOOTER)
 app.use("/rotina", ensureAuth, rotinaRoutes);
 app.use("/revisoes-programadas", revisaoProgramadaRoutes);
+app.use("/", tabRoutes);
 
 // -------------------------------
 // SERVIDOR

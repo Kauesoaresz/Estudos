@@ -1,0 +1,128 @@
+<%- include("../partials/header", { tituloPagina: tituloPagina }) %>
+
+<link rel="stylesheet" href="/css/pages/tab/detalhes.css">
+
+
+<link rel="stylesheet" href="/css/pages/tab/detalhes.css">
+
+<main class="kst-main">
+  <div class="kst-container">
+
+    <!-- CABEÇALHO -->
+    <div class="kst-page-header">
+      <div>
+        <h1 class="kst-page-title">
+          ENEM <%= bloco.anoProva %> — <%= bloco.area.toUpperCase() %>
+        </h1>
+
+        <p class="kst-page-subtitle">
+          Bloco <strong><%= bloco.blocoPosicao %></strong>
+          <% if (bloco.provaEtiqueta) { %>
+            · Prova <strong><%= bloco.provaEtiqueta %></strong>
+          <% } %>
+        </p>
+      </div>
+
+      <div class="tab-actions">
+        <a href="/tab/<%= bloco.id %>/editar" class="kst-btn kst-btn-primary">Editar</a>
+
+        <form action="/tab/<%= bloco.id %>/excluir" method="POST"
+              onsubmit="return confirm('Tem certeza que deseja excluir este bloco?');">
+          <button type="submit" class="kst-btn kst-btn-danger">Excluir</button>
+        </form>
+
+        <a href="/tab" class="kst-btn kst-btn-secondary">Voltar</a>
+      </div>
+    </div>
+
+    <% const erros = bloco.erros || []; %>
+    <% const total = erros.length; %>
+    <% const e1 = erros.filter(e => e.tipoErro === "DESCONHECIMENTO").length; %>
+    <% const e2 = erros.filter(e => e.tipoErro === "LACUNA").length; %>
+    <% const e3 = erros.filter(e => e.tipoErro === "BANALIDADE").length; %>
+
+    <!-- RESUMO EM 2 CARDS -->
+    <section class="tab-resumo-grid">
+
+      <!-- CARD 1: INFO DO BLOCO -->
+      <div class="kst-card kst-card-elevated tab-card-info">
+        <h2 class="tab-card-title">Informações do bloco</h2>
+
+        <ul class="tab-info-list">
+          <li><strong>Ano:</strong> <%= bloco.anoProva %></li>
+          <li><strong>Área:</strong> <%= bloco.area %></li>
+          <li><strong>Questões:</strong> <%= bloco.blocoPosicao %></li>
+          <% if (bloco.provaEtiqueta) { %>
+            <li><strong>Prova:</strong> <%= bloco.provaEtiqueta %></li>
+          <% } %>
+        </ul>
+      </div>
+
+      <!-- CARD 2: ESTATÍSTICAS -->
+      <div class="kst-card kst-card-elevated tab-card-stats">
+        <h2 class="tab-card-title">Erros do bloco</h2>
+
+        <ul class="tab-stats-list">
+          <li>Total: <strong><%= total %></strong></li>
+          <li>Desconhecimento: <strong><%= e1 %></strong></li>
+          <li>Lacunas: <strong><%= e2 %></strong></li>
+          <li>Banalidades: <strong><%= e3 %></strong></li>
+        </ul>
+      </div>
+
+    </section>
+
+    <p class="tab-hint kst-mt-md">
+      Essa visão funciona como um “raio-x” do bloco. Reduzir  
+      <strong>desconhecimento</strong> e <strong>lacunas</strong> significa se aproximar do gabarito.
+    </p>
+
+    <!-- LISTA DE ERROS -->
+    <section class="kst-card kst-card-elevated tab-erros-card">
+
+      <h2 class="kst-section-title">Erros deste bloco</h2>
+
+      <% if (!erros || erros.length === 0) { %>
+
+        <p class="kst-empty kst-mt-md">
+          Nenhum erro registrado neste bloco.
+        </p>
+
+      <% } else { %>
+
+        <ul class="tab-erros-list kst-mt-md">
+
+          <% erros.forEach(erro => { %>
+            <li class="tab-erro-item">
+
+              <header class="tab-erro-header">
+                <span class="tab-erro-questao">Questão <%= erro.numeroQuestao %></span>
+                <span class="kst-tag kst-tag-mini"><%= erro.tipoErro %></span>
+              </header>
+
+              <p class="tab-erro-descricao"><%= erro.descricao %></p>
+
+            </li>
+          <% }) %>
+
+        </ul>
+
+      <% } %>
+
+    </section>
+
+    <!-- GUIA FORA DO CARD DE ERROS -->
+    <section class="kst-card kst-card-elevated tab-hint-box kst-mt-lg">
+      <h3 class="tab-hint-title">Guia rápido da classificação</h3>
+
+      <ul class="tab-hint-list">
+        <li><strong>DESCONHECIMENTO:</strong> você não sabe o conteúdo.</li>
+        <li><strong>LACUNA:</strong> sabe, mas faltou uma peça.</li>
+        <li><strong>BANALIDADE:</strong> erro de atenção.</li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<%- include("../partials/footer") %>

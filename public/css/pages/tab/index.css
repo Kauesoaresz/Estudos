@@ -1,0 +1,145 @@
+/* =======================================
+   PÁGINA TÉCNICA TAB — VISUAL LIMPO
+======================================= */
+
+/* ----- GRID DO RESUMO ----- */
+
+.tab-summary-grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: 1fr;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 700px) {
+  .tab-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1050px) {
+  .tab-summary-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ----- CARD DO RESUMO ----- */
+
+.tab-card {
+  background: var(--kst-bg-elevated);
+  border-radius: 18px;
+  padding: 1.6rem;
+  box-shadow: var(--kst-shadow-soft);
+  border: 1px solid var(--kst-border-subtle);
+  transition: 0.25s ease;
+}
+
+.tab-card:hover {
+  box-shadow: var(--kst-shadow-medium);
+  transform: translateY(-3px);
+}
+
+.tab-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.tab-card-number {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-top: 0.4rem;
+}
+
+/* =======================================
+   LINHA DO TEMPO
+======================================= */
+
+.tab-timeline-wrapper {
+  margin-bottom: 2rem;
+}
+
+.tab-timeline {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.4rem;
+}
+
+.tab-timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--kst-border-subtle);
+}
+
+.tab-timeline-date {
+  font-weight: 600;
+  width: 110px;
+}
+
+.tab-timeline-content span {
+  color: var(--kst-text-secondary);
+  font-size: 0.85rem;
+  margin-left: 5px;
+}
+
+/* =======================================
+   GRID DOS BLOCOS
+======================================= */
+
+.tab-blocks-grid {
+  display: grid;
+  gap: 1.4rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 800px) {
+  .tab-blocks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1150px) {
+  .tab-blocks-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ----- CARD DO BLOCO ----- */
+
+.tab-block-card {
+  padding: 1.5rem;
+  border-radius: 18px;
+}
+
+.tab-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.tab-block-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.tab-block-meta {
+  font-size: 0.85rem;
+  color: var(--kst-text-secondary);
+}
+
+.tab-block-stats p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.tab-block-footer {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* =======================================
+   FINAL DO CSS
+======================================= */

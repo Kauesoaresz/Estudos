@@ -1,0 +1,114 @@
+/* =======================================================
+   EDIÇÃO DO BLOCO TAB — INTERFACE PROFISSIONAL
+======================================================= */
+
+/* --- CABEÇALHO --- */
+
+.kst-page-header {
+  margin-bottom: 1.6rem;
+}
+
+/* --- CARD DO FORM --- */
+
+.kst-card {
+  border-radius: 18px;
+  padding: 2rem !important;
+}
+
+/* --- GRID DOS CAMPOS --- */
+
+.kst-form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.4rem;
+  margin-bottom: 1.4rem;
+}
+
+@media (min-width: 760px) {
+  .kst-form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* --- FORM GROUP --- */
+
+.kst-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.kst-form-label {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  font-size: 0.94rem;
+}
+
+/* --- INPUTS / SELECTS / TEXTAREA --- */
+
+.kst-input,
+.kst-select,
+.kst-textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  background: var(--kst-bg-subtle);
+  border: 1px solid var(--kst-border-subtle);
+  font-size: 0.95rem;
+  transition: 0.2s ease;
+}
+
+.kst-input:focus,
+.kst-select:focus,
+.kst-textarea:focus {
+  outline: none;
+  border-color: var(--kst-primary);
+  background: #ffffff10;
+  box-shadow: 0 0 0 2px var(--kst-primary-transparent);
+}
+
+/* TEXTAREA */
+
+.kst-textarea {
+  resize: vertical;
+  min-height: 180px;
+  line-height: 1.45;
+}
+
+/* HINT BELOW TEXTAREA */
+
+.kst-hint {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--kst-text-secondary);
+}
+
+/* --- AÇÕES DO FORM (VOLTAR + SALVAR) --- */
+
+.kst-form-actions {
+  margin-top: 1.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+/* Botão Voltar (anchor) dentro das ações */
+.kst-form-actions .kst-btn-outline {
+  font-size: 0.9rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+}
+
+/* Botão Salvar */
+.kst-form-actions .kst-btn-primary {
+  font-size: 1rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 12px;
+}
+
+/* Espaçamento final */
+.kst-card:last-child {
+  margin-bottom: 2rem;
+}

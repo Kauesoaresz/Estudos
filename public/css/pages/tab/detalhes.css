@@ -1,0 +1,139 @@
+/* ============================================================
+   DETALHES DO BLOCO — VISUAL PREMIUM
+============================================================ */
+
+/* ---- AÇÕES DO TOPO ---- */
+
+.tab-actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* ---- GRID DO RESUMO (2 CARDS) ---- */
+
+.tab-resumo-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 850px) {
+  .tab-resumo-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.tab-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.tab-card-info,
+.tab-card-stats {
+  padding: 1.6rem;
+  border-radius: 18px;
+}
+
+/* ---- LISTAS DO RESUMO ---- */
+
+.tab-info-list,
+.tab-stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tab-info-list li,
+.tab-stats-list li {
+  margin: 0.45rem 0;
+  font-size: 0.95rem;
+}
+
+/* ---- HINT APÓS RESUMO ---- */
+
+.tab-hint {
+  background: var(--kst-bg-subtle);
+  padding: 0.9rem 1rem;
+  border-left: 4px solid var(--kst-primary);
+  border-radius: 10px;
+  color: var(--kst-text-secondary);
+  font-size: 0.92rem;
+  margin-top: 1.4rem;
+}
+
+/* ============================================================
+   LISTA DE ERROS
+============================================================ */
+
+.tab-erros-card {
+  padding: 1.8rem;
+  border-radius: 20px;
+  margin-top: 2rem;
+}
+
+.tab-erros-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tab-erro-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--kst-border-subtle);
+}
+
+.tab-erro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tab-erro-questao {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.tab-erro-descricao {
+  margin-top: 0.5rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+/* ============================================================
+   GUIA DE CLASSIFICAÇÃO — SEÇÃO SEPARADA
+============================================================ */
+
+.tab-hint-box {
+  padding: 1.4rem 1.6rem;
+  background: var(--kst-bg-subtle);
+  border-radius: 14px;
+  border-left: 4px solid var(--kst-primary);
+  margin-top: 2rem;
+}
+
+.tab-hint-title {
+  margin-bottom: 0.6rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.tab-hint-list li {
+  margin: 0.45rem 0;
+  font-size: 0.97rem;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+============================================================ */
+
+@media (max-width: 600px) {
+  .tab-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

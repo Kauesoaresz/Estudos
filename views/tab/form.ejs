@@ -1,0 +1,186 @@
+<%- include("../partials/header", { tituloPagina: tituloPagina }) %>
+
+<link rel="stylesheet" href="/css/pages/tab/novo.css" />
+
+<main class="kst-main">
+  <div class="kst-container">
+
+    <!-- CABEÇALHO -->
+    <div class="kst-page-header">
+      <div>
+        <h1 class="kst-page-title">Novo Bloco TAB</h1>
+        <p class="kst-page-subtitle">
+          Registre um bloco de questões e anote seus erros com a técnica TAB.
+        </p>
+      </div>
+
+      
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <form action="/tab/novo" method="POST" class="kst-form-card">
+
+      <!-- LINHA 1 -->
+      <div class="kst-form-row">
+        <div class="kst-form-group">
+          <label class="kst-form-label">Ano da prova ENEM *</label>
+          <input 
+            type="number" 
+            name="anoProva"
+            min="2010"
+            max="2100"
+            required
+            class="kst-input"
+            placeholder="Ex: 2024"
+          />
+        </div>
+
+        <div class="kst-form-group">
+          <label class="kst-form-label">Área *</label>
+          <select name="area" id="tabArea" class="kst-select" required>
+            <option value="">Selecione...</option>
+            <option value="LINGUAGENS">Linguagens</option>
+            <option value="HUMANAS">Ciências Humanas</option>
+            <option value="NATUREZA">Ciências da Natureza</option>
+            <option value="MATEMATICA">Matemática</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- LINHA 2 -->
+      <div class="kst-form-row">
+        <div class="kst-form-group">
+          <label class="kst-form-label">Bloco das questões *</label>
+          <select name="blocoPosicao" id="tabBlocos" class="kst-select" required>
+            <option value="">Selecione a área primeiro...</option>
+          </select>
+        </div>
+
+        <div class="kst-form-group">
+          <label class="kst-form-label">Etiqueta da prova (opcional)</label>
+          <input 
+            type="text" 
+            name="provaEtiqueta"
+            class="kst-input"
+            placeholder="Ex: ENEM 2023 - Azul"
+          />
+        </div>
+      </div>
+
+      <!-- TEXTAREA DE ERROS -->
+      <div class="kst-form-group kst-mt-md">
+        <label class="kst-form-label">
+          Erros do bloco (1 por linha)
+        </label>
+
+        <textarea 
+          name="errosTexto" 
+          rows="10" 
+          class="kst-textarea"
+          placeholder="138 - LACUNA - Análise combinatória
+139 - DESCONHECIMENTO - Função afim
+140 - BANALIDADE - Não li que era negativo"></textarea>
+
+        <small class="kst-hint">
+          Siga: <strong>Questão - Tipo - Descrição</strong>  
+          Tipos: DESCONHECIMENTO · LACUNA · BANALIDADE
+        </small>
+      </div>
+
+      <!-- BOTÕES -->
+      <div class="kst-form-actions">
+        <button class="kst-btn kst-btn-primary kst-btn-lg" type="submit">
+          Salvar bloco TAB
+        </button>
+      </div>
+    </form>
+
+    <!-- GUIA DEDICADO TAB -->
+    <section class="kst-guide kst-mt-xl">
+      <h2>Como usar este formulário — Técnica TAB</h2>
+      <p class="kst-page-subtitle">
+        Guia rápido para elevar seus acertos e consciência em cada bloco resolvido.
+      </p>
+
+      <h3>📌 Passo a passo:</h3>
+
+      <ol class="kst-list kst-mt-sm">
+        <li><strong>Baixe uma prova oficial do ENEM</strong> (2010+).</li>
+        <li><strong>Escolha a área</strong> (LINGUAGENS · HUMANAS · NATUREZA · MATEMÁTICA).</li>
+        <li>O sistema libera os <strong>blocos correspondentes</strong> automaticamente.</li>
+        <li><strong>Resolva as 15 questões</strong> daquele bloco.</li>
+        <li><strong>Corrija sem emoção</strong>: procure o erro, não o acerto.</li>
+
+        <li>
+          Classifique cada erro em:
+          <ul>
+            <li><strong>DESCONHECIMENTO</strong> – Você não sabia o conteúdo.</li>
+            <li><strong>LACUNA</strong> – Você sabia, mas faltava uma parte.</li>
+            <li><strong>BANALIDADE</strong> – Desatenção, leitura, pressa.</li>
+          </ul>
+        </li>
+
+        <li>
+          Registre assim:
+          <pre class="kst-code">138 - LACUNA - Errei o princípio multiplicativo</pre>
+        </li>
+
+        <li><strong>Salve o bloco</strong> e acompanhe tudo no painel TAB.</li>
+      </ol>
+
+      <p class="kst-mt-md">
+        A TAB não te faz “acertar mais”.  
+        Ela te faz <strong>errar menos</strong>.  
+        E quem erra pouco fecha a prova.
+      </p>
+    </section>
+
+  </div>
+</main>
+
+<%- include("../partials/footer") %>
+
+<script>
+/* DISTRIBUIÇÃO DE BLOCOS POR ÁREA */
+const blocosPorArea = {
+  "LINGUAGENS": [
+    { value: "1-15", label: "1–15 (Início da prova)" },
+    { value: "16-30", label: "16–30 (Meio da prova)" },
+    { value: "31-45", label: "31–45 (Final da prova)" }
+  ],
+  "HUMANAS": [
+    { value: "46-60", label: "46–60 (Início da área)" },
+    { value: "61-75", label: "61–75 (Meio da área)" },
+    { value: "76-90", label: "76–90 (Final da área)" }
+  ],
+  "NATUREZA": [
+    { value: "91-105", label: "91–105 (Início da área)" },
+    { value: "106-120", label: "106–120 (Meio da área)" },
+    { value: "121-135", label: "121–135 (Final da área)" }
+  ],
+  "MATEMATICA": [
+    { value: "136-150", label: "136–150 (Início da área)" },
+    { value: "151-165", label: "151–165 (Meio da área)" },
+    { value: "166-180", label: "166–180 (Final da área)" }
+  ]
+};
+
+document.getElementById("tabArea").addEventListener("change", function() {
+  const area = this.value;
+  const selectBlocos = document.getElementById("tabBlocos");
+
+  selectBlocos.innerHTML = "";
+
+  if (!blocosPorArea[area]) {
+    selectBlocos.innerHTML = `<option value="">Selecione a área primeiro...</option>`;
+    return;
+  }
+
+  blocosPorArea[area].forEach(bloco => {
+    const opt = document.createElement("option");
+    opt.value = bloco.value;
+    opt.textContent = bloco.label;
+    selectBlocos.appendChild(opt);
+  });
+});
+</script>

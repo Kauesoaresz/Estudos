@@ -1,0 +1,142 @@
+<%- include("../partials/header", { tituloPagina: tituloPagina }) %>
+
+<link rel="stylesheet" href="/css/pages/tab/editar.css">
+
+<main class="kst-main">
+  <div class="kst-container">
+
+    <!-- CABEÇALHO -->
+    <div class="kst-page-header">
+      <div>
+        <h1 class="kst-page-title">Editar Bloco TAB</h1>
+        <p class="kst-page-subtitle">Atualize o bloco e seus erros.</p>
+      </div>
+      <!-- Removi o botão Voltar daqui -->
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <form action="/tab/<%= bloco.id %>/editar" method="POST" class="kst-card kst-card-elevated kst-p-lg">
+
+      <!-- Linha 1 -->
+      <div class="kst-form-row">
+        <div class="kst-form-group">
+          <label class="kst-form-label">Ano da prova ENEM *</label>
+          <input 
+            type="number"
+            name="anoProva"
+            min="2010"
+            max="2100"
+            required
+            class="kst-input"
+            value="<%= bloco.anoProva %>"
+          />
+        </div>
+
+        <div class="kst-form-group">
+          <label class="kst-form-label">Área *</label>
+          <select name="area" id="tabArea" class="kst-select" required>
+            <option value="">Selecione...</option>
+            <option value="LINGUAGENS" <%= bloco.area === "LINGUAGENS" ? "selected" : "" %>>Linguagens</option>
+            <option value="HUMANAS" <%= bloco.area === "HUMANAS" ? "selected" : "" %>>Ciências Humanas</option>
+            <option value="NATUREZA" <%= bloco.area === "NATUREZA" ? "selected" : "" %>>Ciências da Natureza</option>
+            <option value="MATEMATICA" <%= bloco.area === "MATEMATICA" ? "selected" : "" %>>Matemática</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Linha 2 -->
+      <div class="kst-form-row">
+        <div class="kst-form-group">
+          <label class="kst-form-label">Bloco *</label>
+          <select name="blocoPosicao" id="tabBlocos" class="kst-select" required>
+            <option value="<%= bloco.blocoPosicao %>" selected>
+              <%= bloco.blocoPosicao %> (atual)
+            </option>
+          </select>
+        </div>
+
+        <div class="kst-form-group">
+          <label class="kst-form-label">Etiqueta da Prova</label>
+          <input 
+            type="text"
+            name="provaEtiqueta"
+            class="kst-input"
+            value="<%= bloco.provaEtiqueta || '' %>"
+          />
+        </div>
+      </div>
+
+      <!-- TEXTAREA DE ERROS -->
+      <div class="kst-form-group kst-mt-md">
+        <label class="kst-form-label">Erros do bloco (1 por linha)</label>
+
+        <textarea 
+          name="errosTexto"
+          rows="12"
+          class="kst-textarea"
+        ><% bloco.erros.forEach(e => { %><%= `${e.numeroQuestao} - ${e.tipoErro} - ${e.descricao}\n` %><% }) %></textarea>
+
+        <small class="kst-hint">
+          Formato: <strong>Questão - Tipo - Descrição</strong>  
+          Tipos: DESCONHECIMENTO, LACUNA, BANALIDADE.
+        </small>
+      </div>
+
+      <!-- BOTÕES -->
+      <div class="kst-form-actions">
+        <a href="/tab/<%= bloco.id %>" class="kst-btn kst-btn-outline kst-btn-sm">
+          Voltar
+        </a>
+
+        <button class="kst-btn kst-btn-primary kst-btn-lg" type="submit">
+          Salvar alterações
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</main>
+
+<%- include("../partials/footer") %>
+
+<script>
+// DISTRIBUIÇÃO OFICIAL DOS BLOCOS ENEM
+const blocosPorArea = {
+  "LINGUAGENS": [
+    { value: "1-15", label: "1–15 (Início)" },
+    { value: "16-30", label: "16–30 (Meio)" },
+    { value: "31-45", label: "31–45 (Final)" }
+  ],
+  "HUMANAS": [
+    { value: "46-60", label: "46–60 (Início)" },
+    { value: "61-75", label: "61–75 (Meio)" },
+    { value: "76-90", label: "76–90 (Final)" }
+  ],
+  "NATUREZA": [
+    { value: "91-105", label: "91–105 (Início)" },
+    { value: "106-120", label: "106–120 (Meio)" },
+    { value: "121-135", label: "121–135 (Final)" }
+  ],
+  "MATEMATICA": [
+    { value: "136-150", label: "136–150 (Início)" },
+    { value: "151-165", label: "151–165 (Meio)" },
+    { value: "166-180", label: "166–180 (Final)" }
+  ]
+};
+
+// Atualizar blocos ao trocar área
+document.getElementById("tabArea").addEventListener("change", function () {
+  const area = this.value;
+  const select = document.getElementById("tabBlocos");
+
+  select.innerHTML = "";
+
+  blocosPorArea[area]?.forEach(b => {
+    const opt = document.createElement("option");
+    opt.value = b.value;
+    opt.textContent = b.label;
+    select.appendChild(opt);
+  });
+});
+</script>
