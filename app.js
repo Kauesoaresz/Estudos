@@ -39,6 +39,8 @@ const perfilRoutes = require("./routes/perfilRoutes");
 const rotinaRoutes = require("./routes/routineRoutes");
 const tabRoutes = require("./routes/tabRoutes");
 
+const anotacaoRoutes = require("./routes/anotacaoRoutes");
+
 // -------------------------------
 // INICIAR APP
 // -------------------------------
@@ -123,6 +125,7 @@ app.use("/simulados", ensureAuth, simuladoRoutes);
 app.use("/estatisticas", ensureAuth, estatisticasRoutes);
 app.use("/medalhas", ensureAuth, medalhaRoutes);
 app.use("/perfil", ensureAuth, perfilRoutes);
+app.use("/anotacoes", anotacaoRoutes);
 
 // 🚀 ROTINA (SEM HEADER/FOOTER)
 app.use("/rotina", ensureAuth, rotinaRoutes);

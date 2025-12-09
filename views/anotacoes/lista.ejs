@@ -1,0 +1,59 @@
+<%- include("../partials/header") %>
+
+<div class="kst-page-title">
+  <h1>Anotações</h1>
+</div>
+
+<div class="kst-card anotacoes-container">
+
+  <div class="anotacoes-header">
+    <a href="/anotacoes/nova" class="kst-btn kst-btn-primary">+ Nova Anotação</a>
+  </div>
+
+  <div class="anotacoes-list">
+
+    <% if (anotacoes.length === 0) { %>
+      <p class="anotacoes-empty">Nenhuma anotação registrada ainda.</p>
+    <% } %>
+
+    <% anotacoes.forEach(a => { %>
+      <div class="anotacao-card <%= a.importante ? 'anotacao-importante' : '' %>">
+
+        <% if (a.importante) { %>
+          <div class="badge-importante">⭐ IMPORTANTE</div>
+        <% } %>
+
+        <div class="anotacao-info">
+
+          <div class="anotacao-data">
+            <%= a.data %>
+          </div>
+
+          <!-- O MARKDOWN JÁ VEM PRONTO DO CONTROLLER -->
+          <div class="anotacao-conteudo">
+            <%- a.html %>
+          </div>
+
+        </div>
+
+        <div class="anotacao-actions">
+          <a href="/anotacoes/editar/<%= a.id %>" class="kst-btn kst-btn-small kst-btn-outline">
+            Editar
+          </a>
+
+          <a 
+            href="/anotacoes/excluir/<%= a.id %>"
+            class="kst-btn kst-btn-small kst-btn-danger"
+            onclick="return confirm('Excluir anotação?')"
+          >
+            Excluir
+          </a>
+        </div>
+
+      </div>
+    <% }) %>
+
+  </div>
+</div>
+
+<%- include("../partials/footer") %>

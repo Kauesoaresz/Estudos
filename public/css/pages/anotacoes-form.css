@@ -1,0 +1,22 @@
+form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input,
+textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-salvar {
+  padding: 12px;
+  background: #333;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}

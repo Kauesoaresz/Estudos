@@ -1,0 +1,77 @@
+/* CONTAINER GERAL */
+.anotacoes-container {
+  padding: 25px;
+  border-radius: 18px;
+}
+
+/* BOTÃO NOVA ANOTAÇÃO */
+.anotacoes-header {
+  margin-bottom: 25px;
+}
+
+/* LISTA */
+.anotacoes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* CARD DE ANOTAÇÃO */
+.anotacao-card {
+  background: var(--card-bg, #ffffff);
+  padding: 18px 22px;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* INFO */
+.anotacao-info {
+  flex: 1;
+}
+
+/* DATA */
+.anotacao-data {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.75;
+  margin-bottom: 8px;
+}
+
+/* TEXTO */
+.anotacao-conteudo {
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap; /* mantém quebras */
+  word-wrap: break-word;
+  max-width: 95%;
+}
+
+/* AÇÕES */
+.anotacao-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* TEXTO QUANDO VAZIO */
+.anotacoes-empty {
+  opacity: 0.7;
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* RESPONSIVIDADE */
+@media(max-width: 700px) {
+  .anotacao-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .anotacao-actions {
+    flex-direction: row;
+  }
+}

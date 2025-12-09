@@ -1,0 +1,155 @@
+<%- include("../partials/header") %>
+
+<div class="kst-page-title">
+  <h1><%= anotacao ? "Editar Anotação" : "Nova Anotação" %></h1>
+  <p class="kst-page-subtitle">
+    Organize suas ideias com markdown profissional, destaque visual e pré-visualização em tempo real.
+  </p>
+</div>
+
+<div class="kst-card anotacoes-form-card">
+
+  <form 
+    action="<%= anotacao ? '/anotacoes/editar/' + anotacao.id : '/anotacoes/nova' %>" 
+    method="POST"
+    class="kst-form anotacoes-form"
+  >
+
+    <!-- IMPORTANTE -->
+    <div class="importante-toggle">
+      <label class="toggle-label">
+        <input 
+          type="checkbox" 
+          name="importante"
+          <%= anotacao?.importante ? "checked" : "" %>
+        >
+        <span class="toggle-custom"></span>
+        Marcar como importante ⭐
+      </label>
+    </div>
+
+    <!-- DATA -->
+    <div class="kst-form-group">
+      <label for="data">Data</label>
+      <input 
+        type="date" 
+        id="data" 
+        name="data" 
+        class="kst-input kst-input-large"
+        required
+        value="<%= anotacao ? anotacao.data : '' %>"
+      >
+    </div>
+
+    <!-- BARRA DE FERRAMENTAS -->
+    <div class="toolbar">
+      <button type="button" onclick="addTag('**', '**')" title="Negrito"><b>B</b></button>
+      <button type="button" onclick="addTag('*', '*')" title="Itálico"><i>I</i></button>
+      <button type="button" onclick="addHeading()" title="Título">H1</button>
+      <button type="button" onclick="addList()" title="Lista">• Lista</button>
+      <button type="button" onclick="addSeparator()" title="Separador">───</button>
+      <button type="button" onclick="clearFormatting()" title="Limpar formatação">✖</button>
+    </div>
+
+    <!-- TEXTO -->
+    <div class="kst-form-group">
+      <label for="conteudo">Anotação</label>
+      <textarea 
+        id="conteudo" 
+        name="conteudo" 
+        rows="8"
+        class="kst-textarea kst-textarea-large"
+        required
+        oninput="autoResize(this); updatePreview(); updateCounter();"
+      ><%= anotacao ? anotacao.conteudo : '' %></textarea>
+
+      <div class="contador">
+        <span id="contador-caracteres">0</span> caracteres · 
+        <span id="contador-linhas">0</span> linhas
+      </div>
+    </div>
+
+    <!-- PRÉ-VISUALIZAÇÃO -->
+    <div class="preview-box">
+      <h3>Pré-visualização</h3>
+      <div id="preview"></div>
+    </div>
+
+    <!-- BOTÃO -->
+    <div class="kst-form-actions">
+      <button type="submit" class="kst-btn kst-btn-primary kst-btn-large">
+        <%= anotacao ? "Salvar alterações" : "Adicionar anotação" %>
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+
+<script>
+  const md = window.markdownit({ breaks: true });
+
+  function autoResize(textarea) {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  }
+
+  // Toolbar funções
+  function addTag(before, after) {
+    let t = conteudo;
+    let start = t.selectionStart;
+    let end = t.selectionEnd;
+    let selected = t.value.substring(start, end);
+
+    t.value = t.value.substring(0, start) + before + selected + after + t.value.substring(end);
+    t.focus();
+    updatePreview();
+  }
+
+  function addHeading() {
+    conteudo.value = "# " + conteudo.value;
+    updatePreview();
+  }
+
+  function addList() {
+    conteudo.value += "\n• ";
+    updatePreview();
+  }
+
+  function addSeparator() {
+    conteudo.value += "\n\n───\n\n";
+    updatePreview();
+  }
+
+  function clearFormatting() {
+    conteudo.value = conteudo.value
+      .replace(/\*\*/g, "")
+      .replace(/\*/g, "")
+      .replace(/^# /gm, "");
+    updatePreview();
+  }
+
+  // Preview com markdown-it
+  function updatePreview() {
+    const raw = conteudo.value;
+    const html = md.render(raw);
+    document.getElementById("preview").innerHTML = html;
+  }
+
+  // Contador
+  function updateCounter() {
+    const txt = conteudo.value;
+    document.getElementById("contador-caracteres").innerText = txt.length;
+    document.getElementById("contador-linhas").innerText = txt.split(/\n/).length;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    autoResize(conteudo);
+    updatePreview();
+    updateCounter();
+  });
+</script>
+
+<%- include("../partials/footer") %>
