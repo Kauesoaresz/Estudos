@@ -186,7 +186,11 @@ async function home(req, res) {
         dataLabel,
         horasEstudo: Number(diaHoje.horas_estudo_liquidas || 0),
         questoes: Number(diaHoje.questoes_feitas_total || 0),
-        horasSono: diaHoje.horas_sono_total || null,
+        horasSono:
+  diaHoje.horas_sono_total != null
+    ? Number(diaHoje.horas_sono_total)
+    : null,
+
         foco: diaHoje.nivel_foco || null,
         energia: diaHoje.nivel_energia || null,
         humor: diaHoje.humor
