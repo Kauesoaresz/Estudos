@@ -3,7 +3,9 @@
 const bcrypt = require("bcryptjs");
 const { Usuario } = require("../models");
 
+// =========================
 // GET /cadastro
+// =========================
 async function mostrarCadastro(req, res) {
   if (req.session.usuario) {
     return res.redirect("/");
@@ -19,7 +21,9 @@ async function mostrarCadastro(req, res) {
   });
 }
 
+// =========================
 // POST /cadastro
+// =========================
 async function cadastrar(req, res) {
   try {
     const { nome, email, senha, confirmar_senha } = req.body;
@@ -57,7 +61,6 @@ async function cadastrar(req, res) {
       senha_hash: hash
     });
 
-    // 🔥 SESSÃO COMPLETA
     req.session.usuario = {
       id: usuario.id,
       nome: usuario.nome,
@@ -72,7 +75,9 @@ async function cadastrar(req, res) {
   }
 }
 
+// =========================
 // GET /login
+// =========================
 async function mostrarLogin(req, res) {
   if (req.session.usuario) {
     return res.redirect("/");
@@ -87,7 +92,9 @@ async function mostrarLogin(req, res) {
   });
 }
 
+// =========================
 // POST /login
+// =========================
 async function logar(req, res) {
   try {
     const { email, senha } = req.body;
@@ -120,13 +127,11 @@ async function logar(req, res) {
       });
     }
 
-    // 🔥 SESSÃO COMPLETA
     req.session.usuario = {
       id: usuario.id,
       nome: usuario.nome,
       email: usuario.email,
       foto: usuario.foto
-
     };
 
     return res.redirect("/");
@@ -136,7 +141,75 @@ async function logar(req, res) {
   }
 }
 
+// =========================
+// GET /recuperar-senha
+// =========================
+function mostrarRecuperarSenha(req, res) {
+  res.render("recuperar-senha", {
+    tituloPagina: "Recuperar senha",
+    erro: null,
+    sucesso: null,
+    valores: {
+      email: ""
+    }
+  });
+}
+
+// =========================
+// POST /recuperar-senha
+// =========================
+async function recuperarSenha(req, res) {
+  try {
+    const { email, nova_senha, confirmar_senha } = req.body;
+
+    if (!email || !nova_senha || !confirmar_senha) {
+      return res.render("recuperar-senha", {
+        tituloPagina: "Recuperar senha",
+        erro: "Preencha todos os campos.",
+        sucesso: null,
+        valores: { email }
+      });
+    }
+
+    if (nova_senha !== confirmar_senha) {
+      return res.render("recuperar-senha", {
+        tituloPagina: "Recuperar senha",
+        erro: "As senhas não conferem.",
+        sucesso: null,
+        valores: { email }
+      });
+    }
+
+    const usuario = await Usuario.findOne({ where: { email } });
+
+    if (!usuario) {
+      return res.render("recuperar-senha", {
+        tituloPagina: "Recuperar senha",
+        erro: "E-mail não encontrado.",
+        sucesso: null,
+        valores: { email }
+      });
+    }
+
+    const hash = await bcrypt.hash(nova_senha, 10);
+
+    await usuario.update({ senha_hash: hash });
+
+    return res.render("recuperar-senha", {
+      tituloPagina: "Recuperar senha",
+      erro: null,
+      sucesso: "Senha redefinida com sucesso. Agora você pode fazer login.",
+      valores: { email: "" }
+    });
+  } catch (error) {
+    console.error("❌ Erro ao recuperar senha:", error);
+    return res.status(500).send("Erro ao recuperar senha.");
+  }
+}
+
+// =========================
 // GET /logout
+// =========================
 function logout(req, res) {
   req.session.destroy(() => {
     res.clearCookie("connect.sid");
@@ -149,5 +222,7 @@ module.exports = {
   cadastrar,
   mostrarLogin,
   logar,
+  mostrarRecuperarSenha,
+  recuperarSenha,
   logout
 };

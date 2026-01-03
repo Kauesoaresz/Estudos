@@ -6,18 +6,22 @@
 function toISODate(value) {
   if (!value) return null;
 
-  // Se for objeto Date
-  if (value instanceof Date) {
-    return value.toISOString().slice(0, 10);
-  }
-
-  // Se já for string tipo "2025-01-21"
+  // Se já for string YYYY-MM-DD (DATEONLY do MySQL)
   if (typeof value === "string" && value.includes("-")) {
     return value.slice(0, 10);
   }
 
+  // Se for Date, converter para data LOCAL (não UTC)
+  if (value instanceof Date) {
+    const y = value.getFullYear();
+    const m = String(value.getMonth() + 1).padStart(2, "0");
+    const d = String(value.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
   return null;
 }
+
 
 // Diferença em dias entre uma data ISO (YYYY-MM-DD) e uma data de referência
 // refDate default = hoje

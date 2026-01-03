@@ -160,7 +160,8 @@ async function home(req, res) {
     });
 
     const hoje = new Date();
-    const hojeISO = hoje.toISOString().slice(0, 10);
+    const hojeISO = toISODate(hoje);
+
 
     let diaHoje = diasBrutos.find(d => toISODate(d.data) === hojeISO);
 

@@ -1,0 +1,32 @@
+<h2>Recuperar senha</h2>
+
+<% if (erro) { %>
+  <p style="color: red;"><%= erro %></p>
+<% } %>
+
+<% if (sucesso) { %>
+  <p style="color: green;"><%= sucesso %></p>
+<% } %>
+
+<form method="POST">
+  <div>
+    <label>E-mail</label>
+    <input type="email" name="email" value="<%= valores.email %>" required>
+  </div>
+
+  <div>
+    <label>Nova senha</label>
+    <input type="password" name="nova_senha" required>
+  </div>
+
+  <div>
+    <label>Confirmar nova senha</label>
+    <input type="password" name="confirmar_senha" required>
+  </div>
+
+  <button type="submit">Redefinir senha</button>
+</form>
+
+<p>
+  <a href="/login">Voltar para o login</a>
+</p>
